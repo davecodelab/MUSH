@@ -8,7 +8,11 @@ import {
   RoommateRequest, 
   RoommatePreferences, 
   AppNotification,
-  HostelConfig
+  HostelConfig,
+  Floor,
+  RoomType,
+  RoomSize,
+  RoomStatus
 } from '../types';
 import { generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
 import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment } from '../services/api';
