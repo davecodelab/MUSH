@@ -19,7 +19,8 @@ export const Navbar: React.FC = () => {
     notifications, 
     currentStudent, 
     switchUserRole,
-    activeBookingHold 
+    activeBookingHold,
+    setIsAuthModalOpen 
   } = useHostel();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -171,12 +172,18 @@ export const Navbar: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setShowRoleSelector(!showRoleSelector)}
+                onClick={() => {
+                  if (currentStudent.id === '20814522' && !currentStudent.hasPaid) {
+                    setIsAuthModalOpen(true);
+                  } else {
+                    setShowRoleSelector(!showRoleSelector);
+                  }
+                }}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#5B514B]/50 hover:bg-[#5B514B] text-xs font-medium text-[#F4EFE7] transition-colors border border-[#7D6E66]/40 cursor-pointer shadow-xs"
               >
                 <User className="w-3.5 h-3.5 text-[#FEFB58]" />
                 <span>
-                  {currentStudent.hasPaid ? 'Student (Paid)' : 'Student (Guest)'}
+                  {currentStudent.id === '20814522' && !currentStudent.hasPaid ? 'Sign In / Register' : currentStudent.name}
                 </span>
               </motion.button>
 
@@ -190,7 +197,20 @@ export const Navbar: React.FC = () => {
                     className="absolute right-0 mt-2 w-56 bg-[#2A2827] border border-[#5B514B] rounded-xl shadow-2xl p-2 z-50 text-xs"
                   >
                     <div className="px-3 py-1.5 text-[11px] uppercase tracking-wider text-[#A1927D] font-semibold">
-                      Simulate User Mode
+                      Student Account
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsAuthModalOpen(true);
+                        setShowRoleSelector(false);
+                      }}
+                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center justify-between text-[#FEFB58] font-bold cursor-pointer"
+                    >
+                      <span>Sign In / Create Account</span>
+                    </button>
+                    <div className="my-1 border-t border-[#5B514B]"></div>
+                    <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-[#7D6E66] font-semibold">
+                      Demo Persona Mode
                     </div>
                     <button
                       onClick={() => {
@@ -292,6 +312,17 @@ export const Navbar: React.FC = () => {
               ))}
 
               <div className="pt-3 border-t border-[#5B514B]/50 space-y-2">
+                <button
+                  onClick={() => {
+                    setIsAuthModalOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm bg-[#FEFB58] text-[#2A2827] font-bold flex items-center justify-between cursor-pointer"
+                >
+                  <span>{currentStudent.id !== '20814522' ? currentStudent.name : 'Sign In / Register Portal'}</span>
+                  <User className="w-4 h-4 text-[#2A2827]" />
+                </button>
+
                 <button
                   onClick={() => handleNavClick('dashboard')}
                   className="w-full text-left px-3 py-2 rounded-lg text-sm text-[#F4EFE7] hover:bg-[#5B514B] flex items-center justify-between"
