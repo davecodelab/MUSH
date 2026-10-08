@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHostel } from '../context/HostelContext';
+import { getRoommates } from '../services/api';
 import { 
   Building2, 
   CheckCircle2, 
@@ -56,6 +57,20 @@ export const StudentDashboard: React.FC = () => {
   // Find user's confirmed booking
   const myBooking = bookings.find((b) => b.id === currentStudent.bookingId) || bookings[0];
   const myRoom = rooms.find((r) => r.id === currentStudent.roomId || r.roomNumber === currentStudent.roomNumber) || rooms.find((r) => r.roomNumber === '305') || rooms[0];
+
+  const [liveRoommates, setLiveRoommates] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (currentStudent.hasPaid && myRoom) {
+      getRoommates(myRoom.roomNumber)
+        .then((data) => {
+          if (data && data.roommates) {
+            setLiveRoommates(data.roommates);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [currentStudent.hasPaid, myRoom?.roomNumber]);
 
   return (
     <section className="py-12 bg-[#F4EFE7]">
@@ -207,19 +222,38 @@ export const StudentDashboard: React.FC = () => {
                         {isYou ? '🧑‍🎓' : isPaid ? '🧑' : '🟢'}
                       </div>
 
-                      <div>
-                        <span className="font-bold text-xs block text-[#2A2827]">
-                          Space #{s.spaceNumber}
-                        </span>
-                        <span className="text-xs font-semibold text-[#5B514B] block mt-0.5">
-                          {isYou ? 'You (Dave)' : isPaid ? (s.studentName || 'Roommate') : 'Available'}
-                        </span>
-                        {isPaid && (
-                          <span className="text-[10px] text-[#7D6E66] block">
-                            {s.studentProgram || 'KNUST Student'}
-                          </span>
-                        )}
-                      </div>
+                      {(() => {
+                        const spaceLetter = s.spaceNumber === 1 ? 'A' : s.spaceNumber === 2 ? 'B' : s.spaceNumber === 3 ? 'C' : 'D';
+                        const matchedMate = liveRoommates.find((m) => m.space_identifier === spaceLetter);
+                        const displayName = isYou 
+                          ? `You (${currentStudent.name.split(' ')[0]})` 
+                          : matchedMate?.name || s.studentName || (isPaid ? 'Confirmed Roommate' : 'Available');
+
+                        return (
+                          <div>
+                            <span className="font-bold text-xs block text-[#2A2827]">
+                              Space #{s.spaceNumber} {matchedMate?.space_identifier ? `(${matchedMate.space_identifier})` : ''}
+                            </span>
+                            <span className="text-xs font-semibold text-[#5B514B] block mt-0.5">
+                              {displayName}
+                            </span>
+                            {isPaid && (
+                              <span className="text-[10px] text-[#7D6E66] block">
+                                {s.studentProgram || 'KNUST Resident'}
+                              </span>
+                            )}
+                            {matchedMate && matchedMate.phone_number && (
+                              <a
+                                href={`tel:${matchedMate.phone_number}`}
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2A2827] bg-[#FEFB58]/40 hover:bg-[#FEFB58] px-2 py-0.5 rounded mt-1.5 transition-colors"
+                              >
+                                <Phone className="w-3 h-3 text-[#2A2827]" />
+                                <span>{matchedMate.phone_number}</span>
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })()}
 
                       <div className="mt-3 pt-2 border-t border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-[#7D6E66]">
                         {isYou ? 'Assigned' : isPaid ? 'Confirmed' : 'Vacant'}

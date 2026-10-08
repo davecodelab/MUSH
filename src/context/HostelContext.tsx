@@ -10,7 +10,8 @@ import {
   AppNotification,
   HostelConfig
 } from '../types';
-import { generate120Rooms } from '../data/seedRooms';
+import { generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
+import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment } from '../services/api';
 
 interface HostelContextType {
   rooms: Room[];
@@ -64,6 +65,9 @@ interface HostelContextType {
   adminUpdateConfig: (newConfig: Partial<HostelConfig>) => void;
   resetAllData: () => void;
   switchUserRole: (role: 'guest' | 'paid_student' | 'admin') => void;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (open: boolean) => void;
+  setCurrentStudent: React.Dispatch<React.SetStateAction<StudentProfile>>;
 }
 
 const STORAGE_KEYS = {
@@ -107,6 +111,32 @@ const DEFAULT_STUDENT: StudentProfile = {
   },
 };
 
+const normalizeFloor = (f: string): Floor => {
+  const upper = (f || '').toUpperCase();
+  if (upper.includes('GROUND')) return 'Ground';
+  if (upper.includes('FIRST') || upper.includes('1')) return '1st';
+  if (upper.includes('SECOND') || upper.includes('2')) return '2nd';
+  if (upper.includes('THIRD') || upper.includes('3')) return '3rd';
+  if (upper.includes('FOURTH') || upper.includes('4')) return '4th';
+  if (upper.includes('FIFTH') || upper.includes('5')) return '5th';
+  return 'Ground';
+};
+
+const normalizeRoomType = (t: string, capacity: number): RoomType => {
+  const cleaned = (t || '').replace(/[^0-9]/g, '');
+  if (cleaned === '1' || capacity === 1) return '1-in-1';
+  if (cleaned === '2' || capacity === 2) return '2-in-1';
+  if (cleaned === '3' || capacity === 3) return '3-in-1';
+  return '4-in-1';
+};
+
+const getDefaultPrice = (type: RoomType, hasAc: boolean) => {
+  if (type === '1-in-1') return hasAc ? 16500 : 14000;
+  if (type === '2-in-1') return hasAc ? 12500 : 10800;
+  if (type === '3-in-1') return hasAc ? 9500 : 8200;
+  return hasAc ? 7800 : 6500;
+};
+
 const HostelContext = createContext<HostelContextType | undefined>(undefined);
 
 export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -118,6 +148,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [activeReceiptBooking, setActiveReceiptBooking] = useState<Booking | null>(null);
   const [activeBookingHold, setActiveBookingHold] = useState<{ roomId: string; spaceNumber: number; expiresAt: number } | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // Initialize Persistent State
   const [rooms, setRooms] = useState<Room[]>(() => {
@@ -129,6 +160,77 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
     return generate120Rooms();
   });
+
+  // Fetch live rooms from Django backend (MUSHIA database)
+  useEffect(() => {
+    const fetchLiveRooms = async () => {
+      try {
+        const data = await getRooms();
+        if (Array.isArray(data) && data.length > 0) {
+          const floorIndexMap: Record<string, number> = {
+            'Ground': 0, '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5
+          };
+
+          const mapped: Room[] = data.map((r: any) => {
+            const floor = normalizeFloor(r.floor);
+            const roomType = normalizeRoomType(r.room_type, r.capacity);
+            const airConditioned = Boolean(r.amenities?.includes('AC'));
+            const size: RoomSize = r.amenities?.includes('Big') ? 'Big' : 'Small';
+            const price = parseFloat(r.price_per_space) > 0 ? parseFloat(r.price_per_space) : getDefaultPrice(roomType, airConditioned);
+            
+            const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => ({
+              id: `${r.room_number}-space-${idx + 1}`,
+              spaceNumber: idx + 1,
+              status: s.is_available ? 'available' : 'paid',
+            }));
+
+            const occupiedCount = spaces.filter(s => s.status === 'paid').length;
+            let status: RoomStatus = 'available';
+            if (occupiedCount === r.capacity) {
+              status = 'fully_occupied';
+            } else if (occupiedCount > 0) {
+              status = 'partially_occupied';
+            }
+
+            return {
+              id: `mushia-room-${String(r.room_number).toLowerCase()}`,
+              roomNumber: String(r.room_number),
+              floor,
+              floorIndex: floorIndexMap[floor] ?? 0,
+              roomType,
+              capacity: r.capacity,
+              size,
+              airConditioned,
+              price,
+              status,
+              spaces,
+              images: [
+                MUSHIA_IMAGES.interior,
+                MUSHIA_IMAGES.exterior,
+                MUSHIA_IMAGES.studyRoom,
+                MUSHIA_IMAGES.lounge,
+              ],
+              features: [
+                airConditioned ? 'Split-Unit Air Conditioning' : 'High-Velocity Ceiling Fan',
+                'Built-in Wooden Wardrobe',
+                'Study Desk & Ergonomic Chair',
+                'En-suite Modern Washroom',
+                '24/7 Water & Standby Generator Power',
+                'High-Speed Wi-Fi Connectivity',
+              ],
+              description: `Comfortable ${roomType} accommodation located on the ${floor} Floor of Mushia Hostel. Features en-suite modern washroom, study desks, and 24/7 power backup.`,
+            };
+          });
+
+          setRooms(mapped);
+        }
+      } catch (err) {
+        console.warn('Could not load rooms from Django backend, using default inventory:', err);
+      }
+    };
+
+    fetchLiveRooms();
+  }, []);
 
   const [bookings, setBookings] = useState<Booking[]>(() => {
     try {
@@ -371,6 +473,10 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     setActiveBookingHold({ roomId, spaceNumber, expiresAt });
+    // Also notify Django backend of the hold
+    holdSpace({ room_number: room.roomNumber, space_number: spaceNumber }).catch((e) => {
+      console.warn("Backend hold notification:", e?.response?.data?.detail || e.message);
+    });
     return true;
   };
 
@@ -392,6 +498,10 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     setActiveBookingHold(null);
+    // Release hold in Django backend
+    releaseHold().catch((e) => {
+      console.warn("Backend release hold notification:", e?.response?.data?.detail || e.message);
+    });
   };
 
   const startBookingFlow = (room: Room, spaceNum: number) => {
@@ -533,6 +643,19 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setBookings((prev) => [newBooking, ...prev]);
     setPayments((prev) => [newPayment, ...prev]);
     setActiveBookingHold(null);
+
+    // Synchronize booking with Django database
+    try {
+      const holdRes = await holdSpace({ room_number: roomNumber, space_number: spaceNum });
+      const bId = holdRes?.booking?.id;
+      if (bId) {
+        const initRes = await initializePayment(bId);
+        const refToVerify = initRes?.reference || params.paymentRef;
+        await verifyPayment(refToVerify);
+      }
+    } catch (err: any) {
+      console.warn("Django backend payment synchronization notice:", err?.response?.data?.detail || err.message);
+    }
 
     // Add confirmation notification
     setNotifications((prev) => [
@@ -801,6 +924,9 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         adminUpdateConfig,
         resetAllData,
         switchUserRole,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        setCurrentStudent,
       }}
     >
       {children}

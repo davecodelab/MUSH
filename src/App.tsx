@@ -23,6 +23,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { FacilitiesSection } from './components/FacilitiesSection';
 import { GallerySection } from './components/GallerySection';
 import { LocationSection } from './components/LocationSection';
+import { LoginRegisterModal } from './components/LoginRegisterModal';
 import { HowItWorks } from './components/HowItWorks';
 import { FAQSection } from './components/FAQSection';
 import { Footer } from './components/Footer';
@@ -133,6 +134,7 @@ const HostelAppContent: React.FC = () => {
         </main>
 
         {/* Global Interactive Modals */}
+        <LoginRegisterModal />
         <RoomDetailModal />
         <BookingFlowModal />
         <ReceiptModal />
