@@ -21,7 +21,7 @@ interface HostelContextType {
   roommateRequests: RoommateRequest[];
   notifications: AppNotification[];
   config: HostelConfig;
-  activeView: 'home' | 'rooms' | 'floor-explorer' | 'facilities' | 'gallery' | 'location' | 'how-it-works' | 'roommates' | 'dashboard' | 'admin';
+  activeView: 'home' | 'rooms' | 'floor-explorer' | 'facilities' | 'gallery'  | 'location' | 'how-it-works' | 'roommates' | 'dashboard' | 'admin';
   selectedRoom: Room | null;
   selectedSpaceNumber: number | null;
   isBookingModalOpen: boolean;

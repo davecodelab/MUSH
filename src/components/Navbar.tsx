@@ -9,10 +9,6 @@ import {
   ShieldCheck, 
   Menu, 
   X, 
-  Layers, 
-  Compass, 
-  Users, 
-  Sparkles,
   CheckCircle2
 } from 'lucide-react';
 
@@ -35,11 +31,9 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { id: 'rooms' as const, label: 'Rooms' },
     { id: 'floor-explorer' as const, label: 'Floor Explorer' },
-    { id: 'facilities' as const, label: 'Facilities' },
     { id: 'roommates' as const, label: 'Roommates' },
     { id: 'gallery' as const, label: 'Gallery' },
-    { id: 'location' as const, label: 'Location' },
-    { id: 'how-it-works' as const, label: 'How It Works' },
+   
   ];
 
   const handleNavClick = (viewId: typeof activeView) => {
@@ -90,9 +84,6 @@ export const Navbar: React.FC = () => {
             <div>
               <span className="text-xl sm:text-2xl font-bold tracking-tight text-[#F4EFE7] block leading-none">
                 Mushia Hostel
-              </span>
-              <span className="text-[11px] text-[#A1927D] tracking-wider uppercase mt-1 block">
-                KNUST · Ayeduase Newsite
               </span>
             </div>
           </motion.button>

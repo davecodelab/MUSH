@@ -77,18 +77,9 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
                 duration: 1.8,
                 ease: 'linear',
               }}
-              className="absolute inset-0 bg-gradient-to-t from-transparent via-[#FEFB58]/20 to-transparent w-full"
+              className="absolute inset-0 bg-linear-to-t from-transparent via-[#FEFB58]/20 to-transparent w-full"
             />
           </div>
-
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 20 }}
-            className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#FEFB58] text-[#2A2827] flex items-center justify-center font-black text-[10px] shadow-md"
-          >
-            KNUST
-          </motion.div>
         </motion.div>
 
         {/* Title */}
@@ -110,7 +101,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         <div className="w-full space-y-3">
           <div className="h-1.5 w-full bg-[#5B514B]/60 rounded-full overflow-hidden border border-[#7D6E66]/40 p-0.5">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#FEFB58] via-[#FFF852] to-[#FEFB58] rounded-full shadow-[0_0_12px_rgba(254,251,88,0.5)]"
+              className="h-full bg-linear-to-r from-[#FEFB58] via-[#FFF852] to-[#FEFB58] rounded-full shadow-[0_0_12px_rgba(254,251,88,0.5)]"
               style={{ width: `${progress}%` }}
               transition={{ ease: 'easeOut', duration: 0.1 }}
             />
@@ -118,7 +109,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
           {/* Status Text & Percentage */}
           <div className="flex items-center justify-between text-xs text-[#A5ABAA] font-medium pt-1">
-            <span className="truncate max-w-[220px] text-left text-[11px] text-[#A1927D]">
+            <span className="truncate max-w-55 text-left text-[11px] text-[#A1927D]">
               {statusText}
             </span>
             <span className="font-mono font-bold text-[#FEFB58] tabular-nums">

@@ -75,7 +75,7 @@ export const LocationSection: React.FC = () => {
           </div>
 
           {/* Map Visual Graphic */}
-          <div className="bg-[#2A2827] rounded-2xl overflow-hidden border border-[#7D6E66] shadow-xl relative aspect-[4/3] flex flex-col justify-between p-6 text-white">
+          <div className="bg-[#2A2827] rounded-2xl overflow-hidden border border-[#7D6E66] shadow-xl relative aspect-4/3 flex flex-col justify-between p-6 text-white">
             
             {/* Compass / Orientation Header */}
             <div className="flex justify-between items-start z-10">
@@ -106,7 +106,7 @@ export const LocationSection: React.FC = () => {
             </div>
 
             {/* Subtle grid lines background overlay */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#FEFB58_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#FEFB58_1px,transparent_1px)] bg-size-[16px_16px]"></div>
           </div>
 
         </div>
