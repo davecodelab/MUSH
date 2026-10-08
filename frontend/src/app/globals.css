@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --mushia-charcoal: #2A2827;
+    --mushia-mauve: #5B514B;
+    --mushia-taupe: #7D6E66;
+    --mushia-stone: #A1927D;
+    --mushia-soft-stone: #A5ABAA;
+    --mushia-cream: #F4EFE7;
+    --mushia-terracotta: #8B756C;
+    --mushia-yellow: #FEFB58;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #F4EFE7;
+    color: #2A2827;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom scrollbar for interactive floor map and galleries */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EAE3D9;
+}
+::-webkit-scrollbar-thumb {
+  background: #A1927D;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7D6E66;
+}
+
+/* Micro-interaction utilities */
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-subtle-float {
+  animation: subtle-float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(254, 251, 88, 0.6)); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
