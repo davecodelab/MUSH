@@ -18,13 +18,15 @@ import {
   SpaceStatus
 } from '../types';
 import { generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
-import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment } from '../services/api';
+import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment, getUserProfile, logoutUser } from '../services/api';
 
 interface HostelContextType {
   rooms: Room[];
   bookings: Booking[];
   payments: PaymentTransaction[];
   currentStudent: StudentProfile;
+  isLoggedIn: boolean;
+  logout: () => Promise<void>;
   activeBookingHold: { roomId: string; spaceNumber: number; expiresAt: number } | null;
   roommateRequests: RoommateRequest[];
   notifications: AppNotification[];
@@ -108,14 +110,14 @@ const DEFAULT_CONFIG: HostelConfig = {
 };
 
 const DEFAULT_STUDENT: StudentProfile = {
-  id: '20814522',
-  name: 'Dave Frimpong',
-  knustId: '20814522',
-  email: 'dfrimpong@st.knust.edu.gh',
-  phone: '+233 24 991 8234',
+  id: '',
+  name: '',
+  knustId: '',
+  email: '',
+  phone: '',
   gender: 'Male',
-  program: 'BSc Computer Engineering',
-  level: 'Level 200',
+  program: 'Undergraduate Student',
+  level: 'Level 100',
   hasPaid: false,
   preferences: {
     sleepPreference: 'Flexible',
@@ -248,6 +250,36 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     fetchLiveRooms();
   }, []);
 
+  // Check authenticated session on load from Django backend
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const data = await getUserProfile();
+        if (data && (data.user || data.id || data.email)) {
+          const u = data.user || data;
+          setCurrentStudent({
+            id: String(u.id || u.username),
+            name: u.name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username,
+            knustId: u.knustId || u.username || String(u.id),
+            email: u.email || '',
+            phone: u.phone || u.phone_number || '',
+            gender: u.gender === 'Female' || u.gender === 'FEMALE' ? 'Female' : 'Male',
+            program: u.program_of_study || 'Undergraduate Student',
+            level: u.year_of_study ? `Level ${u.year_of_study}00` : 'Level 100',
+            hasPaid: Boolean(u.hasPaid),
+            bookingId: u.bookingId,
+            roomId: u.roomId,
+            roomNumber: u.roomNumber,
+            spaceNumber: u.spaceNumber,
+          });
+        }
+      } catch (e) {
+        // Guest session
+      }
+    };
+    checkAuth();
+  }, []);
+
   const [bookings, setBookings] = useState<Booking[]>(() => {
     try {
       const saved = safeGetStorage(STORAGE_KEYS.BOOKINGS);
@@ -310,12 +342,29 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [currentStudent, setCurrentStudent] = useState<StudentProfile>(() => {
     try {
       const saved = safeGetStorage(STORAGE_KEYS.STUDENT);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.id === '20814522' && parsed.name === 'Dave Frimpong' && !parsed.hasPaid) {
+          return DEFAULT_STUDENT;
+        }
+        return parsed;
+      }
     } catch (e) {
       console.error(e);
     }
     return DEFAULT_STUDENT;
   });
+
+  const isLoggedIn = Boolean(
+    currentStudent &&
+    currentStudent.id &&
+    currentStudent.id.trim() !== '' &&
+    currentStudent.id !== '20814522' &&
+    currentStudent.name &&
+    currentStudent.name.trim() !== '' &&
+    currentStudent.name !== 'Guest Student' &&
+    currentStudent.name !== 'Guest'
+  );
 
   const [roommateRequests, setRoommateRequests] = useState<RoommateRequest[]>(() => {
     try {
@@ -902,6 +951,32 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch (e) {
+      console.warn('Logout notice:', e);
+    }
+    setCurrentStudent(DEFAULT_STUDENT);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(STORAGE_KEYS.STUDENT);
+      } catch {}
+    }
+    setActiveView('home');
+    setNotifications((prev) => [
+      {
+        id: 'notif-' + Date.now(),
+        title: 'Logged Out',
+        message: 'You have been safely signed out.',
+        timestamp: 'Just now',
+        read: false,
+        type: 'system',
+      },
+      ...prev,
+    ]);
+  };
+
   return (
     <HostelContext.Provider
       value={{
@@ -909,6 +984,8 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         bookings,
         payments,
         currentStudent,
+        isLoggedIn,
+        logout,
         activeBookingHold,
         roommateRequests,
         notifications,

@@ -9,13 +9,16 @@ class StudentSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source='phone_number', read_only=True)
     hasPaid = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
+    bookingId = serializers.SerializerMethodField()
+    roomNumber = serializers.SerializerMethodField()
+    spaceNumber = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name', 
             'phone_number', 'gender', 'emergency_contact', 'is_profile_complete',
-            'name', 'knustId', 'phone', 'hasPaid'
+            'name', 'knustId', 'phone', 'hasPaid', 'bookingId', 'roomNumber', 'spaceNumber'
         ]
         read_only_fields = ['id']
 
@@ -25,6 +28,18 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def get_hasPaid(self, obj):
         return obj.bookings.filter(status='CONFIRMED').exists()
+
+    def get_bookingId(self, obj):
+        booking = obj.bookings.filter(status='CONFIRMED').first()
+        return str(booking.id) if booking else None
+
+    def get_roomNumber(self, obj):
+        booking = obj.bookings.filter(status='CONFIRMED').first()
+        return str(booking.room_space.room.room_number) if booking else None
+
+    def get_spaceNumber(self, obj):
+        booking = obj.bookings.filter(status='CONFIRMED').first()
+        return booking.room_space.space_number if booking else None
 
     def get_gender(self, obj):
         return 'Male' if obj.gender == 'MALE' else ('Female' if obj.gender == 'FEMALE' else '')

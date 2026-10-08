@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useHostel } from '../context/HostelContext';
 import { 
@@ -11,7 +11,10 @@ import {
   ShieldCheck, 
   Menu, 
   X, 
-  CheckCircle2
+  CheckCircle2,
+  LogOut,
+  ChevronDown,
+  Users
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -20,14 +23,31 @@ export const Navbar: React.FC = () => {
     setActiveView, 
     notifications, 
     currentStudent, 
-    switchUserRole,
+    isLoggedIn,
+    logout,
     activeBookingHold,
     setIsAuthModalOpen 
   } = useHostel();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
-  const [showRoleSelector, setShowRoleSelector] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const notifMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setShowUserDropdown(false);
+      }
+      if (notifMenuRef.current && !notifMenuRef.current.contains(e.target as Node)) {
+        setShowNotifDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const unreadNotifs = notifications.filter((n) => !n.read).length;
 
@@ -41,6 +61,8 @@ export const Navbar: React.FC = () => {
   const handleNavClick = (viewId: typeof activeView) => {
     setActiveView(viewId);
     setMobileMenuOpen(false);
+    setShowUserDropdown(false);
+    setShowNotifDropdown(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -119,7 +141,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-3">
             
             {/* Notifications Trigger */}
-            <div className="relative">
+            <div className="relative" ref={notifMenuRef}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -168,86 +190,102 @@ export const Navbar: React.FC = () => {
               </AnimatePresence>
             </div>
 
-            {/* Quick Demo Persona / Mode Switcher */}
-            <div className="relative hidden md:block">
+            {/* Desktop Student Account / Auth State */}
+            {!isLoggedIn ? (
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  if (currentStudent.id === '20814522' && !currentStudent.hasPaid) {
-                    setIsAuthModalOpen(true);
-                  } else {
-                    setShowRoleSelector(!showRoleSelector);
-                  }
-                }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#5B514B]/50 hover:bg-[#5B514B] text-xs font-medium text-[#F4EFE7] transition-colors border border-[#7D6E66]/40 cursor-pointer shadow-xs"
+                onClick={() => setIsAuthModalOpen(true)}
+                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-[#5B514B]/50 hover:bg-[#5B514B] text-xs font-semibold text-[#FEFB58] transition-colors border border-[#7D6E66]/40 cursor-pointer shadow-xs"
               >
                 <User className="w-3.5 h-3.5 text-[#FEFB58]" />
-                <span>
-                  {currentStudent.id === '20814522' && !currentStudent.hasPaid ? 'Sign In / Register' : currentStudent.name}
-                </span>
+                <span>Sign In / Register</span>
               </motion.button>
+            ) : (
+              <div className="relative hidden md:block" ref={userMenuRef}>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#5B514B]/50 hover:bg-[#5B514B] text-xs font-semibold text-[#F4EFE7] transition-colors border border-[#7D6E66]/40 cursor-pointer shadow-xs"
+                >
+                  <div className="w-5 h-5 rounded-full bg-[#FEFB58] text-[#2A2827] font-bold text-[10px] flex items-center justify-center shrink-0">
+                    {currentStudent.name ? currentStudent.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className="max-w-[120px] truncate">{currentStudent.name}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-[#A5ABAA] transition-transform duration-200 ${showUserDropdown ? 'rotate-180' : ''}`} />
+                </motion.button>
 
-              <AnimatePresence>
-                {showRoleSelector && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-56 bg-[#2A2827] border border-[#5B514B] rounded-xl shadow-2xl p-2 z-50 text-xs"
-                  >
-                    <div className="px-3 py-1.5 text-[11px] uppercase tracking-wider text-[#A1927D] font-semibold">
-                      Student Account
-                    </div>
-                    <button
-                      onClick={() => {
-                        setIsAuthModalOpen(true);
-                        setShowRoleSelector(false);
-                      }}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center justify-between text-[#FEFB58] font-bold cursor-pointer"
+                <AnimatePresence>
+                  {showUserDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-64 bg-[#2A2827] border border-[#5B514B] rounded-xl shadow-2xl p-2 z-50 text-xs"
                     >
-                      <span>Sign In / Create Account</span>
-                    </button>
-                    <div className="my-1 border-t border-[#5B514B]"></div>
-                    <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-[#7D6E66] font-semibold">
-                      Demo Persona Mode
-                    </div>
-                    <button
-                      onClick={() => {
-                        switchUserRole('guest');
-                        setShowRoleSelector(false);
-                      }}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center justify-between text-[#F4EFE7] cursor-pointer"
-                    >
-                      <span>Prospective Student (Guest)</span>
-                      {!currentStudent.hasPaid && <CheckCircle2 className="w-3.5 h-3.5 text-[#FEFB58]" />}
-                    </button>
-                    <button
-                      onClick={() => {
-                        switchUserRole('paid_student');
-                        setShowRoleSelector(false);
-                      }}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center justify-between text-[#F4EFE7] cursor-pointer"
-                    >
-                      <span>Confirmed Student (Paid)</span>
-                      {currentStudent.hasPaid && <CheckCircle2 className="w-3.5 h-3.5 text-[#FEFB58]" />}
-                    </button>
-                    <div className="my-1 border-t border-[#5B514B]/50"></div>
-                    <button
-                      onClick={() => {
-                        switchUserRole('admin');
-                        setShowRoleSelector(false);
-                      }}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center gap-2 text-[#FEFB58] font-medium cursor-pointer"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>Hostel Admin Portal</span>
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                      {/* User Account Info */}
+                      <div className="px-3 py-2 border-b border-[#5B514B]/50">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-bold text-[#F4EFE7] truncate">{currentStudent.name}</span>
+                          {currentStudent.hasPaid ? (
+                            <span className="text-[10px] bg-[#FEFB58] text-[#2A2827] font-bold px-1.5 py-0.5 rounded shrink-0">
+                              Room {currentStudent.roomNumber}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] bg-[#5B514B] text-[#FEFB58] font-medium px-1.5 py-0.5 rounded shrink-0">
+                              Applicant
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-[#A5ABAA] truncate mt-0.5">
+                          {currentStudent.email || `ID: ${currentStudent.knustId}`}
+                        </p>
+                      </div>
+
+                      {/* Links */}
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            handleNavClick('dashboard');
+                            setShowUserDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center gap-2 text-[#F4EFE7] hover:text-[#FEFB58] transition-colors cursor-pointer"
+                        >
+                          <User className="w-3.5 h-3.5 text-[#FEFB58]" />
+                          <span>Student Dashboard</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick('roommates');
+                            setShowUserDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#5B514B]/70 flex items-center gap-2 text-[#F4EFE7] hover:text-[#FEFB58] transition-colors cursor-pointer"
+                        >
+                          <Users className="w-3.5 h-3.5 text-[#FEFB58]" />
+                          <span>Roommate Matching</span>
+                        </button>
+                      </div>
+
+                      {/* Sign Out */}
+                      <div className="pt-1 border-t border-[#5B514B]/50">
+                        <button
+                          onClick={async () => {
+                            setShowUserDropdown(false);
+                            await logout();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-red-500/15 flex items-center gap-2 text-red-400 hover:text-red-300 font-semibold transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-3.5 h-3.5 text-red-400" />
+                          <span>Log Out</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Dashboard / Admin Shortcut */}
             {currentStudent.hasPaid ? (
@@ -313,36 +351,62 @@ export const Navbar: React.FC = () => {
               ))}
 
               <div className="pt-3 border-t border-[#5B514B]/50 space-y-2">
-                <button
-                  onClick={() => {
-                    setIsAuthModalOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm bg-[#FEFB58] text-[#2A2827] font-bold flex items-center justify-between cursor-pointer"
-                >
-                  <span>{currentStudent.id !== '20814522' ? currentStudent.name : 'Sign In / Register Portal'}</span>
-                  <User className="w-4 h-4 text-[#2A2827]" />
-                </button>
+                {!isLoggedIn ? (
+                  <button
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left px-3.5 py-2.5 rounded-lg text-sm bg-[#FEFB58] text-[#2A2827] font-bold flex items-center justify-between cursor-pointer shadow-sm"
+                  >
+                    <span>Sign In / Register Portal</span>
+                    <User className="w-4 h-4 text-[#2A2827]" />
+                  </button>
+                ) : (
+                  <>
+                    <div className="p-3 rounded-lg bg-[#5B514B]/30 border border-[#5B514B]/60 flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-full bg-[#FEFB58] text-[#2A2827] font-bold text-xs flex items-center justify-center shrink-0">
+                          {currentStudent.name ? currentStudent.name.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-[#F4EFE7] leading-tight truncate">{currentStudent.name}</p>
+                          <p className="text-[11px] text-[#A5ABAA] truncate">{currentStudent.email || `ID: ${currentStudent.knustId}`}</p>
+                        </div>
+                      </div>
+                      {currentStudent.hasPaid && (
+                        <span className="text-[10px] bg-[#FEFB58] text-[#2A2827] px-2 py-0.5 rounded font-bold shrink-0 ml-2">
+                          Room {currentStudent.roomNumber}
+                        </span>
+                      )}
+                    </div>
 
-                <button
-                  onClick={() => handleNavClick('dashboard')}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm text-[#F4EFE7] hover:bg-[#5B514B] flex items-center justify-between"
-                >
-                  <span>Student Dashboard</span>
-                  {currentStudent.hasPaid && (
-                    <span className="text-[10px] bg-[#FEFB58] text-[#2A2827] px-2 py-0.5 rounded font-bold">
-                      Room {currentStudent.roomNumber}
-                    </span>
-                  )}
-                </button>
+                    <button
+                      onClick={() => handleNavClick('dashboard')}
+                      className="w-full text-left px-3 py-2 rounded-lg text-sm text-[#F4EFE7] hover:bg-[#5B514B] flex items-center justify-between cursor-pointer"
+                    >
+                      <span>Student Dashboard</span>
+                    </button>
 
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm text-[#FEFB58] hover:bg-[#5B514B] flex items-center gap-2"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Admin Portal (120 Rooms)</span>
-                </button>
+                    <button
+                      onClick={() => handleNavClick('roommates')}
+                      className="w-full text-left px-3 py-2 rounded-lg text-sm text-[#F4EFE7] hover:bg-[#5B514B] flex items-center justify-between cursor-pointer"
+                    >
+                      <span>Roommate Matching</span>
+                    </button>
+
+                    <button
+                      onClick={async () => {
+                        setMobileMenuOpen(false);
+                        await logout();
+                      }}
+                      className="w-full text-left px-3 py-2.5 rounded-lg text-sm bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <LogOut className="w-4 h-4 text-red-400" />
+                      <span>Log Out</span>
+                    </button>
+                  </>
+                )}
               </div>
             </motion.div>
           )}
