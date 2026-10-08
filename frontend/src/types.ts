@@ -36,6 +36,7 @@ export interface Room {
 }
 
 export interface StudentProfile {
+  firstName: string;
   id: string;
   name: string;
   knustId: string;

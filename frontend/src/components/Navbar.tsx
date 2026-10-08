@@ -1,22 +1,27 @@
+
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Building2,
   Bell,
   User,
   Menu,
   X,
   LogOut,
   ChevronDown,
-  Users,
 } from 'lucide-react';
 
 import { useHostel } from '../context/HostelContext';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  isPreloaderLoading?: boolean;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({
+  isPreloaderLoading = false,
+}) => {
   const {
     activeView,
     setActiveView,
@@ -29,67 +34,182 @@ export const Navbar: React.FC = () => {
   } = useHostel();
 
   /* -------------------------------------------------------------------------- */
-  /*                                    STATE                                   */
+  /* STATE                                                                      */
   /* -------------------------------------------------------------------------- */
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
-  // Controls hide/show behavior while scrolling.
-  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
+
+  /* -------------------------------------------------------------------------- */
+  /* REFS                                                                       */
+  /* -------------------------------------------------------------------------- */
 
   const userMenuRef = useRef<HTMLDivElement>(null);
   const notifMenuRef = useRef<HTMLDivElement>(null);
 
-  // Last known scroll position.
   const lastScrollY = useRef(0);
-
-  // Prevents tiny scroll movements from constantly toggling the navbar.
   const scrollAccumulator = useRef(0);
 
-  const unreadCount =
-    notifications?.filter((notification: any) => !notification.read).length ||
-    0;
+  /*
+   * Prevents the navbar from immediately appearing because of the scroll
+   * position changing while a new page/view is being opened.
+   */
+  const navTransitionLock = useRef(false);
+
+  /*
+   * Used to prevent the first tiny scroll movement from triggering
+   * the navbar.
+   */
+  const hasScrolledAfterTransition = useRef(false);
+
+  const ticking = useRef(false);
 
   /* -------------------------------------------------------------------------- */
-  /*                         HIDE / SHOW ON SCROLL                              */
+  /* NOTIFICATIONS                                                              */
+  /* -------------------------------------------------------------------------- */
+
+  const unreadCount =
+    notifications?.filter(
+      (notification: any) => !notification.read
+    ).length || 0;
+
+  /* -------------------------------------------------------------------------- */
+  /* PRELOADER STATE                                                            */
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
-    let ticking = false;
+    /*
+     * While the preloader is active, the navbar must not exist visually.
+     */
+    if (isPreloaderLoading) {
+      setIsNavbarVisible(false);
 
+      lastScrollY.current = window.scrollY;
+      scrollAccumulator.current = 0;
+      navTransitionLock.current = false;
+      hasScrolledAfterTransition.current = false;
+
+      return;
+    }
+
+    /*
+     * The preloader has completed.
+     *
+     * Keep the navbar hidden after the intro.
+     * It will appear when the user starts scrolling.
+     */
+    setIsNavbarVisible(false);
+
+    lastScrollY.current = window.scrollY;
+    scrollAccumulator.current = 0;
+
+    navTransitionLock.current = true;
+    hasScrolledAfterTransition.current = false;
+  }, [isPreloaderLoading]);
+
+  /* -------------------------------------------------------------------------- */
+  /* SCROLL BEHAVIOUR                                                           */
+  /* -------------------------------------------------------------------------- */
+
+  useEffect(() => {
     const handleScroll = () => {
-      if (ticking) return;
+      if (ticking.current) return;
+
+      ticking.current = true;
 
       window.requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
+        const previousScrollY = lastScrollY.current;
 
-        // Always show navbar when we're at the very top.
-        if (currentScrollY <= 12) {
-          setIsNavbarVisible(true);
-          lastScrollY.current = currentScrollY;
-          scrollAccumulator.current = 0;
-          ticking = false;
+        const difference = currentScrollY - previousScrollY;
+
+        lastScrollY.current = currentScrollY;
+
+        /*
+         * Never show navbar while preloader is active.
+         */
+        if (isPreloaderLoading) {
+          setIsNavbarVisible(false);
+
+          ticking.current = false;
           return;
         }
 
-        const difference = currentScrollY - lastScrollY.current;
+        /*
+         * TOP OF PAGE
+         *
+         * At the very top the navbar should always be visible.
+         */
+        if (currentScrollY <= 12) {
+          setIsNavbarVisible(true);
+
+          navTransitionLock.current = false;
+          hasScrolledAfterTransition.current = false;
+          scrollAccumulator.current = 0;
+
+          ticking.current = false;
+          return;
+        }
+
+        /*
+         * AFTER PRELOADER / PAGE TRANSITION
+         *
+         * Navbar stays hidden until the user actually starts scrolling.
+         */
+        if (navTransitionLock.current) {
+          if (Math.abs(difference) < 6) {
+            ticking.current = false;
+            return;
+          }
+
+          hasScrolledAfterTransition.current = true;
+
+          /*
+           * First meaningful scroll:
+           *
+           * Scrolling UP  -> show navbar immediately.
+           * Scrolling DOWN -> keep it hidden.
+           */
+          if (difference < 0) {
+            setIsNavbarVisible(true);
+          } else {
+            setIsNavbarVisible(false);
+          }
+
+          /*
+           * The transition lock is now finished.
+           * Normal scroll behaviour takes over.
+           */
+          navTransitionLock.current = false;
+          scrollAccumulator.current = 0;
+
+          ticking.current = false;
+          return;
+        }
 
         /*
          * Ignore tiny movements.
-         * This prevents the navbar from flickering while the user
-         * makes small touchpad / mobile scrolling movements.
+         * This prevents jitter from trackpads and mobile browsers.
          */
-        if (Math.abs(difference) < 6) {
-          ticking = false;
+        if (Math.abs(difference) < 2) {
+          ticking.current = false;
           return;
         }
 
+        /*
+         * Accumulate scroll movement before changing navbar state.
+         * This creates a smoother experience than reacting to every
+         * single pixel.
+         */
         scrollAccumulator.current += difference;
 
         /*
-         * Scrolling DOWN
+         * SCROLLING DOWN
+         *
+         * Hide navbar after enough downward movement.
          */
         if (scrollAccumulator.current > 14) {
           setIsNavbarVisible(false);
@@ -97,18 +217,17 @@ export const Navbar: React.FC = () => {
         }
 
         /*
-         * Scrolling UP
+         * SCROLLING UP
+         *
+         * Show navbar after enough upward movement.
          */
         if (scrollAccumulator.current < -14) {
           setIsNavbarVisible(true);
           scrollAccumulator.current = 0;
         }
 
-        lastScrollY.current = currentScrollY;
-        ticking = false;
+        ticking.current = false;
       });
-
-      ticking = true;
     };
 
     window.addEventListener('scroll', handleScroll, {
@@ -118,10 +237,10 @@ export const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isPreloaderLoading]);
 
   /* -------------------------------------------------------------------------- */
-  /*                           LOCK BODY SCROLL                                 */
+  /* BODY SCROLL LOCK                                                           */
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
@@ -137,7 +256,7 @@ export const Navbar: React.FC = () => {
   }, [mobileMenuOpen]);
 
   /* -------------------------------------------------------------------------- */
-  /*                          CLOSE DROPDOWNS                                   */
+  /* CLOSE DROPDOWNS WHEN CLICKING OUTSIDE                                      */
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
@@ -162,12 +281,15 @@ export const Navbar: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener(
+        'mousedown',
+        handleClickOutside
+      );
     };
   }, []);
 
   /* -------------------------------------------------------------------------- */
-  /*                      CLOSE MOBILE MENU ON DESKTOP                          */
+  /* CLOSE MOBILE MENU ON DESKTOP                                               */
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
@@ -185,72 +307,84 @@ export const Navbar: React.FC = () => {
   }, []);
 
   /* -------------------------------------------------------------------------- */
-  /*                              NAVIGATION                                    */
+  /* NAVIGATION                                                                 */
   /* -------------------------------------------------------------------------- */
 
-  const closeAllMenus = () => {
+  const handleNavClick = (viewId: string) => {
+    /*
+     * Hide navbar immediately.
+     */
+    setIsNavbarVisible(false);
+
+    /*
+     * Prevent the scroll listener from immediately bringing it back.
+     */
+    navTransitionLock.current = true;
+    hasScrolledAfterTransition.current = false;
+    scrollAccumulator.current = 0;
+
+    /*
+     * Reset scroll tracking.
+     */
+    lastScrollY.current = window.scrollY;
+
+    /*
+     * Close all menus.
+     */
     setMobileMenuOpen(false);
     setShowNotifDropdown(false);
     setShowUserDropdown(false);
-  };
 
-  const handleNavClick = (viewId: string) => {
+    /*
+     * Change the active page/view.
+     */
     setActiveView(viewId as any);
-    closeAllMenus();
 
-    // Always return to the top when changing views.
+    /*
+     * Start the new view at the top.
+     */
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
 
-  const handleLogout = () => {
-    closeAllMenus();
-    logout();
-  };
-
   /* -------------------------------------------------------------------------- */
-  /*                              NAV LINKS                                     */
+  /* NAVIGATION LINKS                                                           */
   /* -------------------------------------------------------------------------- */
 
   const navLinks = [
     {
       id: 'rooms',
       label: 'Rooms',
-      icon: Building2,
     },
     {
       id: 'floor-explorer',
       label: 'Floor Explorer',
-      icon: Building2,
     },
     {
       id: 'roommates',
       label: 'Roommates',
-      icon: Users,
     },
     {
       id: 'gallery',
       label: 'Gallery',
-      icon: Building2,
     },
   ];
 
   /* -------------------------------------------------------------------------- */
-  /*                                 RENDER                                     */
+  /* RENDER                                                                     */
   /* -------------------------------------------------------------------------- */
 
   return (
     <>
-      {/* ---------------------------------------------------------------------- */}
-      {/*                          FIXED NAVBAR                                  */}
-      {/* ---------------------------------------------------------------------- */}
-
-      <motion.div
-        initial={{ y: 0 }}
+      <motion.nav
+        initial={false}
         animate={{
-          y: isNavbarVisible ? '0%' : '-110%',
+          y:
+            isPreloaderLoading || !isNavbarVisible
+              ? '-110%'
+              : '0%',
         }}
         transition={{
           duration: 0.32,
@@ -258,171 +392,69 @@ export const Navbar: React.FC = () => {
         }}
         className="
           fixed
-          inset-x-0
           top-0
-          z-[100]
+          left-0
+          right-0
+          z-40
           w-full
-          max-w-full
+          bg-[#211F1D]
+          border-b
+          border-[#5B514B]
         "
       >
         {/* ------------------------------------------------------------------ */}
-        {/*                         BOOKING HOLD                                */}
+        {/* BOOKING HOLD                                                       */}
         {/* ------------------------------------------------------------------ */}
 
-        <AnimatePresence initial={false}>
-          {activeBookingHold && (
-            <motion.div
-              initial={{
-                height: 0,
-                opacity: 0,
-              }}
-              animate={{
-                height: 'auto',
-                opacity: 1,
-              }}
-              exit={{
-                height: 0,
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.25,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="
-                overflow-hidden
-                border-b
-                border-[#FEFB58]/20
-                bg-[#FEFB58]
-                text-[#211F1D]
-              "
-            >
-              <div
-                className="
-                  mx-auto
-                  flex
-                  min-h-[40px]
-                  w-full
-                  max-w-7xl
-                  items-center
-                  justify-center
-                  px-3
-                  py-2
-                  text-center
-                  sm:px-6
-                  lg:px-8
-                "
-              >
-                <p className="text-xs font-semibold leading-relaxed sm:text-sm">
-                  Your room is temporarily reserved.
-                  <span className="ml-1 font-bold">
-                    Complete your booking before the hold expires.
-                  </span>
-                </p>
+        {activeBookingHold && (
+          <div className="bg-[#FEFB58] text-[#211F1D]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="h-9 flex items-center justify-center text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                <span>
+                  Your room is temporarily reserved while you
+                  complete your booking.
+                </span>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
 
         {/* ------------------------------------------------------------------ */}
-        {/*                             HEADER                                  */}
+        {/* MAIN NAV                                                           */}
         {/* ------------------------------------------------------------------ */}
 
-        <header
-          className="
-            relative
-            z-[100]
-            w-full
-            max-w-full
-            border-b
-            border-[#5B514B]/35
-            bg-[#211F1D]
-            text-[#F4EFE7]
-            shadow-[0_4px_20px_rgba(0,0,0,0.12)]
-          "
-        >
-          <div
-            className="
-              mx-auto
-              flex
-              h-16
-              w-full
-              max-w-7xl
-              min-w-0
-              items-center
-              gap-2
-              px-3
-              sm:h-[72px]
-              sm:px-6
-              lg:px-8
-            "
-          >
-            {/* -------------------------------------------------------------- */}
-            {/*                              LOGO                              */}
-            {/* -------------------------------------------------------------- */}
-
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-[72px] flex items-center justify-between gap-6">
+            {/* BRAND */}
             <button
               type="button"
               onClick={() => handleNavClick('home')}
-              aria-label="Go to homepage"
-              className="
-                group
-                flex
-                min-w-0
-                shrink-0
-                items-center
-                rounded-xl
-                outline-none
-                focus-visible:ring-2
-                focus-visible:ring-[#FEFB58]
-                focus-visible:ring-offset-2
-                focus-visible:ring-offset-[#211F1D]
-              "
+              className="flex items-center gap-3 shrink-0 cursor-pointer"
             >
-              <div
-                className="
-                  relative
-                  h-10
-                  w-10
-                  shrink-0
-                  overflow-hidden
-                  rounded-lg
-                  sm:h-11
-                  sm:w-11
-                "
-              >
+              <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-[#5B514B]">
                 <Image
-                  src="/Mush_logo.png"
+                  src="/mush_logo.png"
                   alt="Mushia Hostel"
                   fill
-                  priority
-                  sizes="44px"
-                  className="
-                    object-contain
-                    transition-transform
-                    duration-300
-                    group-hover:scale-105
-                  "
+                  sizes="40px"
+                  className="object-cover"
                 />
+              </div>
+
+              <div className="hidden sm:block text-left">
+                <div className="text-sm font-black tracking-tight text-[#F4EFE7]">
+                  MUSHIA
+                </div>
+
+                <div className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#A1927D]">
+                  HOSTEL
+                </div>
               </div>
             </button>
 
-            {/* -------------------------------------------------------------- */}
-            {/*                         DESKTOP NAV                             */}
-            {/* -------------------------------------------------------------- */}
-
-            <nav
-              aria-label="Main navigation"
-              className="
-                ml-auto
-                hidden
-                min-w-0
-                items-center
-                gap-1
-                lg:flex
-              "
-            >
+            {/* DESKTOP NAV */}
+            <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
-                const Icon = link.icon;
                 const isActive = activeView === link.id;
 
                 return (
@@ -430,917 +462,510 @@ export const Navbar: React.FC = () => {
                     key={link.id}
                     type="button"
                     onClick={() => handleNavClick(link.id)}
-                    className={`
-                      group
+                    className="
                       relative
-                      flex
-                      min-h-10
-                      shrink-0
-                      items-center
-                      gap-2
-                      rounded-lg
-                      px-3
-                      text-sm
-                      font-medium
+                      px-4
+                      py-2
+                      text-xs
+                      font-bold
+                      uppercase
+                      tracking-wider
+                      text-[#A1927D]
+                      hover:text-[#F4EFE7]
                       transition-colors
-                      duration-200
-                      focus-visible:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-[#FEFB58]
-                      ${
-                        isActive
-                          ? 'text-[#FEFB58]'
-                          : 'text-[#F4EFE7]/75 hover:text-[#F4EFE7]'
-                      }
-                    `}
+                      cursor-pointer
+                    "
                   >
-                    <Icon
-                      className={`
-                        h-4
-                        w-4
-                        transition-transform
-                        duration-200
-                        group-hover:-translate-y-0.5
-                        ${
-                          isActive
-                            ? 'text-[#FEFB58]'
-                            : 'text-[#A1927D]'
-                        }
-                      `}
-                    />
-
-                    <span className="whitespace-nowrap">
-                      {link.label}
-                    </span>
+                    {link.label}
 
                     {isActive && (
                       <motion.span
-                        layoutId="navbar-active"
+                        layoutId="active-nav"
                         className="
                           absolute
-                          inset-x-3
-                          -bottom-[1px]
-                          h-[2px]
-                          rounded-full
+                          left-4
+                          right-4
+                          -bottom-1
+                          h-0.5
                           bg-[#FEFB58]
                         "
                         transition={{
                           type: 'spring',
-                          stiffness: 400,
-                          damping: 30,
+                          stiffness: 500,
+                          damping: 35,
                         }}
                       />
                     )}
                   </button>
                 );
               })}
-            </nav>
+            </div>
 
-            {/* -------------------------------------------------------------- */}
-            {/*                          ACTIONS                                */}
-            {/* -------------------------------------------------------------- */}
-
-            <div
-              className="
-                ml-auto
-                flex
-                shrink-0
-                items-center
-                gap-1.5
-                sm:gap-2
-                lg:ml-4
-              "
-            >
-              {/* ---------------------------------------------------------- */}
-              {/*                       NOTIFICATIONS                          */}
-              {/* ---------------------------------------------------------- */}
-
-              {isLoggedIn && (
-                <div
-                  ref={notifMenuRef}
-                  className="relative hidden sm:block"
+            {/* RIGHT ACTIONS */}
+            <div className="flex items-center gap-2">
+              {/* NOTIFICATIONS */}
+              <div
+                ref={notifMenuRef}
+                className="relative hidden sm:block"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowNotifDropdown((prev) => !prev);
+                    setShowUserDropdown(false);
+                  }}
+                  className="
+                    relative
+                    w-10
+                    h-10
+                    rounded-xl
+                    border
+                    border-[#5B514B]
+                    flex
+                    items-center
+                    justify-center
+                    text-[#A1927D]
+                    hover:text-[#F4EFE7]
+                    hover:border-[#7D6E66]
+                    transition-colors
+                    cursor-pointer
+                  "
+                  aria-label="Notifications"
                 >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowNotifDropdown((value) => !value);
-                      setShowUserDropdown(false);
-                    }}
-                    aria-label="Notifications"
-                    aria-expanded={showNotifDropdown}
-                    className="
-                      relative
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-                      rounded-lg
-                      border
-                      border-[#F4EFE7]/10
-                      bg-[#F4EFE7]/[0.04]
-                      text-[#F4EFE7]/80
-                      transition-all
-                      duration-200
-                      hover:border-[#F4EFE7]/20
-                      hover:bg-[#F4EFE7]/[0.08]
-                      hover:text-[#F4EFE7]
-                      focus-visible:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-[#FEFB58]
-                    "
-                  >
-                    <Bell className="h-[18px] w-[18px]" />
+                  <Bell className="w-4 h-4" />
 
-                    {unreadCount > 0 && (
-                      <span
-                        className="
-                          absolute
-                          right-1
-                          top-1
-                          flex
-                          h-4
-                          min-w-4
-                          items-center
-                          justify-center
-                          rounded-full
-                          bg-[#FEFB58]
-                          px-1
-                          text-[9px]
-                          font-black
-                          leading-none
-                          text-[#211F1D]
-                        "
-                      >
-                        {unreadCount > 9 ? '9+' : unreadCount}
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Notification dropdown */}
-                  <AnimatePresence>
-                    {showNotifDropdown && (
-                      <motion.div
-                        initial={{
-                          opacity: 0,
-                          y: -6,
-                          scale: 0.98,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                          scale: 1,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          y: -6,
-                          scale: 0.98,
-                        }}
-                        transition={{
-                          duration: 0.18,
-                        }}
-                        className="
-                          absolute
-                          right-0
-                          top-[calc(100%+10px)]
-                          z-[120]
-                          w-[min(360px,calc(100vw-24px))]
-                          overflow-hidden
-                          rounded-2xl
-                          border
-                          border-[#5B514B]/40
-                          bg-[#211F1D]
-                          shadow-[0_18px_50px_rgba(0,0,0,0.28)]
-                        "
-                      >
-                        <div
-                          className="
-                            flex
-                            items-center
-                            justify-between
-                            border-b
-                            border-[#5B514B]/30
-                            px-4
-                            py-3
-                          "
-                        >
-                          <div>
-                            <p className="text-sm font-bold text-[#F4EFE7]">
-                              Notifications
-                            </p>
-
-                            <p className="mt-0.5 text-xs text-[#A1927D]">
-                              Your latest updates
-                            </p>
-                          </div>
-
-                          {unreadCount > 0 && (
-                            <span
-                              className="
-                                rounded-full
-                                bg-[#FEFB58]/10
-                                px-2
-                                py-1
-                                text-[10px]
-                                font-bold
-                                text-[#FEFB58]
-                              "
-                            >
-                              {unreadCount} new
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="max-h-[320px] overflow-y-auto">
-                          {notifications?.length ? (
-                            notifications.map((notification: any) => (
-                              <div
-                                key={notification.id}
-                                className="
-                                  border-b
-                                  border-[#5B514B]/20
-                                  px-4
-                                  py-3.5
-                                  last:border-b-0
-                                  hover:bg-[#F4EFE7]/[0.03]
-                                "
-                              >
-                                <div className="flex gap-3">
-                                  <div
-                                    className="
-                                      mt-0.5
-                                      h-2
-                                      w-2
-                                      shrink-0
-                                      rounded-full
-                                      bg-[#FEFB58]
-                                    "
-                                  />
-
-                                  <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-[#F4EFE7]">
-                                      {notification.title ||
-                                        'Notification'}
-                                    </p>
-
-                                    {notification.message && (
-                                      <p className="mt-1 text-xs leading-relaxed text-[#A1927D]">
-                                        {notification.message}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="px-5 py-8 text-center">
-                              <Bell className="mx-auto h-6 w-6 text-[#A1927D]" />
-
-                              <p className="mt-3 text-sm font-medium text-[#F4EFE7]">
-                                No notifications
-                              </p>
-
-                              <p className="mt-1 text-xs text-[#A1927D]">
-                                You&apos;re all caught up.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-
-              {/* ---------------------------------------------------------- */}
-              {/*                         USER MENU                            */}
-              {/* ---------------------------------------------------------- */}
-
-              {isLoggedIn ? (
-                <div
-                  ref={userMenuRef}
-                  className="relative hidden lg:block"
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowUserDropdown((value) => !value);
-                      setShowNotifDropdown(false);
-                    }}
-                    aria-expanded={showUserDropdown}
-                    className="
-                      flex
-                      min-h-10
-                      max-w-[180px]
-                      items-center
-                      gap-2
-                      rounded-lg
-                      border
-                      border-[#F4EFE7]/10
-                      bg-[#F4EFE7]/[0.04]
-                      px-2.5
-                      text-left
-                      transition-all
-                      duration-200
-                      hover:border-[#F4EFE7]/20
-                      hover:bg-[#F4EFE7]/[0.08]
-                      focus-visible:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-[#FEFB58]
-                    "
-                  >
-                    <div
+                  {unreadCount > 0 && (
+                    <span
                       className="
-                        flex
-                        h-7
-                        w-7
-                        shrink-0
-                        items-center
-                        justify-center
+                        absolute
+                        top-1
+                        right-1
+                        min-w-4
+                        h-4
+                        px-1
                         rounded-full
                         bg-[#FEFB58]
                         text-[#211F1D]
+                        text-[8px]
+                        font-black
+                        flex
+                        items-center
+                        justify-center
                       "
                     >
-                      <User className="h-3.5 w-3.5" />
-                    </div>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
 
-                    <div className="min-w-0">
-                      <p className="truncate text-xs font-semibold text-[#F4EFE7]">
-                        {currentStudent?.name || 'Student'}
-                      </p>
+                <AnimatePresence>
+                  {showNotifDropdown && (
+                    <motion.div
+                      initial={{
+                        opacity: 0,
+                        y: 8,
+                        scale: 0.98,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: 8,
+                        scale: 0.98,
+                      }}
+                      transition={{
+                        duration: 0.2,
+                      }}
+                      className="
+                        absolute
+                        right-0
+                        top-full
+                        mt-3
+                        w-80
+                        max-w-[calc(100vw-2rem)]
+                        rounded-2xl
+                        border
+                        border-[#5B514B]
+                        bg-[#2A2827]
+                        shadow-2xl
+                        overflow-hidden
+                      "
+                    >
+                      <div className="px-4 py-3 border-b border-[#5B514B]">
+                        <div className="text-xs font-black uppercase tracking-wider text-[#F4EFE7]">
+                          Notifications
+                        </div>
+                      </div>
 
-                      <p className="truncate text-[10px] text-[#A1927D]">
-                        Account
-                      </p>
-                    </div>
+                      <div className="max-h-80 overflow-y-auto">
+                        {notifications?.length ? (
+                          notifications.map(
+                            (notification: any) => (
+                              <div
+                                key={notification.id}
+                                className="
+                                  px-4
+                                  py-3
+                                  border-b
+                                  border-[#5B514B]/60
+                                  last:border-0
+                                "
+                              >
+                                <p className="text-xs text-[#F4EFE7]">
+                                  {notification.message}
+                                </p>
 
-                    <ChevronDown
-                      className={`
-                        ml-auto
-                        h-3.5
-                        w-3.5
-                        shrink-0
-                        text-[#A1927D]
-                        transition-transform
-                        duration-200
-                        ${
-                          showUserDropdown
-                            ? 'rotate-180'
-                            : ''
-                        }
-                      `}
-                    />
-                  </button>
+                                {!notification.read && (
+                                  <div className="mt-1 text-[9px] uppercase tracking-wider text-[#FEFB58] font-bold">
+                                    New
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          )
+                        ) : (
+                          <div className="px-4 py-8 text-center text-xs text-[#A1927D]">
+                            No notifications yet.
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-                  {/* User dropdown */}
-                  <AnimatePresence>
-                    {showUserDropdown && (
-                      <motion.div
-                        initial={{
-                          opacity: 0,
-                          y: -6,
-                          scale: 0.98,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                          scale: 1,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          y: -6,
-                          scale: 0.98,
-                        }}
-                        transition={{
-                          duration: 0.18,
-                        }}
-                        className="
-                          absolute
-                          right-0
-                          top-[calc(100%+10px)]
-                          z-[120]
-                          w-60
-                          overflow-hidden
-                          rounded-2xl
-                          border
-                          border-[#5B514B]/40
-                          bg-[#211F1D]
-                          p-1.5
-                          shadow-[0_18px_50px_rgba(0,0,0,0.28)]
-                        "
-                      >
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleNavClick('dashboard')
-                          }
-                          className="
-                            flex
-                            w-full
-                            items-center
-                            gap-3
-                            rounded-xl
-                            px-3
-                            py-3
-                            text-left
-                            text-sm
-                            font-medium
-                            text-[#F4EFE7]
-                            transition-colors
-                            hover:bg-[#F4EFE7]/[0.05]
-                          "
-                        >
-                          <User className="h-4 w-4 text-[#A1927D]" />
-                          Dashboard
-                        </button>
-
-                        <div className="my-1 h-px bg-[#5B514B]/30" />
-
-                        <button
-                          type="button"
-                          onClick={handleLogout}
-                          className="
-                            flex
-                            w-full
-                            items-center
-                            gap-3
-                            rounded-xl
-                            px-3
-                            py-3
-                            text-left
-                            text-sm
-                            font-medium
-                            text-[#F4EFE7]
-                            transition-colors
-                            hover:bg-[#FEFB58]/[0.06]
-                            hover:text-[#FEFB58]
-                          "
-                        >
-                          <LogOut className="h-4 w-4" />
-                          Sign Out
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                /* ---------------------------------------------------------- */
-                /*                       DESKTOP LOGIN                        */
-                /* ---------------------------------------------------------- */
-
+              {/* USER */}
+              <div
+                ref={userMenuRef}
+                className="relative hidden sm:block"
+              >
                 <button
                   type="button"
-                  onClick={() => setIsAuthModalOpen(true)}
+                  onClick={() => {
+                    setShowUserDropdown((prev) => !prev);
+                    setShowNotifDropdown(false);
+                  }}
                   className="
-                    hidden
-                    min-h-10
+                    flex
                     items-center
                     gap-2
-                    rounded-lg
-                    border
-                    border-[#F4EFE7]/10
-                    bg-[#F4EFE7]/[0.04]
+                    h-10
                     px-3
-                    text-sm
-                    font-semibold
-                    text-[#F4EFE7]
-                    transition-all
-                    duration-200
-                    hover:border-[#FEFB58]/30
-                    hover:bg-[#FEFB58]/[0.06]
-                    hover:text-[#FEFB58]
-                    focus-visible:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-[#FEFB58]
-                    lg:flex
+                    rounded-xl
+                    border
+                    border-[#5B514B]
+                    text-[#A1927D]
+                    hover:text-[#F4EFE7]
+                    hover:border-[#7D6E66]
+                    transition-colors
+                    cursor-pointer
                   "
                 >
-                  <User className="h-4 w-4" />
-                  Sign In
+                  <User className="w-4 h-4" />
+
+                  <span className="hidden md:block text-[10px] font-bold uppercase tracking-wider">
+                    {isLoggedIn
+                      ? currentStudent?.firstName || 'Account'
+                      : 'Account'}
+                  </span>
+
+                  <ChevronDown
+                    className={`w-3 h-3 transition-transform ${
+                      showUserDropdown
+                        ? 'rotate-180'
+                        : ''
+                    }`}
+                  />
                 </button>
-              )}
 
-              {/* ---------------------------------------------------------- */}
-              {/*                       BOOK A ROOM                           */}
-              {/* ---------------------------------------------------------- */}
+                <AnimatePresence>
+                  {showUserDropdown && (
+                    <motion.div
+                      initial={{
+                        opacity: 0,
+                        y: 8,
+                        scale: 0.98,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: 8,
+                        scale: 0.98,
+                      }}
+                      transition={{
+                        duration: 0.2,
+                      }}
+                      className="
+                        absolute
+                        right-0
+                        top-full
+                        mt-3
+                        w-52
+                        rounded-2xl
+                        border
+                        border-[#5B514B]
+                        bg-[#2A2827]
+                        shadow-2xl
+                        overflow-hidden
+                      "
+                    >
+                      {isLoggedIn ? (
+                        <>
+                          <div className="px-4 py-4 border-b border-[#5B514B]">
+                            <div className="text-xs font-bold text-[#F4EFE7]">
+                              {currentStudent?.firstName ||
+                                'Welcome'}
+                            </div>
 
+                            <div className="text-[10px] text-[#A1927D] mt-1 truncate">
+                              {currentStudent?.email || ''}
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              logout();
+                              setShowUserDropdown(false);
+                            }}
+                            className="
+                              w-full
+                              px-4
+                              py-3
+                              flex
+                              items-center
+                              gap-3
+                              text-left
+                              text-xs
+                              font-bold
+                              text-[#A1927D]
+                              hover:text-[#F4EFE7]
+                              hover:bg-[#5B514B]/30
+                              transition-colors
+                              cursor-pointer
+                            "
+                          >
+                            <LogOut className="w-4 h-4" />
+                            Sign out
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsAuthModalOpen(true);
+                            setShowUserDropdown(false);
+                          }}
+                          className="
+                            w-full
+                            px-4
+                            py-4
+                            text-left
+                            text-xs
+                            font-bold
+                            text-[#F4EFE7]
+                            hover:bg-[#5B514B]/30
+                            transition-colors
+                            cursor-pointer
+                          "
+                        >
+                          Sign in
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* BOOK */}
               <button
                 type="button"
-                onClick={() => handleNavClick('rooms')}
+                onClick={() => handleNavClick('booking')}
                 className="
                   hidden
-                  min-h-10
+                  sm:flex
+                  h-10
                   items-center
                   justify-center
-                  rounded-lg
-                  bg-[#FEFB58]
                   px-4
-                  text-sm
-                  font-bold
+                  rounded-xl
+                  bg-[#FEFB58]
                   text-[#211F1D]
-                  transition-all
-                  duration-200
-                  hover:bg-[#FFFCA0]
-                  hover:shadow-[0_6px_20px_rgba(254,251,88,0.14)]
-                  focus-visible:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-[#FEFB58]
-                  focus-visible:ring-offset-2
-                  focus-visible:ring-offset-[#211F1D]
-                  sm:flex
+                  text-[10px]
+                  font-black
+                  uppercase
+                  tracking-wider
+                  hover:brightness-95
+                  transition
+                  cursor-pointer
                 "
               >
                 Book a Room
               </button>
 
-              {/* ---------------------------------------------------------- */}
-              {/*                       MOBILE MENU                           */}
-              {/* ---------------------------------------------------------- */}
-
+              {/* MOBILE MENU */}
               <button
                 type="button"
-                onClick={() => {
-                  setMobileMenuOpen((value) => !value);
-                  setShowNotifDropdown(false);
-                  setShowUserDropdown(false);
-                }}
-                aria-label={
-                  mobileMenuOpen
-                    ? 'Close navigation menu'
-                    : 'Open navigation menu'
-                }
-                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen((prev) => !prev)}
                 className="
-                  flex
-                  h-10
+                  lg:hidden
                   w-10
-                  shrink-0
+                  h-10
+                  rounded-xl
+                  border
+                  border-[#5B514B]
+                  flex
                   items-center
                   justify-center
-                  rounded-lg
-                  border
-                  border-[#F4EFE7]/10
-                  bg-[#F4EFE7]/[0.04]
                   text-[#F4EFE7]
-                  transition-all
-                  duration-200
-                  hover:bg-[#F4EFE7]/[0.08]
-                  focus-visible:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-[#FEFB58]
-                  lg:hidden
+                  cursor-pointer
                 "
+                aria-label={
+                  mobileMenuOpen
+                    ? 'Close menu'
+                    : 'Open menu'
+                }
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  {mobileMenuOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{
-                        opacity: 0,
-                        rotate: -45,
-                        scale: 0.8,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        rotate: 0,
-                        scale: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        rotate: 45,
-                        scale: 0.8,
-                      }}
-                    >
-                      <X className="h-5 w-5" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{
-                        opacity: 0,
-                        rotate: 45,
-                        scale: 0.8,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        rotate: 0,
-                        scale: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        rotate: -45,
-                        scale: 0.8,
-                      }}
-                    >
-                      <Menu className="h-5 w-5" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
-        </header>
+        </div>
+      </motion.nav>
 
-        {/* ------------------------------------------------------------------ */}
-        {/*                         MOBILE MENU                                 */}
-        {/* ------------------------------------------------------------------ */}
+      {/* -------------------------------------------------------------------- */}
+      {/* MOBILE DRAWER                                                        */}
+      {/* -------------------------------------------------------------------- */}
 
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.button
-                type="button"
-                aria-label="Close menu"
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-                onClick={() => setMobileMenuOpen(false)}
-                className="
-                  fixed
-                  inset-0
-                  top-16
-                  z-[-1]
-                  bg-black/35
-                  lg:hidden
-                "
-              />
+      <AnimatePresence>
+        {mobileMenuOpen && !isPreloaderLoading && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="
+                fixed
+                inset-0
+                z-30
+                bg-black/50
+                lg:hidden
+              "
+              onClick={() => setMobileMenuOpen(false)}
+            />
 
-              {/* Drawer */}
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: -12,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -12,
-                }}
-                transition={{
-                  duration: 0.24,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="
-                  absolute
-                  left-0
-                  right-0
-                  top-full
-                  z-[110]
-                  max-h-[calc(100vh-64px)]
-                  overflow-y-auto
-                  border-b
-                  border-[#5B514B]/40
-                  bg-[#211F1D]
-                  shadow-[0_18px_50px_rgba(0,0,0,0.25)]
-                  lg:hidden
-                "
-              >
-                <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6">
-                  {/* Mobile account */}
-                  {isLoggedIn && (
-                    <div
-                      className="
-                        mb-5
-                        flex
-                        items-center
-                        gap-3
-                        rounded-2xl
-                        border
-                        border-[#5B514B]/30
-                        bg-[#F4EFE7]/[0.035]
-                        p-3
-                      "
-                    >
-                      <div
-                        className="
-                          flex
-                          h-10
-                          w-10
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-full
-                          bg-[#FEFB58]
-                          text-[#211F1D]
-                        "
-                      >
-                        <User className="h-4 w-4" />
-                      </div>
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: -20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: -20,
+              }}
+              transition={{
+                duration: 0.25,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                fixed
+                top-[72px]
+                left-0
+                right-0
+                z-35
+                lg:hidden
+                bg-[#211F1D]
+                border-b
+                border-[#5B514B]
+                shadow-2xl
+              "
+            >
+              <div className="px-4 py-5 space-y-2">
+                {navLinks.map((link) => {
+                  const isActive =
+                    activeView === link.id;
 
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-[#F4EFE7]">
-                          {currentStudent?.name || 'Student'}
-                        </p>
-
-                        <p className="mt-0.5 text-xs text-[#A1927D]">
-                          Student account
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Navigation */}
-                  <nav
-                    aria-label="Mobile navigation"
-                    className="space-y-1"
-                  >
-                    {navLinks.map((link, index) => {
-                      const Icon = link.icon;
-                      const isActive = activeView === link.id;
-
-                      return (
-                        <motion.button
-                          key={link.id}
-                          type="button"
-                          initial={{
-                            opacity: 0,
-                            x: -10,
-                          }}
-                          animate={{
-                            opacity: 1,
-                            x: 0,
-                          }}
-                          transition={{
-                            delay: index * 0.035,
-                            duration: 0.2,
-                          }}
-                          onClick={() =>
-                            handleNavClick(link.id)
-                          }
-                          className={`
-                            flex
-                            min-h-12
-                            w-full
-                            items-center
-                            gap-3
-                            rounded-xl
-                            px-3
-                            text-left
-                            transition-all
-                            duration-200
-                            ${
-                              isActive
-                                ? 'bg-[#FEFB58]/10 text-[#FEFB58]'
-                                : 'text-[#F4EFE7] hover:bg-[#F4EFE7]/[0.04]'
-                            }
-                          `}
-                        >
-                          <div
-                            className={`
-                              flex
-                              h-9
-                              w-9
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-lg
-                              ${
-                                isActive
-                                  ? 'bg-[#FEFB58] text-[#211F1D]'
-                                  : 'bg-[#F4EFE7]/[0.05] text-[#A1927D]'
-                              }
-                            `}
-                          >
-                            <Icon className="h-4 w-4" />
-                          </div>
-
-                          <span className="text-sm font-semibold">
-                            {link.label}
-                          </span>
-
-                          {isActive && (
-                            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#FEFB58]" />
-                          )}
-                        </motion.button>
-                      );
-                    })}
-                  </nav>
-
-                  {/* Mobile actions */}
-                  <div className="mt-5 border-t border-[#5B514B]/30 pt-5">
-                    {!isLoggedIn ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          closeAllMenus();
-                          setIsAuthModalOpen(true);
-                        }}
-                        className="
-                          flex
-                          min-h-12
-                          w-full
-                          items-center
-                          justify-center
-                          gap-2
-                          rounded-xl
-                          border
-                          border-[#5B514B]/40
-                          bg-[#F4EFE7]/[0.04]
-                          text-sm
-                          font-bold
-                          text-[#F4EFE7]
-                          transition-colors
-                          hover:bg-[#F4EFE7]/[0.08]
-                        "
-                      >
-                        <User className="h-4 w-4" />
-                        Sign In
-                      </button>
-                    ) : (
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleNavClick('dashboard')
-                          }
-                          className="
-                            flex
-                            min-h-12
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-xl
-                            border
-                            border-[#5B514B]/40
-                            bg-[#F4EFE7]/[0.04]
-                            text-sm
-                            font-semibold
-                            text-[#F4EFE7]
-                            transition-colors
-                            hover:bg-[#F4EFE7]/[0.08]
-                          "
-                        >
-                          <User className="h-4 w-4" />
-                          Dashboard
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={handleLogout}
-                          className="
-                            flex
-                            min-h-12
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-xl
-                            border
-                            border-[#5B514B]/40
-                            bg-[#F4EFE7]/[0.04]
-                            text-sm
-                            font-semibold
-                            text-[#F4EFE7]
-                            transition-colors
-                            hover:bg-[#FEFB58]/[0.06]
-                            hover:text-[#FEFB58]
-                          "
-                        >
-                          <LogOut className="h-4 w-4" />
-                          Sign Out
-                        </button>
-                      </div>
-                    )}
-
+                  return (
                     <button
+                      key={link.id}
                       type="button"
-                      onClick={() => handleNavClick('rooms')}
-                      className="
-                        mt-2
-                        flex
-                        min-h-12
+                      onClick={() =>
+                        handleNavClick(link.id)
+                      }
+                      className={`
+                        relative
                         w-full
-                        items-center
-                        justify-center
+                        px-4
+                        py-4
                         rounded-xl
-                        bg-[#FEFB58]
-                        text-sm
-                        font-black
-                        text-[#211F1D]
-                        transition-all
-                        duration-200
-                        hover:bg-[#FFFCA0]
-                      "
+                        flex
+                        items-center
+                        justify-between
+                        text-left
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        transition-colors
+                        cursor-pointer
+                        ${
+                          isActive
+                            ? 'bg-[#5B514B]/40 text-[#FEFB58]'
+                            : 'text-[#A1927D] hover:text-[#F4EFE7] hover:bg-[#5B514B]/20'
+                        }
+                      `}
                     >
-                      Book a Room
+                      <span>{link.label}</span>
+
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#FEFB58]" />
+                      )}
                     </button>
-                  </div>
+                  );
+                })}
+
+                <div className="pt-3 border-t border-[#5B514B]">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleNavClick('booking')
+                    }
+                    className="
+                      w-full
+                      h-12
+                      rounded-xl
+                      bg-[#FEFB58]
+                      text-[#211F1D]
+                      text-xs
+                      font-black
+                      uppercase
+                      tracking-wider
+                      cursor-pointer
+                    "
+                  >
+                    Book a Room
+                  </button>
                 </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
