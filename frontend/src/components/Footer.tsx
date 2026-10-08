@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
 
             <p className="text-xs text-[#A5ABAA] leading-relaxed max-w-sm">
               Official student accommodation serving KNUST undergraduate and postgraduate students. 
-              Featuring 120 rooms across 6 floors at Ayeduase Newsite, Kumasi, Ghana.
+              Featuring 103 rooms across 6 floors at Ayeduase Newsite, Kumasi, Ghana.
             </p>
 
             <div className="text-xs text-[#A5ABAA] space-y-1.5 pt-2">
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-[#A5ABAA]">
               <li>
                 <button onClick={() => handleNav('rooms')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  120 Room Inventory
+                  103 Room Inventory
                 </button>
               </li>
               <li>

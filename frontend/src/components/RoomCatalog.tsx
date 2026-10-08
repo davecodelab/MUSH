@@ -113,7 +113,7 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
           </div>
 
           <div className="mt-4 md:mt-0 text-xs text-[#7D6E66] font-medium">
-            Showing <strong className="text-[#2A2827] font-bold tabular-nums">{filteredRooms.length}</strong> of 120 rooms
+            Showing <strong className="text-[#2A2827] font-bold tabular-nums">{filteredRooms.length}</strong> of {rooms.length} rooms
           </div>
         </div>
 
@@ -269,7 +269,7 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
               }}
               className="px-4 py-2 bg-[#5B514B] text-white text-xs font-bold rounded-lg hover:bg-[#2A2827] transition-colors"
             >
-              View All 120 Rooms
+              View All {rooms.length} Rooms
             </button>
           </motion.div>
         ) : (

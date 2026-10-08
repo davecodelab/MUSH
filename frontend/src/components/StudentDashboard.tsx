@@ -48,7 +48,7 @@ export const StudentDashboard: React.FC = () => {
               onClick={() => setActiveView('rooms')}
               className="px-6 py-3 bg-[#FEFB58] hover:bg-[#fff945] text-[#2A2827] font-bold text-xs rounded-xl shadow-md cursor-pointer"
             >
-              Browse 120 Rooms & Book
+              Browse Rooms & Book
             </button>
           </div>
         </div>

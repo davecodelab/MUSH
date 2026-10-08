@@ -105,7 +105,7 @@ export const Hero: React.FC = () => {
               className="px-6 py-3.5 bg-[#5B514B]/70 hover:bg-[#5B514B] text-[#F4EFE7] font-semibold text-sm sm:text-base rounded-xl border border-[#7D6E66]/60 transition-all backdrop-blur-sm flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Building className="w-4 h-4 text-[#A1927D]" />
-              <span>Explore 6 Floors (120 Rooms)</span>
+              <span>Explore 6 Floors (103 Rooms)</span>
             </motion.button>
           </motion.div>
 
@@ -115,8 +115,8 @@ export const Hero: React.FC = () => {
             className="pt-6 border-t border-[#5B514B]/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm"
           >
             <div className="p-2 rounded-lg bg-[#2A2827]/40 border border-[#5B514B]/30 backdrop-blur-sm">
-              <span className="block font-black text-xl text-[#F4EFE7] tabular-nums">120</span>
-              <span className="text-[#A5ABAA] text-xs">Configured Rooms</span>
+              <span className="block font-black text-xl text-[#F4EFE7] tabular-nums">103</span>
+              <span className="text-[#A5ABAA] text-xs">Official Rooms</span>
             </div>
             <div className="p-2 rounded-lg bg-[#2A2827]/40 border border-[#5B514B]/30 backdrop-blur-sm">
               <span className="block font-black text-xl text-[#F4EFE7] tabular-nums">6 Floors</span>

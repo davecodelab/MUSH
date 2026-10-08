@@ -41,12 +41,21 @@ class Command(BaseCommand):
                     room_num_str = str(room_num).strip()
                     room_type_str = str(room_type).strip()
                     
-                    # Parse capacity from room_type (e.g., '4IN1' -> 4)
-                    try:
-                        capacity = int(room_type_str[0])
-                    except ValueError:
-                        self.stderr.write(f"Could not parse capacity for {room_num_str} from {room_type_str}")
-                        continue
+                    amenities = []
+                    if 'AC' in room_type_str.upper():
+                        amenities.append('AC')
+                    if 'LARGE' in room_type_str.upper() or 'BIG' in room_type_str.upper():
+                        amenities.append('Big')
+                    if 'RESERVED' in room_type_str.upper():
+                        amenities.append('Reserved')
+                        capacity = 1
+                    else:
+                        try:
+                            capacity = int(room_type_str[0])
+                        except ValueError:
+                            capacity = 1
+                    if capacity >= 3 and 'Big' not in amenities:
+                        amenities.append('Big')
                         
                     # Create or get Room
                     room, created = Room.objects.get_or_create(
@@ -55,7 +64,8 @@ class Command(BaseCommand):
                             'floor': floor_name,
                             'room_type': room_type_str,
                             'capacity': capacity,
-                            'price_per_space': 0.00, # Default, can be updated later
+                            'price_per_space': 0.00,
+                            'amenities': amenities,
                         }
                     )
                     

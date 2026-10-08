@@ -12,7 +12,7 @@ export const HowItWorks: React.FC = () => {
     {
       num: '01',
       title: 'Explore',
-      subtitle: 'Browse 120 rooms & facilities',
+      subtitle: 'Browse 103 rooms & facilities',
       description: 'Filter by floor level, AC status, room size, or student capacity across our interactive 6-floor layout.',
       icon: Search,
     },

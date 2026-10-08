@@ -9,7 +9,7 @@ export const FAQSection: React.FC = () => {
   const faqs = [
     {
       q: 'What room types does Mushia Hostel offer?',
-      a: 'Mushia Hostel offers 4-in-1, 3-in-1, 2-in-1, and executive 1-in-1 rooms across 6 residential floors with 120 rooms in total.',
+      a: 'Mushia Hostel offers 4-in-1, 3-in-1, 2-in-1, and executive 1-in-1 rooms across 6 residential floors with 103 rooms in total.',
     },
     {
       q: 'Do you have AC rooms?',
@@ -17,7 +17,7 @@ export const FAQSection: React.FC = () => {
     },
     {
       q: 'Can I choose my room and specific bed space?',
-      a: 'Students can inspect all 120 rooms via our interactive Floor Explorer and select the exact bed space (Space 1, 2, 3, or 4) they prefer.',
+      a: 'Students can inspect all 103 rooms via our interactive Floor Explorer and select the exact bed space (Space 1, 2, 3, or 4) they prefer.',
     },
     {
       q: 'Can I choose my roommate?',
