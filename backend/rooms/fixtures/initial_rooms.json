@@ -1,0 +1,3065 @@
+[
+{
+  "model": "rooms.room",
+  "pk": 1,
+  "fields": {
+    "room_number": "R01",
+    "floor": "GROUND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "MALE",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 2,
+  "fields": {
+    "room_number": "R02",
+    "floor": "GROUND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 3,
+  "fields": {
+    "room_number": "R03",
+    "floor": "GROUND FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 4,
+  "fields": {
+    "room_number": "R04",
+    "floor": "GROUND FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 5,
+  "fields": {
+    "room_number": "R05",
+    "floor": "GROUND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 6,
+  "fields": {
+    "room_number": "R06",
+    "floor": "GROUND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 7,
+  "fields": {
+    "room_number": "R07",
+    "floor": "GROUND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 8,
+  "fields": {
+    "room_number": "R08",
+    "floor": "GROUND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 9,
+  "fields": {
+    "room_number": "R09",
+    "floor": "GROUND FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 10,
+  "fields": {
+    "room_number": "R10",
+    "floor": "GROUND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 11,
+  "fields": {
+    "room_number": "R11",
+    "floor": "GROUND FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 12,
+  "fields": {
+    "room_number": "R12",
+    "floor": "GROUND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 13,
+  "fields": {
+    "room_number": "R13",
+    "floor": "GROUND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 14,
+  "fields": {
+    "room_number": "R14",
+    "floor": "GROUND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 15,
+  "fields": {
+    "room_number": "R101",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 16,
+  "fields": {
+    "room_number": "R102",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 17,
+  "fields": {
+    "room_number": "R103",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 18,
+  "fields": {
+    "room_number": "R104",
+    "floor": "1ST FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 19,
+  "fields": {
+    "room_number": "R105",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'SMALL",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 20,
+  "fields": {
+    "room_number": "R106",
+    "floor": "1ST FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 21,
+  "fields": {
+    "room_number": "R107",
+    "floor": "1ST FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 22,
+  "fields": {
+    "room_number": "R108",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 23,
+  "fields": {
+    "room_number": "R109",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 24,
+  "fields": {
+    "room_number": "R110",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 25,
+  "fields": {
+    "room_number": "R111",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 26,
+  "fields": {
+    "room_number": "R112",
+    "floor": "1ST FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 27,
+  "fields": {
+    "room_number": "R113",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 28,
+  "fields": {
+    "room_number": "R114",
+    "floor": "1ST FLOOR",
+    "room_type": "2IN1'SMALL",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 29,
+  "fields": {
+    "room_number": "R115",
+    "floor": "1ST FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 30,
+  "fields": {
+    "room_number": "R201",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 31,
+  "fields": {
+    "room_number": "R202",
+    "floor": "2ND FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 32,
+  "fields": {
+    "room_number": "R203",
+    "floor": "2ND FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 33,
+  "fields": {
+    "room_number": "R204",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1'LARGE'AC",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 34,
+  "fields": {
+    "room_number": "R205",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 35,
+  "fields": {
+    "room_number": "R206",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 36,
+  "fields": {
+    "room_number": "R207",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 37,
+  "fields": {
+    "room_number": "R208",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 38,
+  "fields": {
+    "room_number": "R209",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 39,
+  "fields": {
+    "room_number": "R210",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 40,
+  "fields": {
+    "room_number": "R211",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 41,
+  "fields": {
+    "room_number": "R212",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 42,
+  "fields": {
+    "room_number": "R213",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 43,
+  "fields": {
+    "room_number": "R214",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 44,
+  "fields": {
+    "room_number": "R215",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 45,
+  "fields": {
+    "room_number": "R216",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 46,
+  "fields": {
+    "room_number": "R217",
+    "floor": "2ND FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 47,
+  "fields": {
+    "room_number": "R218",
+    "floor": "2ND FLOOR",
+    "room_type": "2IN1'SMALL",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 48,
+  "fields": {
+    "room_number": "R301",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 49,
+  "fields": {
+    "room_number": "R302",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 50,
+  "fields": {
+    "room_number": "R303",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 51,
+  "fields": {
+    "room_number": "R304",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 52,
+  "fields": {
+    "room_number": "R305",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 53,
+  "fields": {
+    "room_number": "R306",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 54,
+  "fields": {
+    "room_number": "R307",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 55,
+  "fields": {
+    "room_number": "R308",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 56,
+  "fields": {
+    "room_number": "R309",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 57,
+  "fields": {
+    "room_number": "R310",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 58,
+  "fields": {
+    "room_number": "R311",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 59,
+  "fields": {
+    "room_number": "R312",
+    "floor": "3RD FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 60,
+  "fields": {
+    "room_number": "R313",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 61,
+  "fields": {
+    "room_number": "R314",
+    "floor": "3RD FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 62,
+  "fields": {
+    "room_number": "R315",
+    "floor": "3RD FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 63,
+  "fields": {
+    "room_number": "R316",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 64,
+  "fields": {
+    "room_number": "R317",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 65,
+  "fields": {
+    "room_number": "R318",
+    "floor": "3RD FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 66,
+  "fields": {
+    "room_number": "R319",
+    "floor": "3RD FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 67,
+  "fields": {
+    "room_number": "R401",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 68,
+  "fields": {
+    "room_number": "R402",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 69,
+  "fields": {
+    "room_number": "R403",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 70,
+  "fields": {
+    "room_number": "R404",
+    "floor": "4TH FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 71,
+  "fields": {
+    "room_number": "R405",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 72,
+  "fields": {
+    "room_number": "R406",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 73,
+  "fields": {
+    "room_number": "R407",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 74,
+  "fields": {
+    "room_number": "R408",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 75,
+  "fields": {
+    "room_number": "R409",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 76,
+  "fields": {
+    "room_number": "R410",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 77,
+  "fields": {
+    "room_number": "R411",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 78,
+  "fields": {
+    "room_number": "R412",
+    "floor": "4TH FLOOR",
+    "room_type": "3IN1",
+    "capacity": 3,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 79,
+  "fields": {
+    "room_number": "R413",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 80,
+  "fields": {
+    "room_number": "R414",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 81,
+  "fields": {
+    "room_number": "R415",
+    "floor": "4TH FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 82,
+  "fields": {
+    "room_number": "R416",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1'AC",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 83,
+  "fields": {
+    "room_number": "R417",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 84,
+  "fields": {
+    "room_number": "R418",
+    "floor": "4TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 85,
+  "fields": {
+    "room_number": "R419",
+    "floor": "4TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 86,
+  "fields": {
+    "room_number": "R501",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 87,
+  "fields": {
+    "room_number": "R502",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 88,
+  "fields": {
+    "room_number": "R503",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 89,
+  "fields": {
+    "room_number": "R504",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 90,
+  "fields": {
+    "room_number": "R505",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 91,
+  "fields": {
+    "room_number": "R506",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 92,
+  "fields": {
+    "room_number": "R507",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 93,
+  "fields": {
+    "room_number": "R508",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 94,
+  "fields": {
+    "room_number": "R509",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 95,
+  "fields": {
+    "room_number": "R510",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 96,
+  "fields": {
+    "room_number": "R512",
+    "floor": "5TH FLOOR",
+    "room_type": "4IN1",
+    "capacity": 4,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 97,
+  "fields": {
+    "room_number": "R513",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 98,
+  "fields": {
+    "room_number": "R514",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 99,
+  "fields": {
+    "room_number": "R515",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 100,
+  "fields": {
+    "room_number": "R516",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 101,
+  "fields": {
+    "room_number": "R517",
+    "floor": "5TH FLOOR",
+    "room_type": "1IN1",
+    "capacity": 1,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.room",
+  "pk": 102,
+  "fields": {
+    "room_number": "R518",
+    "floor": "5TH FLOOR",
+    "room_type": "2IN1",
+    "capacity": 2,
+    "price_per_space": "0.00",
+    "gender_policy": "UNASSIGNED",
+    "amenities": []
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 1,
+  "fields": {
+    "room": 1,
+    "space_identifier": "A",
+    "occupant": 3
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 2,
+  "fields": {
+    "room": 1,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 3,
+  "fields": {
+    "room": 2,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 4,
+  "fields": {
+    "room": 2,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 5,
+  "fields": {
+    "room": 3,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 6,
+  "fields": {
+    "room": 3,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 7,
+  "fields": {
+    "room": 3,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 8,
+  "fields": {
+    "room": 3,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 9,
+  "fields": {
+    "room": 4,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 10,
+  "fields": {
+    "room": 4,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 11,
+  "fields": {
+    "room": 4,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 12,
+  "fields": {
+    "room": 5,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 13,
+  "fields": {
+    "room": 6,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 14,
+  "fields": {
+    "room": 7,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 15,
+  "fields": {
+    "room": 8,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 16,
+  "fields": {
+    "room": 9,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 17,
+  "fields": {
+    "room": 9,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 18,
+  "fields": {
+    "room": 9,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 19,
+  "fields": {
+    "room": 10,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 20,
+  "fields": {
+    "room": 10,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 21,
+  "fields": {
+    "room": 11,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 22,
+  "fields": {
+    "room": 11,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 23,
+  "fields": {
+    "room": 11,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 24,
+  "fields": {
+    "room": 12,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 25,
+  "fields": {
+    "room": 12,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 26,
+  "fields": {
+    "room": 13,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 27,
+  "fields": {
+    "room": 14,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 28,
+  "fields": {
+    "room": 14,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 29,
+  "fields": {
+    "room": 15,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 30,
+  "fields": {
+    "room": 15,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 31,
+  "fields": {
+    "room": 16,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 32,
+  "fields": {
+    "room": 16,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 33,
+  "fields": {
+    "room": 17,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 34,
+  "fields": {
+    "room": 17,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 35,
+  "fields": {
+    "room": 18,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 36,
+  "fields": {
+    "room": 19,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 37,
+  "fields": {
+    "room": 19,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 38,
+  "fields": {
+    "room": 20,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 39,
+  "fields": {
+    "room": 21,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 40,
+  "fields": {
+    "room": 22,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 41,
+  "fields": {
+    "room": 22,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 42,
+  "fields": {
+    "room": 23,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 43,
+  "fields": {
+    "room": 23,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 44,
+  "fields": {
+    "room": 24,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 45,
+  "fields": {
+    "room": 24,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 46,
+  "fields": {
+    "room": 25,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 47,
+  "fields": {
+    "room": 25,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 48,
+  "fields": {
+    "room": 26,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 49,
+  "fields": {
+    "room": 26,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 50,
+  "fields": {
+    "room": 26,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 51,
+  "fields": {
+    "room": 26,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 52,
+  "fields": {
+    "room": 27,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 53,
+  "fields": {
+    "room": 27,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 54,
+  "fields": {
+    "room": 28,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 55,
+  "fields": {
+    "room": 28,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 56,
+  "fields": {
+    "room": 29,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 57,
+  "fields": {
+    "room": 30,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 58,
+  "fields": {
+    "room": 30,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 59,
+  "fields": {
+    "room": 31,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 60,
+  "fields": {
+    "room": 31,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 61,
+  "fields": {
+    "room": 31,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 62,
+  "fields": {
+    "room": 31,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 63,
+  "fields": {
+    "room": 32,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 64,
+  "fields": {
+    "room": 32,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 65,
+  "fields": {
+    "room": 32,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 66,
+  "fields": {
+    "room": 32,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 67,
+  "fields": {
+    "room": 33,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 68,
+  "fields": {
+    "room": 34,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 69,
+  "fields": {
+    "room": 34,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 70,
+  "fields": {
+    "room": 35,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 71,
+  "fields": {
+    "room": 35,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 72,
+  "fields": {
+    "room": 36,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 73,
+  "fields": {
+    "room": 37,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 74,
+  "fields": {
+    "room": 38,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 75,
+  "fields": {
+    "room": 39,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 76,
+  "fields": {
+    "room": 40,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 77,
+  "fields": {
+    "room": 40,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 78,
+  "fields": {
+    "room": 41,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 79,
+  "fields": {
+    "room": 41,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 80,
+  "fields": {
+    "room": 42,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 81,
+  "fields": {
+    "room": 42,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 82,
+  "fields": {
+    "room": 43,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 83,
+  "fields": {
+    "room": 43,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 84,
+  "fields": {
+    "room": 44,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 85,
+  "fields": {
+    "room": 44,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 86,
+  "fields": {
+    "room": 45,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 87,
+  "fields": {
+    "room": 45,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 88,
+  "fields": {
+    "room": 46,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 89,
+  "fields": {
+    "room": 47,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 90,
+  "fields": {
+    "room": 47,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 91,
+  "fields": {
+    "room": 48,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 92,
+  "fields": {
+    "room": 48,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 93,
+  "fields": {
+    "room": 49,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 94,
+  "fields": {
+    "room": 49,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 95,
+  "fields": {
+    "room": 50,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 96,
+  "fields": {
+    "room": 50,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 97,
+  "fields": {
+    "room": 51,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 98,
+  "fields": {
+    "room": 51,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 99,
+  "fields": {
+    "room": 52,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 100,
+  "fields": {
+    "room": 52,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 101,
+  "fields": {
+    "room": 53,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 102,
+  "fields": {
+    "room": 53,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 103,
+  "fields": {
+    "room": 54,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 104,
+  "fields": {
+    "room": 55,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 105,
+  "fields": {
+    "room": 56,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 106,
+  "fields": {
+    "room": 57,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 107,
+  "fields": {
+    "room": 58,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 108,
+  "fields": {
+    "room": 58,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 109,
+  "fields": {
+    "room": 59,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 110,
+  "fields": {
+    "room": 59,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 111,
+  "fields": {
+    "room": 59,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 112,
+  "fields": {
+    "room": 60,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 113,
+  "fields": {
+    "room": 60,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 114,
+  "fields": {
+    "room": 61,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 115,
+  "fields": {
+    "room": 61,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 116,
+  "fields": {
+    "room": 61,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 117,
+  "fields": {
+    "room": 62,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 118,
+  "fields": {
+    "room": 62,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 119,
+  "fields": {
+    "room": 62,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 120,
+  "fields": {
+    "room": 62,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 121,
+  "fields": {
+    "room": 63,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 122,
+  "fields": {
+    "room": 63,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 123,
+  "fields": {
+    "room": 64,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 124,
+  "fields": {
+    "room": 65,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 125,
+  "fields": {
+    "room": 66,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 126,
+  "fields": {
+    "room": 66,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 127,
+  "fields": {
+    "room": 67,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 128,
+  "fields": {
+    "room": 67,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 129,
+  "fields": {
+    "room": 68,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 130,
+  "fields": {
+    "room": 68,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 131,
+  "fields": {
+    "room": 69,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 132,
+  "fields": {
+    "room": 69,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 133,
+  "fields": {
+    "room": 70,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 134,
+  "fields": {
+    "room": 70,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 135,
+  "fields": {
+    "room": 70,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 136,
+  "fields": {
+    "room": 70,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 137,
+  "fields": {
+    "room": 71,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 138,
+  "fields": {
+    "room": 71,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 139,
+  "fields": {
+    "room": 72,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 140,
+  "fields": {
+    "room": 72,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 141,
+  "fields": {
+    "room": 73,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 142,
+  "fields": {
+    "room": 74,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 143,
+  "fields": {
+    "room": 75,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 144,
+  "fields": {
+    "room": 76,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 145,
+  "fields": {
+    "room": 77,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 146,
+  "fields": {
+    "room": 77,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 147,
+  "fields": {
+    "room": 78,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 148,
+  "fields": {
+    "room": 78,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 149,
+  "fields": {
+    "room": 78,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 150,
+  "fields": {
+    "room": 79,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 151,
+  "fields": {
+    "room": 79,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 152,
+  "fields": {
+    "room": 80,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 153,
+  "fields": {
+    "room": 80,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 154,
+  "fields": {
+    "room": 81,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 155,
+  "fields": {
+    "room": 81,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 156,
+  "fields": {
+    "room": 81,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 157,
+  "fields": {
+    "room": 81,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 158,
+  "fields": {
+    "room": 82,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 159,
+  "fields": {
+    "room": 82,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 160,
+  "fields": {
+    "room": 83,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 161,
+  "fields": {
+    "room": 84,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 162,
+  "fields": {
+    "room": 85,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 163,
+  "fields": {
+    "room": 85,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 164,
+  "fields": {
+    "room": 86,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 165,
+  "fields": {
+    "room": 86,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 166,
+  "fields": {
+    "room": 87,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 167,
+  "fields": {
+    "room": 87,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 168,
+  "fields": {
+    "room": 88,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 169,
+  "fields": {
+    "room": 88,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 170,
+  "fields": {
+    "room": 89,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 171,
+  "fields": {
+    "room": 89,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 172,
+  "fields": {
+    "room": 90,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 173,
+  "fields": {
+    "room": 90,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 174,
+  "fields": {
+    "room": 91,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 175,
+  "fields": {
+    "room": 91,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 176,
+  "fields": {
+    "room": 92,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 177,
+  "fields": {
+    "room": 93,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 178,
+  "fields": {
+    "room": 94,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 179,
+  "fields": {
+    "room": 95,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 180,
+  "fields": {
+    "room": 96,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 181,
+  "fields": {
+    "room": 96,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 182,
+  "fields": {
+    "room": 96,
+    "space_identifier": "C",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 183,
+  "fields": {
+    "room": 96,
+    "space_identifier": "D",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 184,
+  "fields": {
+    "room": 97,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 185,
+  "fields": {
+    "room": 97,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 186,
+  "fields": {
+    "room": 98,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 187,
+  "fields": {
+    "room": 98,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 188,
+  "fields": {
+    "room": 99,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 189,
+  "fields": {
+    "room": 99,
+    "space_identifier": "B",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 190,
+  "fields": {
+    "room": 100,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 191,
+  "fields": {
+    "room": 101,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 192,
+  "fields": {
+    "room": 102,
+    "space_identifier": "A",
+    "occupant": null
+  }
+},
+{
+  "model": "rooms.roomspace",
+  "pk": 193,
+  "fields": {
+    "room": 102,
+    "space_identifier": "B",
+    "occupant": null
+  }
+}
+]

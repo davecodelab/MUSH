@@ -1,0 +1,23 @@
+[project]
+name = "mush-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Anapey01", email = "gabriel.k.anapey@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "django>=6.1.2",
+    "django-cors-headers>=4.9.0",
+    "djangorestframework>=3.18.3",
+    "djangorestframework-simplejwt>=5.5.1",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.6",
+    "psycopg2-binary>=2.9.13",
+    "python-docx>=1.2.0",
+    "python-dotenv>=1.2.4",
+]
+
+[tool.uv]
+package = false
