@@ -1,175 +1,426 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'motion/react';
 import { useHostel } from '../context/HostelContext';
-import { Building2, MapPin, Phone, Mail, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Building2,
+  MapPin,
+  Phone,
+  Mail,
+  ShieldCheck,
+  Instagram,
+  Facebook,
+  MessageCircle,
+} from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const { setActiveView, config } = useHostel();
 
-  const handleNav = (view: any) => {
+  const handleNav = (view: Parameters<typeof setActiveView>[0]) => {
     setActiveView(view);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
+  const currentYear = new Date().getFullYear();
+
+  const hostelLinks = [
+    { label: 'Rooms & Availability', view: 'rooms' },
+    { label: 'Floor Explorer', view: 'floor-explorer' },
+    { label: 'Facilities', view: 'facilities' },
+    { label: 'Gallery', view: 'gallery' },
+  ] as const;
+
+  const studentLinks = [
+    { label: 'How Booking Works', view: 'how-it-works' },
+    { label: 'Roommate Matching', view: 'roommates' },
+    { label: 'Student Dashboard', view: 'dashboard' },
+    { label: 'Location & Directions', view: 'location' },
+  ] as const;
+
+  const managementLinks = [
+    { label: 'Admin Portal', view: 'admin' },
+  ] as const;
+
   return (
-    <footer className="bg-[#2A2827] text-[#F4EFE7] border-t border-[#5B514B]">
-      
-      {/* Final Pre-Footer Call to Action (Section #65) */}
-      <div className="border-b border-[#5B514B]/80 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <span className="text-xs font-bold text-[#A1927D] uppercase tracking-widest block">
-            KNUST Academic Session Accommodation
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Ready to Find Your Space?
-          </h2>
-          <p className="text-sm sm:text-base text-[#A5ABAA] max-w-xl mx-auto">
-            Secure your accommodation at Mushia Hostel and make your university journey comfortable, focused, and safe.
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={() => handleNav('rooms')}
-              className="px-8 py-3.5 bg-[#FEFB58] hover:bg-[#fff945] text-[#2A2827] font-black text-sm rounded-xl transition-all shadow-xl active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer"
-            >
-              <span>Book Your Room</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+    <footer className="relative overflow-hidden bg-[#211F1D] text-[#F7F1E8]">
+      {/* =========================================================
+          BACKGROUND DETAILS
+      ========================================================== */}
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {/* Large warm glow */}
+        <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#FEFB58]/[0.035] blur-3xl" />
+
+        <div className="absolute -left-40 bottom-20 h-[360px] w-[360px] rounded-full bg-[#8B756C]/[0.06] blur-3xl" />
+
+        {/* Editorial grid lines */}
+        <div className="absolute inset-y-0 left-[8%] hidden w-px bg-white/[0.035] lg:block" />
+        <div className="absolute inset-y-0 right-[8%] hidden w-px bg-white/[0.035] lg:block" />
       </div>
 
-      {/* Main Footer Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          
-          {/* Brand Info */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-[#5B514B] flex items-center justify-center text-[#FEFB58]">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                Mushia Hostel
-              </span>
-            </div>
+      {/* =========================================================
+          BIG CTA
+      ========================================================== */}
 
-            <p className="text-xs text-[#A5ABAA] leading-relaxed max-w-sm">
-              Official student accommodation serving KNUST undergraduate and postgraduate students. 
-              Featuring 103 rooms across 6 floors at Ayeduase Newsite, Kumasi, Ghana.
+      <section className="relative border-b border-[#A1927D]/20">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
+          <div className="relative overflow-hidden rounded-[2rem] border border-[#A1927D]/20 bg-[#2A2827] px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
+            {/* Accent circle */}
+            <div
+              aria-hidden="true"
+              className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#FEFB58]/[0.06] blur-2xl"
+            />
+
+            <div className="relative grid items-end gap-10 lg:grid-cols-[1fr_auto]">
+              <div className="max-w-3xl">
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="mb-5 flex items-center gap-3"
+                >
+                  <span className="h-px w-8 bg-[#FEFB58]" />
+
+                  <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#C7B8A7]">
+                    Your next chapter starts here
+                  </span>
+                </motion.div>
+
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.05 }}
+                  className="max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.045em] text-[#FAF6EF] sm:text-5xl lg:text-7xl"
+                >
+                  Find a place that
+                  <span className="block text-[#FEFB58]">
+                    feels like home.
+                  </span>
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.12 }}
+                  className="mt-6 max-w-xl text-sm leading-7 text-[#B9ADA2] sm:text-base"
+                >
+                  Comfortable rooms, a student-friendly community, and a
+                  convenient location close to KNUST. Find your space at
+                  Mushia Hostel.
+                </motion.p>
+              </div>
+
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => handleNav('rooms')}
+                className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#FEFB58] px-7 py-4 text-sm font-black text-[#211F1D] shadow-[0_15px_40px_rgba(254,251,88,0.12)] transition-shadow duration-300 hover:shadow-[0_20px_50px_rgba(254,251,88,0.2)] sm:w-auto"
+              >
+                <span>Explore Rooms</span>
+
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#211F1D] text-[#FEFB58] transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          MAIN FOOTER
+      ========================================================== */}
+
+      <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
+        <div className="grid gap-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:gap-12">
+          {/* =====================================================
+              BRAND COLUMN
+          ====================================================== */}
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-md"
+          >
+            {/* Logo / Brand */}
+            <button
+              onClick={() => handleNav('home')}
+              className="group mb-6 flex items-center gap-3"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FEFB58] text-[#211F1D] transition-transform duration-300 group-hover:rotate-3">
+                <Building2 className="h-5 w-5" />
+              </span>
+
+              <span className="text-xl font-black tracking-[-0.03em] text-[#FAF6EF]">
+                Mushia
+                <span className="ml-1 font-medium text-[#A1927D]">
+                  Hostel
+                </span>
+              </span>
+            </button>
+
+            <p className="max-w-sm text-sm leading-7 text-[#AFA39A]">
+              Student accommodation designed around comfort, convenience,
+              community, and the everyday rhythm of university life in Kumasi.
             </p>
 
-            <div className="text-xs text-[#A5ABAA] space-y-1.5 pt-2">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#FEFB58] shrink-0 mt-0.5" />
-                <span>{config.address}</span>
+            {/* Contact */}
+            <div className="mt-8 space-y-4">
+              <a
+                href={`tel:${config?.phone || '+233249203029'}`}
+                className="group flex items-start gap-3 text-sm text-[#C7BBB0] transition-colors duration-300 hover:text-[#FEFB58]"
+              >
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#FEFB58]" />
+
+                <span className="relative">
+                  {config?.phone || '+233 24 920 3029'}
+
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#FEFB58] transition-all duration-300 group-hover:w-full" />
+                </span>
+              </a>
+
+              <a
+                href={`mailto:${config?.email || 'info@mushiahostel.com'}`}
+                className="group flex items-start gap-3 text-sm text-[#C7BBB0] transition-colors duration-300 hover:text-[#FEFB58]"
+              >
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#FEFB58]" />
+
+                <span className="relative break-all">
+                  {config?.email || 'info@mushiahostel.com'}
+
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#FEFB58] transition-all duration-300 group-hover:w-full" />
+                </span>
+              </a>
+
+              <button
+                onClick={() => handleNav('location')}
+                className="group flex items-start gap-3 text-left text-sm text-[#C7BBB0] transition-colors duration-300 hover:text-[#FEFB58]"
+              >
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#FEFB58]" />
+
+                <span className="relative">
+                  {config?.address || 'FNF Junction, Ayeduase Newsite, Kumasi'}
+
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#FEFB58] transition-all duration-300 group-hover:w-full" />
+                </span>
+              </button>
+            </div>
+
+            {/* Social */}
+            <div className="mt-8 flex items-center gap-2">
+              <motion.a
+                href="#"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Instagram"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#A1927D]/25 text-[#B9ADA2] transition-all duration-300 hover:border-[#FEFB58]/60 hover:bg-[#FEFB58] hover:text-[#211F1D]"
+              >
+                <Instagram className="h-4 w-4" />
+              </motion.a>
+
+              <motion.a
+                href="#"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Facebook"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#A1927D]/25 text-[#B9ADA2] transition-all duration-300 hover:border-[#FEFB58]/60 hover:bg-[#FEFB58] hover:text-[#211F1D]"
+              >
+                <Facebook className="h-4 w-4" />
+              </motion.a>
+
+              <motion.a
+                href="https://wa.me/233249203029"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="WhatsApp"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#A1927D]/25 text-[#B9ADA2] transition-all duration-300 hover:border-[#FEFB58]/60 hover:bg-[#FEFB58] hover:text-[#211F1D]"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </motion.a>
+            </div>
+          </motion.div>
+
+          {/* =====================================================
+              LINK COLUMN
+          ====================================================== */}
+
+          <FooterLinkColumn
+            title="Explore"
+            links={hostelLinks}
+            onNavigate={handleNav}
+          />
+
+          <FooterLinkColumn
+            title="Student Life"
+            links={studentLinks}
+            onNavigate={handleNav}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8F8177]">
+              Management
+            </h3>
+
+            <div className="space-y-4">
+              {managementLinks.map((link) => (
+                <FooterNavButton
+                  key={link.label}
+                  label={link.label}
+                  onClick={() => handleNav(link.view)}
+                  icon={<ShieldCheck className="h-3.5 w-3.5" />}
+                />
+              ))}
+
+              <div className="pt-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#A1927D]/20 px-3 py-1.5 text-[10px] font-semibold text-[#9E9289]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FEFB58]" />
+                  Paystack verified
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#FEFB58] shrink-0" />
-                <span>{config.phone}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#FEFB58] shrink-0" />
-                <span>{config.email}</span>
-              </div>
+
+              <p className="max-w-[180px] pt-1 text-xs leading-6 text-[#82776F]">
+                Secure student accommodation in Ayeduase, Kumasi.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* =========================================================
+            BOTTOM BAR
+        ========================================================== */}
+
+        <div className="mt-16 border-t border-[#A1927D]/15 pt-7">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-[11px] text-[#776D66]">
+              © {currentYear} Mushia Hostel. All rights reserved.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.14em] text-[#776D66]">
+              <button
+                onClick={() => handleNav('location')}
+                className="transition-colors duration-300 hover:text-[#FEFB58]"
+              >
+                KNUST · Kumasi
+              </button>
+
+              <span className="hidden h-1 w-1 rounded-full bg-[#655C56] sm:block" />
+
+              <span>Student Living</span>
+
+              <span className="hidden h-1 w-1 rounded-full bg-[#655C56] sm:block" />
+
+              <span>Ghana</span>
             </div>
           </div>
-
-          {/* Accommodation links */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#A1927D] mb-4">
-              Explore Hostel
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#A5ABAA]">
-              <li>
-                <button onClick={() => handleNav('rooms')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  103 Room Inventory
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('floor-explorer')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Interactive Floor Explorer
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('facilities')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Hostel Facilities & Study Hall
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('gallery')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Photo Gallery
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Student Services */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#A1927D] mb-4">
-              Resident Life
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#A5ABAA]">
-              <li>
-                <button onClick={() => handleNav('roommates')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Roommate Matching Hub
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('dashboard')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Student Dashboard
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('how-it-works')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  How Booking Works
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNav('location')} className="hover:text-[#FEFB58] transition-colors cursor-pointer">
-                  Campus Location & Shuttles
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Administration & Legal */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#A1927D] mb-4">
-              Management
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#A5ABAA]">
-              <li>
-                <button onClick={() => handleNav('admin')} className="hover:text-[#FEFB58] text-[#FEFB58] font-semibold transition-colors cursor-pointer flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Admin Portal</span>
-                </button>
-              </li>
-              <li>
-                <span className="block text-zinc-400">Paystack Verified Gateway</span>
-              </li>
-              <li>
-                <span className="block text-zinc-400">KNUST Accommodation Standards</span>
-              </li>
-              <li>
-                <span className="block text-zinc-400">Ayeduase Newsite, Kumasi</span>
-              </li>
-            </ul>
-          </div>
-
         </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-[#5B514B]/60 flex flex-col sm:flex-row items-center justify-between text-xs text-[#A5ABAA] gap-4">
-          <p>© {new Date().getFullYear()} Mushia Hostel. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-[11px]">
-            <span>Secure Student Accommodation</span>
-            <span>·</span>
-            <span>KNUST, Kumasi</span>
-          </div>
-        </div>
-
       </div>
     </footer>
+  );
+};
+
+/* ===============================================================
+   LINK COLUMN
+================================================================ */
+
+interface FooterLinkColumnProps {
+  title: string;
+  links: {
+    label: string;
+    view: string;
+  }[] | readonly {
+    label: string;
+    view: string;
+  }[];
+  onNavigate: (view: string) => void;
+}
+
+const FooterLinkColumn: React.FC<FooterLinkColumnProps> = ({
+  title,
+  links,
+  onNavigate,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
+      <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8F8177]">
+        {title}
+      </h3>
+
+      <div className="space-y-1">
+        {links.map((link) => (
+          <FooterNavButton
+            key={link.label}
+            label={link.label}
+            onClick={() => onNavigate(link.view)}
+          />
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+/* ===============================================================
+   ANIMATED NAV BUTTON
+================================================================ */
+
+interface FooterNavButtonProps {
+  label: string;
+  onClick: () => void;
+  icon?: React.ReactNode;
+}
+
+const FooterNavButton: React.FC<FooterNavButtonProps> = ({
+  label,
+  onClick,
+  icon,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className="group flex w-fit items-center gap-2 py-1.5 text-left text-sm text-[#AFA39A] transition-colors duration-300 hover:text-[#FEFB58]"
+    >
+      {icon && (
+        <span className="text-[#FEFB58] transition-transform duration-300 group-hover:scale-110">
+          {icon}
+        </span>
+      )}
+
+      <span className="relative">
+        {label}
+
+        <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#FEFB58] transition-all duration-300 group-hover:w-full" />
+      </span>
+
+      <ArrowUpRight className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+    </button>
   );
 };

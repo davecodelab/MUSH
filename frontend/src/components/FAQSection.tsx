@@ -1,104 +1,294 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
+import { div } from 'motion/react-client';
 
 export const FAQSection: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
+  const shouldReduceMotion = useReducedMotion();
 
   const faqs = [
     {
       q: 'What room types does Mushia Hostel offer?',
-      a: 'Mushia Hostel offers 4-in-1, 3-in-1, 2-in-1, and executive 1-in-1 rooms across 6 residential floors with 103 rooms in total.',
+      a: 'Mushia Hostel offers 4-in-1, 3-in-1, 2-in-1, and 1-in-1 accommodation options, giving students different levels of privacy, comfort and affordability.',
     },
     {
       q: 'Do you have AC rooms?',
-      a: 'Yes. Both refrigerated split-unit air-conditioned rooms and high-velocity ceiling fan rooms are available across all floors.',
+      a: 'Yes. Air-conditioned rooms are available, while some rooms use ceiling fans. Room features can vary depending on the specific space, so check the room details before booking.',
     },
     {
       q: 'Can I choose my room and specific bed space?',
-      a: 'Students can inspect all 103 rooms via our interactive Floor Explorer and select the exact bed space (Space 1, 2, 3, or 4) they prefer.',
+      a: 'Yes. Available rooms and bed spaces can be viewed through the room selection experience. You can choose from the spaces currently available when making your reservation.',
     },
     {
       q: 'Can I choose my roommate?',
-      a: 'After completing payment, students unlock the Roommate Matching system. You can browse confirmed students assigned to your room, check lifestyle compatibility, and connect mutually.',
+      a: 'After your booking is confirmed, you can access the available roommate information for your room and connect where the roommate-matching option applies.',
     },
     {
       q: 'When is my booking confirmed?',
-      a: 'Your booking is confirmed immediately upon successful Paystack payment verification, and your official accommodation receipt is instantly generated.',
+      a: 'Your reservation is confirmed after your payment has been successfully completed and verified. You will then receive your accommodation confirmation and payment details.',
     },
     {
       q: 'Can I book without paying?',
-      a: 'When you select an available space, the system temporarily locks it for 10 minutes to allow you to complete payment. However, the space is not permanently secured until payment is completed.',
+      a: 'Selecting a room may temporarily hold the space while you complete the booking process. However, the room is not permanently secured until the required payment has been successfully completed.',
     },
     {
       q: 'Where is Mushia Hostel located?',
-      a: 'Mushia Hostel is located at FNF Junction, Ayeduase Newsite, Kumasi, Ghana — just a 3-minute walk to the KNUST campus perimeter.',
+      a: 'Mushia Hostel is located around FNF Junction, Ayeduase Newsite, Kumasi, Ghana, making it a convenient option for students around the KNUST area.',
     },
     {
       q: 'Does the hostel have a study room?',
-      a: 'Yes. Mushia Hostel features a dedicated, quiet, air-conditioned 24-hour study hall equipped with high-speed internet and power backup.',
+      a: 'Yes. Mushia provides dedicated spaces designed to give students a comfortable environment for studying and academic work.',
     },
     {
-      q: 'Does the hostel have CCTV and physical security?',
-      a: 'Yes. The hostel is equipped with 24/7 high-definition CCTV surveillance across all corridors and entrances, reinforced perimeter walls, and security guards.',
+      q: 'Does the hostel have security?',
+      a: 'Yes. Mushia has security measures in place to help provide a safe and comfortable residential environment for students.',
     },
     {
-      q: 'Does the hostel have a TV room?',
-      a: 'Yes, a shared student entertainment lounge with sectional seating and a satellite flat-screen TV is available on the ground floor.',
+      q: 'Does the hostel have a TV or entertainment area?',
+      a: 'Yes. Students have access to shared spaces where they can relax, socialise and unwind outside their rooms.',
     },
   ];
 
   return (
-    <section id="faq" className="py-20 bg-[#F4EFE7]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold tracking-widest text-[#7D6E66] uppercase mb-2 block">
-            Got Questions?
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2A2827] tracking-tight">
-            Frequently Asked Questions
-          </h2>
-          <p className="mt-2 text-sm text-[#5B514B]">
-            Everything you need to know about rooms, payment, facilities, and roommate matching.
-          </p>
-        </div>
+    <section
+      id="faq"
+      className="relative overflow-hidden bg-[#2B272A] text-[#F3EEE7]"
+    >
+      {/* =========================================================
+          SUBTLE BACKGROUND
+      ========================================================= */}
 
-        {/* Accordion List */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* soft blue glow inspired by the building windows/sky */}
+        <div className="absolute -right-40 -top-40 h-130 w-130 rounded-full bg-[#6D8EBC]/10 blur-3xl" />
+
+        {/* warm architectural glow */}
+        <div className="absolute -bottom-48 -left-40 h-125 w-125 rounded-full bg-[#594C43]/20 blur-3xl" />
+
+        {/* extremely subtle architectural lines */}
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{
+            backgroundImage: `
+              linear-gradient(#F3EEE7 1px, transparent 1px),
+              linear-gradient(90deg, #F3EEE7 1px, transparent 1px)
+            `,
+            backgroundSize: '100px 100px',
+          }}
+        />
+      </div>
+
+      <div className="relative mx-auto max-w-300 px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
+        {/* =========================================================HEADER========================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mb-14 grid gap-8 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:mb-20"
+        >
+          <div>
+            <div className="mb-7 flex items-center gap-4">
+              <span className="h-px w-10 bg-[#6D8EBC]" />
+
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#A79C92]">
+                Need to know
+              </span>
+            </div>
+
+            <h2 className="max-w-3xl text-[clamp(3rem,6vw,5.8rem)] font-semibold leading-[0.9] tracking-[-0.065em]">
+              Questions,
+              <br />
+              <span className="text-[#A79C92]">answered.</span>
+            </h2>
+          </div>
+
+          <div className="max-w-sm lg:pb-1">
+            <p className="text-sm leading-7 text-[#A79C92] sm:text-base">
+              Everything you need to know before choosing your space at
+              Mushia. If you still have questions, we are only a call away.
+            </p>
+
+            <div className="mt-6 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/4">
+                <HelpCircle className="h-4 w-4 text-[#AFC4DF]" />
+              </div>
+
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#D4CEC8]">
+                Mushia Hostel · Kumasi
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* =========================================================
+            FAQ LIST
+        ========================================================= */}
+
         <div className="space-y-3">
           {faqs.map((faq, idx) => {
             const isOpen = openIdx === idx;
+
             return (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-[#A1927D]/40 overflow-hidden transition-all"
+              <motion.div
+                key={faq.q}
+                initial={{
+                  opacity: 0,
+                  y: shouldReduceMotion ? 0 : 20,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                  margin: '-40px',
+                }}
+                transition={{
+                  duration: 0.55,
+                  delay: Math.min(idx * 0.035, 0.3),
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className={`overflow-hidden rounded-2xl border transition-all duration-500 ${
+                  isOpen
+                    ? 'border-[#6D8EBC]/40 bg-[#F3EEE7]'
+                    : 'border-white/8 bg-white/[0.035] hover:border-white/16 hover:bg-white/5.5'
+                }`}
               >
                 <button
+                  type="button"
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#F4EFE7]/40 transition-colors"
+                  aria-expanded={isOpen}
+                  className="flex w-full cursor-pointer items-center gap-5 px-5 py-5 text-left sm:px-7 sm:py-6"
                 >
-                  <span className="font-bold text-sm sm:text-base text-[#2A2827]">
+                  {/* NUMBER */}
+
+                  <span
+                    className={`hidden shrink-0 font-mono text-[10px] font-bold tracking-[0.15em] sm:block ${
+                      isOpen ? 'text-[#6D8EBC]' : 'text-[#6B625B]'
+                    }`}
+                  >
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+
+                  {/* QUESTION */}
+
+                  <span
+                    className={`flex-1 text-sm font-semibold transition-colors duration-300 sm:text-base ${
+                      isOpen ? 'text-[#2B272A]' : 'text-[#F3EEE7]'
+                    }`}
+                  >
                     {faq.q}
                   </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-[#7D6E66] shrink-0 transition-transform duration-200 ${
-                      isOpen ? 'transform rotate-180 text-[#2A2827]' : ''
+
+                  {/* ICON */}
+
+                  <span
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${
+                      isOpen
+                        ? 'rotate-180 border-[#6D8EBC]/30 bg-[#6D8EBC]/10 text-[#594C43]'
+                        : 'border-white/10 bg-white/3 text-[#A79C92]'
                     }`}
-                  />
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </span>
                 </button>
 
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#5B514B] leading-relaxed border-t border-zinc-100">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
+                {/* ANSWER */}
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      animate={{
+                        height: 'auto',
+                        opacity: 1,
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      transition={{
+                        duration: shouldReduceMotion ? 0 : 0.35,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      <div className="px-5 pb-6 sm:px-7 sm:pb-7">
+                        <div className="ml-0 border-t border-[#A79C92]/25 pt-5 sm:ml-10.5">
+                          <p className="max-w-3xl text-sm leading-7 text-[#6B625B]">
+                            {faq.a}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             );
           })}
         </div>
 
+        {/* =========================================================  BOTTOM CONTACT CARD ========================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{
+            duration: 0.7,
+            delay: 0.1,
+          }}
+          className="mt-10 overflow-hidden rounded-[1.75rem] border border-white/8 bg-white/[0.035]"
+        >
+          <div className="flex flex-col gap-6 px-6 py-7 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6D8EBC]">
+                Still curious?
+              </p>
+
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#F3EEE7] sm:text-2xl">
+                Talk to the Mushia team.
+              </h3>
+
+              <p className="mt-2 text-xs leading-6 text-[#A79C92]">
+                Get help choosing a room or ask about current availability.
+              </p>
+            </div>
+
+            <a
+              href="tel:+233249203029"
+              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#F3EEE7] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#2B272A] transition-all duration-300 hover:bg-[#6D8EBC] hover:text-white hover:shadow-lg"
+            >
+              <span>Call +233 24 920 3029</span>
+
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2B272A] text-white transition-transform duration-300 group-hover:rotate-45">
+                <ChevronDown className="h-3 w-3 -rotate-90" />
+              </span>
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

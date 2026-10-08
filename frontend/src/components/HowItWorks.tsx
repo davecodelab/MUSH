@@ -1,130 +1,378 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useHostel } from '../context/HostelContext';
-import { Search, Bed, CreditCard, HeartHandshake, ArrowRight } from 'lucide-react';
+import {
+  Search,
+  Bed,
+  CreditCard,
+  HeartHandshake,
+  ArrowUpRight,
+  Check,
+} from 'lucide-react';
 
 export const HowItWorks: React.FC = () => {
   const { setActiveView } = useHostel();
+  const shouldReduceMotion = useReducedMotion();
 
   const steps = [
     {
       num: '01',
       title: 'Explore',
-      subtitle: 'Browse 103 rooms & facilities',
-      description: 'Filter by floor level, AC status, room size, or student capacity across our interactive 6-floor layout.',
+      eyebrow: 'Find your space',
+      description:
+        'Explore available rooms and bed spaces across Mushia. Compare room types, floor levels, AC options and capacity before making your choice.',
       icon: Search,
     },
     {
       num: '02',
       title: 'Choose',
-      subtitle: 'Select your preferred space',
-      description: 'Review individual bed spaces and confirmed student occupants. Your selected space is locked for 10 minutes.',
+      eyebrow: 'Make it yours',
+      description:
+        'Select the room or bed space that fits you best. See availability clearly and reserve your preferred space before someone else does.',
       icon: Bed,
     },
     {
       num: '03',
       title: 'Pay',
-      subtitle: 'Secure via Paystack',
-      description: 'Pay instantly with MTN Mobile Money, Telecel Cash, or Cards. Instant automated webhook verification.',
+      eyebrow: 'Reserve securely',
+      description:
+        'Complete your reservation securely through Paystack using Mobile Money or your card. Your payment is verified automatically.',
       icon: CreditCard,
     },
     {
       num: '04',
       title: 'Connect',
-      subtitle: 'Find your confirmed roommate',
-      description: 'Access the verified roommate discovery engine, match lifestyle preferences, and exchange WhatsApp contacts.',
+      eyebrow: 'Get ready for Mushia',
+      description:
+        'Once confirmed, discover your roommate, connect with them and prepare for a smooth move-in experience at Mushia Hostel.',
       icon: HeartHandshake,
     },
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-[#F4EFE7]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-xs font-bold tracking-widest text-[#7D6E66] uppercase mb-2 block">
-            Booking & Move-in Journey
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2A2827] tracking-tight">
-            How Mushia Hostel Booking Works
-          </h2>
-          <p className="mt-2 text-sm sm:text-base text-[#5B514B]">
-            From room discovery to verified roommate connection in four seamless steps.
-          </p>
-        </div>
+    <section
+      id="how-it-works"
+      className="relative overflow-hidden bg-[#F3EEE7] text-[#2B272A]"
+    >
+      {/* =========================================================
+          ATMOSPHERE
+      ========================================================= */}
 
-        {/* 4 Editorial Steps with stagger */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative mb-12">
-          {steps.map((st, idx) => {
-            const Icon = st.icon;
-            return (
+      <div className="pointer-events-none absolute inset-0">
+        {/* architectural grid */}
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage: `
+              linear-gradient(#2B272A 1px, transparent 1px),
+              linear-gradient(90deg, #2B272A 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+          }}
+        />
+
+        {/* soft blue architectural glow */}
+        <div className="absolute -right-40 top-20 h-125 w-125 rounded-full bg-[#6D8EBC]/10 blur-3xl" />
+
+        <div className="absolute -left-40 bottom-0 h-100 w-100 rounded-full bg-[#594C43]/10 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-350 px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
+        {/* =========================================================HEADER========================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mb-20 max-w-4xl lg:mb-28"
+        >
+          <div className="mb-7 flex items-center gap-4">
+            <span className="h-px w-10 bg-[#6D8EBC]" />
+
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#6B625B] sm:text-[11px]">
+              Booking & Move-in
+            </span>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+            <h2 className="text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-[#2B272A]">
+              Your room.
+              <br />
+              <span className="text-[#6B625B]">Your journey.</span>
+            </h2>
+
+            <div className="max-w-md lg:pb-2">
+              <p className="text-sm leading-7 text-[#6B625B] sm:text-base">
+                Finding your home at Mushia should feel simple. Discover your
+                space, secure it, connect with your roommate and arrive ready
+                for campus life.
+              </p>
+
+              <div className="mt-7 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#594C43]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#A79C92]/60">
+                  4
+                </span>
+                <span>Simple steps to move in</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ========================================================= JOURNEY ========================================================= */}
+
+        <div className="relative">
+          {/* Desktop journey line */}
+          <div className="pointer-events-none absolute left-0 right-0 top-13.25 hidden lg:block">
+            <div className="relative h-px w-full bg-[#A79C92]/40">
               <motion.div
-                key={st.num}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl border border-[#A1927D]/40 p-6 flex flex-col justify-between hover:border-[#5B514B] transition-shadow hover:shadow-xl group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="text-3xl font-black text-[#5B514B]/20 font-mono group-hover:text-[#FEFB58] transition-colors">
-                      {st.num}
-                    </span>
-                    <div className="w-10 h-10 rounded-lg bg-[#5B514B]/10 text-[#2A2827] flex items-center justify-center group-hover:bg-[#FEFB58]/30 transition-colors">
-                      <Icon className="w-5 h-5" />
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{
+                  duration: 1.4,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{ transformOrigin: 'left' }}
+                className="absolute inset-y-0 left-0 w-full bg-[#6D8EBC]"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+
+              return (
+                <motion.article
+                  key={step.num}
+                  initial={{
+                    opacity: 0,
+                    y: shouldReduceMotion ? 0 : 45,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                    margin: '-80px',
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    delay: index * 0.12,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  whileHover={
+                    shouldReduceMotion
+                      ? undefined
+                      : {
+                          y: -8,
+                        }
+                  }
+                  className="group relative"
+                >
+                  {/* Mobile connector */}
+                  {index !== steps.length - 1 && (
+                    <div className="absolute left-6.75 top-18 h-[calc(100%+24px)] w-px bg-[#A79C92]/40 md:hidden" />
+                  )}
+
+                  {/* =================================================
+                      NUMBER / NODE
+                  ================================================= */}
+
+                  <div className="relative mb-7 flex items-center gap-5 lg:mb-10 lg:block">
+                    <motion.div
+                      whileHover={
+                        shouldReduceMotion
+                          ? undefined
+                          : {
+                              scale: 1.08,
+                            }
+                      }
+                      className="relative z-10 flex h-13.5 w-13.5 shrink-0 items-center justify-center rounded-full border border-[#A79C92]/70 bg-[#F3EEE7] shadow-[0_0_0_8px_#F3EEE7]"
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2B272A] text-[#F3EEE7] transition-colors duration-500 group-hover:bg-[#6D8EBC]">
+                        <Icon className="h-4 w-4" strokeWidth={1.8} />
+                      </div>
+                    </motion.div>
+
+                    <div className="lg:absolute lg:-top-3 lg:left-18">
+                      <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#6D8EBC]">
+                        STEP {step.num}
+                      </span>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#2A2827] mb-1">
-                    {st.title}
-                  </h3>
-                  <span className="text-xs font-semibold text-[#8B756C] block mb-3">
-                    {st.subtitle}
-                  </span>
-                  <p className="text-xs text-[#5B514B] leading-relaxed">
-                    {st.description}
-                  </p>
-                </div>
+                  {/* ================================================= CONTENT ================================================= */}
 
-                <div className="mt-6 pt-3 border-t border-[#EAE3D9] text-[11px] font-bold text-[#7D6E66] flex items-center justify-between">
-                  <span>Step {idx + 1} of 4</span>
-                  <span className="text-[#2A2827]">→</span>
-                </div>
-              </motion.div>
-            );
-          })}
+                  <div className="rounded-4xl border border-[#A79C92]/45 bg-white/45 p-7 backdrop-blur-[2px] transition-all duration-500 group-hover:border-[#6D8EBC]/50 group-hover:bg-white/70 sm:p-8 lg:min-h-90 lg:rounded-[2.2rem]">
+                    <div className="flex h-full flex-col">
+                      <div>
+                        <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#6B625B]">
+                          {step.eyebrow}
+                        </p>
+
+                        <h3 className="text-3xl font-semibold tracking-[-0.04em] text-[#2B272A]">
+                          {step.title}
+                        </h3>
+
+                        <div className="mt-5 h-px w-10 bg-[#6D8EBC] transition-all duration-500 group-hover:w-20" />
+
+                        <p className="mt-6 text-sm leading-7 text-[#6B625B]">
+                          {step.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-auto pt-10">
+                        <div className="flex items-center justify-between border-t border-[#A79C92]/30 pt-5">
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8A8179]">
+                            Mushia Hostel
+                          </span>
+
+                          <motion.div
+                            animate={
+                              shouldReduceMotion
+                                ? undefined
+                                : {
+                                    x: [0, 3, 0],
+                                  }
+                            }
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                              delay: index * 0.2,
+                            }}
+                            className="text-[#594C43]"
+                          >
+                            <ArrowUpRight className="h-4 w-4" />
+                          </motion.div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Move-in Final Callout */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-[#2A2827] rounded-2xl p-6 sm:p-8 text-center text-white max-w-3xl mx-auto border border-[#5B514B] shadow-2xl"
+        {/* ========================================================= MOVE-IN CTA ========================================================= */}
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : 35,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{
+            duration: 0.8,
+            delay: 0.15,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mt-16 overflow-hidden rounded-4xl bg-[#2B272A] sm:mt-20 lg:mt-28"
         >
-          <h3 className="text-xl sm:text-2xl font-black text-[#FEFB58] mb-2">
-            Then Get Ready to Move In!
-          </h3>
-          <p className="text-xs sm:text-sm text-[#A5ABAA] max-w-xl mx-auto mb-6">
-            Pack your bags, present your official digital receipt at the Mushia reception desk at FNF Junction, and receive your room keys smoothly.
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setActiveView('rooms')}
-            className="px-6 py-3 bg-[#FEFB58] hover:bg-[#fff945] text-[#2A2827] font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer"
-          >
-            <span>Start Your Reservation</span>
-            <ArrowRight className="w-4 h-4" />
-          </motion.button>
+          <div className="relative px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+            {/* CTA decoration */}
+            <div className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full border border-[#6D8EBC]/20" />
+            <div className="pointer-events-none absolute -right-8 -top-20 h-48 w-48 rounded-full border border-[#6D8EBC]/15" />
+
+            <div className="relative flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-[#6D8EBC]" />
+
+                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#A79C92]">
+                    Ready when you are
+                  </span>
+                </div>
+
+                <h3 className="text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#F3EEE7] sm:text-4xl lg:text-5xl">
+                  Your next chapter
+                  <br />
+                  starts at <span className="text-[#AFC4DF]">Mushia.</span>
+                </h3>
+
+                <p className="mt-5 max-w-xl text-sm leading-7 text-[#A79C92]">
+                  Choose your preferred room, secure your space and take the
+                  first step toward a more comfortable campus experience.
+                </p>
+              </div>
+
+              <motion.button
+                whileHover={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        scale: 1.03,
+                      }
+                }
+                whileTap={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        scale: 0.98,
+                      }
+                }
+                onClick={() => setActiveView('rooms')}
+                className="group inline-flex shrink-0 cursor-pointer items-center justify-center gap-4 rounded-full bg-[#F3EEE7] px-7 py-4 text-xs font-bold uppercase tracking-[0.12em] text-[#2B272A] shadow-xl transition-colors duration-300 hover:bg-[#6D8EBC] hover:text-white sm:px-8"
+              >
+                <span>Start Your Reservation</span>
+
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2B272A] text-[#F3EEE7] transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </motion.button>
+            </div>
+          </div>
         </motion.div>
 
+        {/* =========================================================
+            TRUST STRIP
+        ========================================================= */}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[#A79C92]/40 bg-[#A79C92]/40 lg:grid-cols-4"
+        >
+          {[
+            'Secure Payments',
+            'Verified Availability',
+            'Easy Move-in',
+            'Roommate Connection',
+          ].map((item) => (
+            <div
+              key={item}
+              className="flex items-center gap-2 bg-[#F3EEE7] px-4 py-4 sm:px-5"
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#6D8EBC]/15 text-[#594C43]">
+                <Check className="h-3 w-3" strokeWidth={2.5} />
+              </span>
+
+              <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#6B625B] sm:text-[10px]">
+                {item}
+              </span>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

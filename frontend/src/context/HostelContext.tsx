@@ -150,7 +150,7 @@ const normalizeRoomType = (t: string, capacity: number): RoomType => {
 
 const getDefaultPrice = (type: RoomType, hasAc: boolean) => {
   if (type === '1-in-1') return hasAc ? 16500 : 14000;
-  if (type === '2-in-1') return hasAc ? 12500 : 10800;
+  if (type === '2-in-1') return hasAc ? 7500 : 7000;
   if (type === '3-in-1') return hasAc ? 9500 : 8200;
   return hasAc ? 7800 : 6500;
 };

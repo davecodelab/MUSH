@@ -17,7 +17,6 @@ import { ReceiptModal } from '@/components/ReceiptModal';
 import { RoommateMatching } from '@/components/RoommateMatching';
 import { StudentDashboard } from '@/components/StudentDashboard';
 import { AdminDashboard } from '@/components/AdminDashboard';
-import { FacilitiesSection } from '@/components/FacilitiesSection';
 import { GallerySection } from '@/components/GallerySection';
 import { LocationSection } from '@/components/LocationSection';
 import { LoginRegisterModal } from '@/components/LoginRegisterModal';
@@ -73,7 +72,6 @@ export default function HomePage() {
                     }} 
                   />
                   <FloorExplorer />
-                  <FacilitiesSection />
                   <GallerySection />
                   <HowItWorks />
                   <LocationSection />
@@ -91,11 +89,7 @@ export default function HomePage() {
                 </div>
               )}
 
-              {activeView === 'facilities' && (
-                <div className="pt-4">
-                  <FacilitiesSection />
-                </div>
-              )}
+              
 
               {activeView === 'gallery' && (
                 <div className="pt-4">
