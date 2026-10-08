@@ -36,7 +36,6 @@ export const Navbar: React.FC = () => {
     { id: 'floor-explorer' as const, label: 'Floor Explorer' },
     { id: 'roommates' as const, label: 'Roommates' },
     { id: 'gallery' as const, label: 'Gallery' },
-   
   ];
 
   const handleNavClick = (viewId: typeof activeView) => {
