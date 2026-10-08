@@ -1,7 +1,0 @@
-{
-  "name": "Mushia Hostel KNUST Accommodation",
-  "description": "Premium student accommodation booking, interactive 120-room floor explorer, secure Paystack reservations, and verified roommate matching for KNUST students at FNF Junction, Ayeduase Newsite.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
-
