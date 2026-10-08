@@ -17,14 +17,16 @@ import {
   RoomStatus,
   SpaceStatus
 } from '../types';
-import { generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
-import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment } from '../services/api';
+import { generateSeedRooms, generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
+import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment, getUserProfile, logoutUser } from '../services/api';
 
 interface HostelContextType {
   rooms: Room[];
   bookings: Booking[];
   payments: PaymentTransaction[];
   currentStudent: StudentProfile;
+  isLoggedIn: boolean;
+  logout: () => Promise<void>;
   activeBookingHold: { roomId: string; spaceNumber: number; expiresAt: number } | null;
   roommateRequests: RoommateRequest[];
   notifications: AppNotification[];
@@ -78,7 +80,7 @@ interface HostelContextType {
 }
 
 const STORAGE_KEYS = {
-  ROOMS: 'mushia_rooms_v1',
+  ROOMS: 'mushia_rooms_v2',
   BOOKINGS: 'mushia_bookings_v1',
   PAYMENTS: 'mushia_payments_v1',
   STUDENT: 'mushia_student_v1',
@@ -108,14 +110,14 @@ const DEFAULT_CONFIG: HostelConfig = {
 };
 
 const DEFAULT_STUDENT: StudentProfile = {
-  id: '20814522',
-  name: 'Dave Frimpong',
-  knustId: '20814522',
-  email: 'dfrimpong@st.knust.edu.gh',
-  phone: '+233 24 991 8234',
+  id: '',
+  name: '',
+  knustId: '',
+  email: '',
+  phone: '',
   gender: 'Male',
-  program: 'BSc Computer Engineering',
-  level: 'Level 200',
+  program: 'Undergraduate Student',
+  level: 'Level 100',
   hasPaid: false,
   preferences: {
     sleepPreference: 'Flexible',
@@ -166,15 +168,20 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [activeBookingHold, setActiveBookingHold] = useState<{ roomId: string; spaceNumber: number; expiresAt: number } | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Initialize Persistent State
+  // Initialize Persistent State with exact 103 Excel rooms
   const [rooms, setRooms] = useState<Room[]>(() => {
     try {
       const saved = safeGetStorage(STORAGE_KEYS.ROOMS);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === 103) {
+          return parsed;
+        }
+      }
     } catch (e) {
       console.error(e);
     }
-    return generate120Rooms();
+    return generateSeedRooms();
   });
 
   // Fetch live rooms from Django backend (MUSHIA database)
@@ -190,8 +197,13 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           const mapped: Room[] = data.map((r: any) => {
             const floor = normalizeFloor(r.floor);
             const roomType = normalizeRoomType(r.room_type, r.capacity);
-            const airConditioned = Boolean(r.amenities?.includes('AC'));
-            const size: RoomSize = r.amenities?.includes('Big') ? 'Big' : 'Small';
+            const airConditioned = Boolean(
+              r.amenities?.includes('AC') || (r.room_type && r.room_type.includes('AC'))
+            );
+            const isLarge = Boolean(
+              r.amenities?.includes('Big') || (r.room_type && r.room_type.includes('LARGE')) || r.capacity >= 3
+            );
+            const size: RoomSize = isLarge ? 'Big' : 'Small';
             const price = parseFloat(r.price_per_space) > 0 ? parseFloat(r.price_per_space) : getDefaultPrice(roomType, airConditioned);
             
             const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => ({
@@ -200,9 +212,10 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               status: s.is_available ? 'available' : 'paid',
             }));
 
+            const isReserved = Boolean(r.room_type?.includes('RESERVED') || r.amenities?.includes('Reserved'));
             const occupiedCount = spaces.filter(s => s.status === 'paid').length;
             let status: RoomStatus = 'available';
-            if (occupiedCount === r.capacity) {
+            if (occupiedCount === r.capacity || isReserved) {
               status = 'fully_occupied';
             } else if (occupiedCount > 0) {
               status = 'partially_occupied';
@@ -248,6 +261,36 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     fetchLiveRooms();
   }, []);
 
+  // Check authenticated session on load from Django backend
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const data = await getUserProfile();
+        if (data && (data.user || data.id || data.email)) {
+          const u = data.user || data;
+          setCurrentStudent({
+            id: String(u.id || u.username),
+            name: u.name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username,
+            knustId: u.knustId || u.username || String(u.id),
+            email: u.email || '',
+            phone: u.phone || u.phone_number || '',
+            gender: u.gender === 'Female' || u.gender === 'FEMALE' ? 'Female' : 'Male',
+            program: u.program_of_study || 'Undergraduate Student',
+            level: u.year_of_study ? `Level ${u.year_of_study}00` : 'Level 100',
+            hasPaid: Boolean(u.hasPaid),
+            bookingId: u.bookingId,
+            roomId: u.roomId,
+            roomNumber: u.roomNumber,
+            spaceNumber: u.spaceNumber,
+          });
+        }
+      } catch (e) {
+        // Guest session
+      }
+    };
+    checkAuth();
+  }, []);
+
   const [bookings, setBookings] = useState<Booking[]>(() => {
     try {
       const saved = safeGetStorage(STORAGE_KEYS.BOOKINGS);
@@ -255,34 +298,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.error(e);
     }
-    return [
-      {
-        id: 'booking-seed-1',
-        bookingReference: 'MSH-2026-7841',
-        studentId: '20814522',
-        studentName: 'Kwame Mensah',
-        studentEmail: 'kmensah@st.knust.edu.gh',
-        studentPhone: '+233 24 551 2309',
-        studentKnustId: '20814522',
-        gender: 'Male',
-        program: 'BSc Computer Engineering',
-        level: 'Level 200',
-        roomId: 'mushia-room-305',
-        roomNumber: '305',
-        floor: '3rd',
-        roomType: '3-in-1',
-        airConditioned: true,
-        size: 'Big',
-        spaceNumber: 1,
-        amount: 9900,
-        paymentMethod: 'MTN Mobile Money',
-        paymentReference: 'PAY-MSH-992182',
-        status: 'Confirmed',
-        paymentStatus: 'Paid',
-        createdAt: '2026-10-02T10:15:00.000Z',
-        bookingPeriod: '2026/2027 Academic Year',
-      }
-    ];
+    return [];
   });
 
   const [payments, setPayments] = useState<PaymentTransaction[]>(() => {
@@ -292,30 +308,35 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.error(e);
     }
-    return [
-      {
-        id: 'tx-1',
-        bookingId: 'booking-seed-1',
-        bookingReference: 'MSH-2026-7841',
-        studentName: 'Kwame Mensah',
-        amount: 9900,
-        reference: 'PAY-MSH-992182',
-        method: 'MTN Mobile Money',
-        status: 'Successful',
-        date: '2026-10-02 10:16 AM',
-      }
-    ];
+    return [];
   });
 
   const [currentStudent, setCurrentStudent] = useState<StudentProfile>(() => {
     try {
       const saved = safeGetStorage(STORAGE_KEYS.STUDENT);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.id === '20814522' && parsed.name === 'Dave Frimpong' && !parsed.hasPaid) {
+          return DEFAULT_STUDENT;
+        }
+        return parsed;
+      }
     } catch (e) {
       console.error(e);
     }
     return DEFAULT_STUDENT;
   });
+
+  const isLoggedIn = Boolean(
+    currentStudent &&
+    currentStudent.id &&
+    currentStudent.id.trim() !== '' &&
+    currentStudent.id !== '20814522' &&
+    currentStudent.name &&
+    currentStudent.name.trim() !== '' &&
+    currentStudent.name !== 'Guest Student' &&
+    currentStudent.name !== 'Guest'
+  );
 
   const [roommateRequests, setRoommateRequests] = useState<RoommateRequest[]>(() => {
     try {
@@ -324,24 +345,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.error(e);
     }
-    return [
-      {
-        id: 'req-seed-1',
-        senderId: '20819431',
-        senderName: 'Ama Osei-Bonsu',
-        senderProgram: 'BSc Business Administration',
-        senderLevel: 'Level 300',
-        senderGender: 'Female',
-        receiverId: '20841203',
-        receiverName: 'Akosua Frimpong',
-        roomId: 'mushia-room-205',
-        roomNumber: '205',
-        status: 'accepted',
-        createdAt: '2026-10-03T14:30:00Z',
-        contactPhone: '+233 24 411 9090',
-        contactEmail: 'ama.osei@st.knust.edu.gh',
-      }
-    ];
+    return [];
   });
 
   const [notifications, setNotifications] = useState<AppNotification[]>(() => {
@@ -355,7 +359,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       {
         id: 'notif-1',
         title: 'Welcome to Mushia Hostel',
-        message: 'Explore 120 rooms across 6 floors at Ayeduase Newsite. Lock your space and complete payment via Paystack to unlock roommate matching.',
+        message: 'Explore 103 rooms across 6 floors at Ayeduase Newsite. Lock your space and complete payment via Paystack to unlock roommate matching.',
         timestamp: 'Just now',
         read: false,
         type: 'system',
@@ -850,7 +854,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const resetAllData = () => {
-    const initialRooms = generate120Rooms();
+    const initialRooms = generateSeedRooms();
     setRooms(initialRooms);
     setBookings([]);
     setPayments([]);
@@ -860,7 +864,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       {
         id: 'notif-reset',
         title: 'System Restored',
-        message: 'Hostel data reset to default 120 rooms inventory with fresh demo spaces.',
+        message: 'Hostel inventory synchronized with official 103 rooms from MUSHIA database.',
         timestamp: 'Just now',
         read: false,
         type: 'system',
@@ -902,6 +906,32 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch (e) {
+      console.warn('Logout notice:', e);
+    }
+    setCurrentStudent(DEFAULT_STUDENT);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(STORAGE_KEYS.STUDENT);
+      } catch {}
+    }
+    setActiveView('home');
+    setNotifications((prev) => [
+      {
+        id: 'notif-' + Date.now(),
+        title: 'Logged Out',
+        message: 'You have been safely signed out.',
+        timestamp: 'Just now',
+        read: false,
+        type: 'system',
+      },
+      ...prev,
+    ]);
+  };
+
   return (
     <HostelContext.Provider
       value={{
@@ -909,6 +939,8 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         bookings,
         payments,
         currentStudent,
+        isLoggedIn,
+        logout,
         activeBookingHold,
         roommateRequests,
         notifications,

@@ -59,16 +59,17 @@ export const AdminDashboard: React.FC = () => {
     const totalRevenue = payments.reduce((acc, p) => p.status === 'Successful' ? acc + p.amount : acc, 0);
 
     // Floor breakdown
-    const floorsMap: Record<Floor, { total: number; occupied: number }> = {
-      'Ground': { total: 0, occupied: 0 },
-      '1st': { total: 0, occupied: 0 },
-      '2nd': { total: 0, occupied: 0 },
-      '3rd': { total: 0, occupied: 0 },
-      '4th': { total: 0, occupied: 0 },
-      '5th': { total: 0, occupied: 0 },
+    const floorsMap: Record<Floor, { total: number; occupied: number; roomCount: number }> = {
+      'Ground': { total: 0, occupied: 0, roomCount: 0 },
+      '1st': { total: 0, occupied: 0, roomCount: 0 },
+      '2nd': { total: 0, occupied: 0, roomCount: 0 },
+      '3rd': { total: 0, occupied: 0, roomCount: 0 },
+      '4th': { total: 0, occupied: 0, roomCount: 0 },
+      '5th': { total: 0, occupied: 0, roomCount: 0 },
     };
 
     rooms.forEach((r) => {
+      floorsMap[r.floor].roomCount += 1;
       floorsMap[r.floor].total += r.capacity;
       floorsMap[r.floor].occupied += r.spaces.filter((s) => s.status === 'paid').length;
     });
@@ -173,7 +174,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex items-center gap-2 pb-4 mb-8 border-b border-[#5B514B] overflow-x-auto no-scrollbar text-xs font-bold">
           {[
             { id: 'analytics' as const, label: 'Analytics & KPIs' },
-            { id: 'rooms' as const, label: `120 Room Inventory (${rooms.length})` },
+            { id: 'rooms' as const, label: `Room Inventory (${rooms.length})` },
             { id: 'bookings' as const, label: `Bookings (${bookings.length})` },
             { id: 'students' as const, label: 'KNUST Student Roster' },
             { id: 'payments' as const, label: `Payments (${payments.length})` },
@@ -201,8 +202,8 @@ export const AdminDashboard: React.FC = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#5B514B]/40 border border-[#7D6E66]/50 p-5 rounded-xl">
                 <span className="text-[11px] font-bold text-[#A1927D] uppercase tracking-wider block">Total Rooms</span>
-                <span className="text-3xl font-black text-white block mt-1 tabular-nums">120</span>
-                <span className="text-xs text-[#A5ABAA] mt-1 block">6 Floors · 20 rms/floor</span>
+                <span className="text-3xl font-black text-white block mt-1 tabular-nums">{analytics.totalRooms}</span>
+                <span className="text-xs text-[#A5ABAA] mt-1 block">6 Floors · Official Inventory</span>
               </div>
 
               <div className="bg-[#5B514B]/40 border border-[#7D6E66]/50 p-5 rounded-xl">
@@ -248,7 +249,7 @@ export const AdminDashboard: React.FC = () => {
                     return (
                       <div key={flName} className="space-y-1">
                         <div className="flex justify-between font-semibold">
-                          <span>{flName} Floor (20 Rooms)</span>
+                          <span>{flName} Floor ({data.roomCount} Rooms)</span>
                           <span className="tabular-nums">{data.occupied} / {data.total} spaces ({pct}%)</span>
                         </div>
                         <div className="h-2 w-full bg-[#2A2827] rounded-full overflow-hidden">
@@ -293,7 +294,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 2: ROOM MANAGEMENT (ALL 120 ROOMS) */}
+        {/* TAB 2: ROOM MANAGEMENT (ALL ROOMS) */}
         {activeAdminTab === 'rooms' && (
           <div className="bg-[#5B514B]/30 border border-[#7D6E66]/50 rounded-xl overflow-hidden">
             {/* Filters */}
@@ -326,7 +327,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               <div className="text-xs text-[#A5ABAA]">
-                Showing {filteredRooms.length} of 120 rooms
+                Showing {filteredRooms.length} of {rooms.length} rooms
               </div>
             </div>
 

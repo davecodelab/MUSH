@@ -73,6 +73,8 @@ class LoginView(views.APIView):
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
     def post(self, request):
         res = Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
         res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])

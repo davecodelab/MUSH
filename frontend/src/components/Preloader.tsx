@@ -14,7 +14,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   useEffect(() => {
     const steps = [
-      { at: 20, text: 'Scanning 120 rooms across 6 floors...' },
+      { at: 20, text: 'Scanning 103 rooms across 6 floors...' },
       { at: 45, text: 'Verifying live space availability...' },
       { at: 70, text: 'Connecting Paystack & MoMo channels...' },
       { at: 90, text: 'Preparing roommate matching matrix...' },

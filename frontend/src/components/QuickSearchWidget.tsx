@@ -73,7 +73,7 @@ export const QuickSearchWidget: React.FC<QuickSearchProps> = ({ onSearchApply })
               Check Room Availability & Spaces
             </h2>
             <p className="text-xs text-[#A5ABAA]">
-              Academic Session: {config.academicYear} · 120 Total Room Inventory
+              Academic Session: {config.academicYear} · 103 Total Room Inventory
             </p>
           </div>
           
@@ -148,12 +148,12 @@ export const QuickSearchWidget: React.FC<QuickSearchProps> = ({ onSearchApply })
               className="w-full bg-[#2A2827] border border-[#7D6E66] rounded-lg px-3 py-2.5 text-xs sm:text-sm text-[#F4EFE7] focus:outline-none focus:border-[#FEFB58] transition-colors"
             >
               <option value="all">Any Floor (Ground - 5th)</option>
-              <option value="Ground">Ground Floor (G01 - G20)</option>
-              <option value="1st">1st Floor (101 - 120)</option>
-              <option value="2nd">2nd Floor (201 - 220)</option>
-              <option value="3rd">3rd Floor (301 - 320)</option>
-              <option value="4th">4th Floor (401 - 420)</option>
-              <option value="5th">5th Floor (501 - 520)</option>
+              <option value="Ground">Ground Floor (R01 - R14)</option>
+              <option value="1st">1st Floor (R101 - R115)</option>
+              <option value="2nd">2nd Floor (R201 - R218)</option>
+              <option value="3rd">3rd Floor (R301 - R319)</option>
+              <option value="4th">4th Floor (R401 - R419)</option>
+              <option value="5th">5th Floor (R501 - R518)</option>
             </select>
           </div>
 

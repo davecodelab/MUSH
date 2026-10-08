@@ -19,14 +19,19 @@ import {
 export const FloorExplorer: React.FC = () => {
   const { rooms, openRoomDetails, startBookingFlow } = useHostel();
 
-  const floors: { name: Floor; label: string; prefix: string; count: number }[] = [
-    { name: 'Ground', label: 'Ground Floor', prefix: 'G', count: 20 },
-    { name: '1st', label: '1st Floor', prefix: '1', count: 20 },
-    { name: '2nd', label: '2nd Floor', prefix: '2', count: 20 },
-    { name: '3rd', label: '3rd Floor', prefix: '3', count: 20 },
-    { name: '4th', label: '4th Floor', prefix: '4', count: 20 },
-    { name: '5th', label: '5th Floor', prefix: '5', count: 20 },
+  const floorConfigs: { name: Floor; label: string; prefix: string }[] = [
+    { name: 'Ground', label: 'Ground Floor', prefix: 'R0' },
+    { name: '1st', label: '1st Floor', prefix: 'R1' },
+    { name: '2nd', label: '2nd Floor', prefix: 'R2' },
+    { name: '3rd', label: '3rd Floor', prefix: 'R3' },
+    { name: '4th', label: '4th Floor', prefix: 'R4' },
+    { name: '5th', label: '5th Floor', prefix: 'R5' },
   ];
+
+  const floors = floorConfigs.map((f) => ({
+    ...f,
+    count: rooms.filter((r) => r.floor === f.name).length,
+  }));
 
   const [activeFloor, setActiveFloor] = useState<Floor>('3rd');
   const [hoveredRoom, setHoveredRoom] = useState<Room | null>(null);

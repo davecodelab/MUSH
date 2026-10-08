@@ -82,7 +82,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({ onSelectTyp
             onClick={() => setActiveView('rooms')}
             className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#2A2827] hover:text-[#5B514B] cursor-pointer"
           >
-            <span>View All 120 Rooms</span>
+            <span>Explore Room Inventory</span>
             <ArrowRight className="w-4 h-4" />
           </motion.button>
         </div>

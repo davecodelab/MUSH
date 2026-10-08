@@ -73,6 +73,9 @@ export const LoginRegisterModal: React.FC = () => {
           program: 'Undergraduate Student',
           level: 'Level 100',
           hasPaid: Boolean(user.hasPaid),
+          bookingId: user.bookingId || undefined,
+          roomNumber: user.roomNumber || undefined,
+          spaceNumber: user.spaceNumber || undefined,
         };
 
         setCurrentStudent(profile);
@@ -103,6 +106,9 @@ export const LoginRegisterModal: React.FC = () => {
           program: 'Undergraduate Student',
           level: 'Level 100',
           hasPaid: false,
+          bookingId: user.bookingId || undefined,
+          roomNumber: user.roomNumber || undefined,
+          spaceNumber: user.spaceNumber || undefined,
         };
 
         setCurrentStudent(profile);
