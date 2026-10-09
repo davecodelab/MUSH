@@ -63,31 +63,28 @@ export const Hero: React.FC = () => {
         text-[#F4EFE7]
       "
     >
-      {/* ============================================================
-          CINEMATIC BACKGROUND
-      ============================================================ */}
+      {/* ============================================================CINEMATIC BACKGROUND============================================================ */}
 
-      <div className="absolute inset-0 -z-20 overflow-hidden">
-        <motion.img
-          src={MUSHIA_IMAGES.exterior}
-          alt="Exterior of Mushia Hostel in Ayeduase, Kumasi"
-          initial={false}
-          animate={{ scale: 1 }}
-          transition={{
-            duration: shouldReduceMotion ? 0 : 2.2,
-            ease,
-          }}
-          className="
-            h-full
-            w-full
-            object-cover
-            object-[58%_center]
-            sm:object-center
-            lg:object-[center_45%]
-          "
-          referrerPolicy="no-referrer"
-          fetchPriority="high"
-        />
+     <div className="absolute inset-0 -z-20 overflow-hidden">
+  <motion.img
+    src="images/mushia_hero.png"
+    alt="Exterior of Mushia Hostel in Ayeduase, Kumasi"
+    initial={false}
+    animate={{ scale: 1 }}
+    transition={{
+      duration: shouldReduceMotion ? 0 : 2.2,
+      ease,
+    }}
+    className="
+      h-full
+      w-full
+      object-cover
+      object-center
+    "
+    referrerPolicy="no-referrer"
+    fetchPriority="high"
+  />
+</div>
 
         {/* Dark cinematic scrim */}
         <div
@@ -156,9 +153,7 @@ export const Hero: React.FC = () => {
               'url("data:image/svg+xml,%3Csvg viewBox=%270 0 180 180%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%270.55%27/%3E%3C/svg%3E")',
           }}
         />
-      </div>
-
-     
+      
 
       {/* ============================================================
           MAIN CONTENT

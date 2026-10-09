@@ -2,9 +2,12 @@ import { Room, Floor, RoomType, RoomSize, RoomSpace, RoomStatus, SpaceStatus } f
 
 // Real generated asset paths
 export const MUSHIA_IMAGES = {
-  exterior: '/images/mushia_hostel_exterior_1791228260570.jpg',
+  exterior: '/images/mushia_exterior.jpg',
+  compound: '/images/mushia_comp.png',
+  corridor: '/images/mush_corridor.png',
+  background: '/images/mushia_hero.png',
   interior: '/images/mushia_room_interior_1791228272788.jpg',
-  studyRoom: '/images/mushia_study_room_1791228283513.jpg',
+  studyRoom: '/images/study_room.png',
   lounge: '/images/mushia_tv_common_lounge_1791228293201.jpg',
 };
 

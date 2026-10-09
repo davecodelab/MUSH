@@ -46,9 +46,9 @@ export const GallerySection: React.FC = () => {
       id: 5,
       title: 'Balcony Corridor & Sunset View',
       category: 'exterior',
-      categoryLabel: 'Hostel Exterior',
-      src: MUSHIA_IMAGES.exterior,
-      description: 'Upper floor open-air balcony corridors with natural breeze across Ayeduase.',
+      categoryLabel: 'Hostel Corridors',
+      src: MUSHIA_IMAGES.corridor,
+      description: 'Upper floor open-air corridors with natural breeze across Ayeduase.',
     },
     {
       id: 6,
@@ -57,6 +57,14 @@ export const GallerySection: React.FC = () => {
       categoryLabel: 'Bedrooms',
       src: MUSHIA_IMAGES.interior,
       description: 'Private single occupancy room with dedicated study workstation and private en-suite washroom.',
+    },
+    {
+      id: 7,
+      title: 'Water Reservoir ',
+      category: 'exterior',
+      categoryLabel: 'Compound & Utilities',
+      src: MUSHIA_IMAGES.compound,
+      description: 'Water reservoir and compound utilities ensuring uninterrupted water supply for residents.',
     },
   ];
 
