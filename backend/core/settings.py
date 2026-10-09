@@ -10,22 +10,28 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
+import urllib.parse
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0%584yttww5@dg=t!0qq47&ukc&6n^tm9o$r--s_5qgzb6ag1&'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0%584yttww5@dg=t!0qq47&ukc&6n^tm9o$r--s_5qgzb6ag1&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(',') if h.strip()]
 
 
 # Application definition
@@ -46,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,12 +85,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL and not DATABASE_URL.startswith('sqlite:'):
+    url = urllib.parse.urlparse(DATABASE_URL)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': url.path[1:],
+            'USER': url.username,
+            'PASSWORD': url.password,
+            'HOST': url.hostname,
+            'PORT': url.port or 5432,
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -121,6 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Email
@@ -132,11 +154,6 @@ MAILERS = {
     },
 }
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv(os.path.join(BASE_DIR, '.env'))
-
 AUTH_USER_MODEL = 'users.Student'
 
 CORS_ALLOWED_ORIGINS = [
@@ -147,11 +164,18 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
+
+cors_env = os.environ.get('CORS_ALLOWED_ORIGINS')
+if cors_env:
+    CORS_ALLOWED_ORIGINS.extend([origin.strip() for origin in cors_env.split(',') if origin.strip()])
+
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://localhost:\d+$",
     r"^http://127\.0\.0\.1:\d+$",
     r"^http://172\.\d+\.\d+\.\d+:\d+$",
     r"^http://192\.168\.\d+\.\d+:\d+$",
+    r"^https://.*\.vercel\.app$",
+    r"^https://.*\.onrender\.com$",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -169,6 +193,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+IS_PRODUCTION = os.environ.get('RENDER') == 'true' or not DEBUG
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -176,8 +202,8 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_COOKIE': 'access_token',
     'AUTH_COOKIE_REFRESH': 'refresh_token',
-    'AUTH_COOKIE_SECURE': False, # Set to True in Production with HTTPS
+    'AUTH_COOKIE_SECURE': IS_PRODUCTION,
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_PATH': '/',
-    'AUTH_COOKIE_SAMESITE': 'Lax',
+    'AUTH_COOKIE_SAMESITE': 'None' if IS_PRODUCTION else 'Lax',
 }

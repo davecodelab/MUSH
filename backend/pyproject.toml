@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Anapey01", email = "gabriel.k.anapey@gmail.com" }
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "django>=6.1.2",
     "django-cors-headers>=4.9.0",
@@ -17,6 +17,8 @@ dependencies = [
     "psycopg2-binary>=2.9.13",
     "python-docx>=1.2.0",
     "python-dotenv>=1.2.4",
+    "gunicorn>=23.0.0",
+    "whitenoise>=6.8.0",
 ]
 
 [tool.uv]
