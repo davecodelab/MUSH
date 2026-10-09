@@ -80,7 +80,7 @@ interface HostelContextType {
 }
 
 const STORAGE_KEYS = {
-  ROOMS: 'mushia_rooms_v2',
+  ROOMS: 'mushia_rooms_v3',
   BOOKINGS: 'mushia_bookings_v1',
   PAYMENTS: 'mushia_payments_v1',
   STUDENT: 'mushia_student_v1',
@@ -171,6 +171,15 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Initialize Persistent State with exact 103 Excel rooms
   const [rooms, setRooms] = useState<Room[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('mushia_rooms_v2');
+        localStorage.removeItem('mushia_rooms_v1');
+        localStorage.removeItem('mushia_rooms');
+      } catch {
+        // ignore
+      }
+    }
     try {
       const saved = safeGetStorage(STORAGE_KEYS.ROOMS);
       if (saved) {
