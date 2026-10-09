@@ -112,6 +112,7 @@ const DEFAULT_CONFIG: HostelConfig = {
 const DEFAULT_STUDENT: StudentProfile = {
   id: '',
   name: '',
+  firstName: '',
   knustId: '',
   email: '',
   phone: '',
@@ -646,6 +647,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updatedStudent: StudentProfile = {
       ...currentStudent,
       name: params.student.name,
+      firstName: params.student.name.split(' ')[0] || currentStudent.firstName || '',
       knustId: params.student.knustId,
       email: params.student.email,
       phone: params.student.phone,

@@ -939,7 +939,70 @@ export const Navbar: React.FC<NavbarProps> = ({
                   );
                 })}
 
-                <div className="pt-3 border-t border-[#5B514B]">
+                <div className="pt-3 border-t border-[#5B514B] space-y-2">
+                  {isLoggedIn ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="
+                        w-full
+                        h-12
+                        rounded-xl
+                        border
+                        border-[#5B514B]
+                        text-[#A1927D]
+                        hover:text-[#F4EFE7]
+                        hover:bg-[#5B514B]/30
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        cursor-pointer
+                        transition-colors
+                      "
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign out ({currentStudent?.firstName || 'Account'})
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAuthModalOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="
+                        w-full
+                        h-12
+                        rounded-xl
+                        border
+                        border-[#5B514B]
+                        text-[#F4EFE7]
+                        hover:bg-[#5B514B]/30
+                        text-xs
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        cursor-pointer
+                        transition-colors
+                      "
+                    >
+                      <User className="w-4 h-4" />
+                      Sign in
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={() =>

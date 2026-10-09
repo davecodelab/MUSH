@@ -63,9 +63,13 @@ export const LoginRegisterModal: React.FC = () => {
         });
 
         const user = response.user;
+        const profileName = user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username;
+        const profileFirstName = user.first_name || (profileName ? profileName.split(' ')[0] : '') || user.username;
+
         const profile: StudentProfile = {
           id: String(user.id || user.username),
-          name: user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username,
+          name: profileName,
+          firstName: profileFirstName,
           knustId: user.knustId || user.username,
           email: user.email || '',
           phone: user.phone || user.phone_number || '',
@@ -96,9 +100,13 @@ export const LoginRegisterModal: React.FC = () => {
         });
 
         const user = response.user;
+        const regName = user.name || `${formData.first_name || ''} ${formData.last_name || ''}`.trim() || user.username;
+        const regFirstName = user.first_name || formData.first_name.trim() || (regName ? regName.split(' ')[0] : '') || user.username;
+
         const profile: StudentProfile = {
           id: String(user.id || user.username),
-          name: user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username,
+          name: regName,
+          firstName: regFirstName,
           knustId: user.knustId || user.username,
           email: user.email || '',
           phone: user.phone || user.phone_number || '',
