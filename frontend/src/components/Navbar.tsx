@@ -424,31 +424,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* ------------------------------------------------------------------ */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-[72px] flex items-center justify-between gap-6">
+          <div className="h-18 flex items-center justify-between gap-6">
             {/* BRAND */}
             <button
               type="button"
               onClick={() => handleNavClick('home')}
               className="flex items-center gap-3 shrink-0 cursor-pointer"
             >
-              <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-[#5B514B]">
+              <div className="relative w-20 h-18 overflow-hidden">
                 <Image
-                  src="/mush_logo.png"
+                  src="/mushia_logo.png"
                   alt="Mushia Hostel"
                   fill
-                  sizes="40px"
-                  className="object-cover"
+                  sizes="80px"
+                  className="object-contain"
                 />
-              </div>
-
-              <div className="hidden sm:block text-left">
-                <div className="text-sm font-black tracking-tight text-[#F4EFE7]">
-                  MUSHIA
-                </div>
-
-                <div className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#A1927D]">
-                  HOSTEL
-                </div>
               </div>
             </button>
 
@@ -884,7 +874,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="
                 fixed
-                top-[72px]
+                top-18
                 left-0
                 right-0
                 z-35

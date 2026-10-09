@@ -49,18 +49,16 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="relative overflow-hidden bg-[#211F1D] text-[#F7F1E8]">
-      {/* =========================================================
-          BACKGROUND DETAILS
-      ========================================================== */}
+      {/* =========================================================BACKGROUND DETAILS========================================================== */}
 
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
         {/* Large warm glow */}
-        <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#FEFB58]/[0.035] blur-3xl" />
+        <div className="absolute -right-40 -top-40 h-105 w-105 rounded-full bg-[#FEFB58]/[0.035] blur-3xl" />
 
-        <div className="absolute -left-40 bottom-20 h-[360px] w-[360px] rounded-full bg-[#8B756C]/[0.06] blur-3xl" />
+        <div className="absolute -left-40 bottom-20 h-90 w-90 rounded-full bg-[#8B756C]/6 blur-3xl" />
 
         {/* Editorial grid lines */}
         <div className="absolute inset-y-0 left-[8%] hidden w-px bg-white/[0.035] lg:block" />
@@ -73,11 +71,11 @@ export const Footer: React.FC = () => {
 
       <section className="relative border-b border-[#A1927D]/20">
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
-          <div className="relative overflow-hidden rounded-[2rem] border border-[#A1927D]/20 bg-[#2A2827] px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
+          <div className="relative overflow-hidden rounded-4xl border border-[#A1927D]/20 bg-[#2A2827] px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
             {/* Accent circle */}
             <div
               aria-hidden="true"
-              className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#FEFB58]/[0.06] blur-2xl"
+              className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#FEFB58]/6 blur-2xl"
             />
 
             <div className="relative grid items-end gap-10 lg:grid-cols-[1fr_auto]">
@@ -165,16 +163,17 @@ export const Footer: React.FC = () => {
               onClick={() => handleNav('home')}
               className="group mb-6 flex items-center gap-3"
             >
-             
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-[#5B514B]">
-                                <Image
-                                  src="/mush_logo.png"
-                                  alt="Mushia Hostel"
-                                  fill
-                                  sizes="40px"
-                                  className="object-cover"
-                                />
-                     </div>
+          {/* Logo container */}
+  <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden">
+    <Image
+      src="/mushia_logo.png"
+      alt="Mushia Hostel Logo"
+      width={60}
+      height={50}
+      priority
+      className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105" />
+  </span>
+  
               
 
               <span className="text-xl font-black tracking-[-0.03em] text-[#FAF6EF]">

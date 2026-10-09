@@ -368,7 +368,7 @@ export const Hero: React.FC = () => {
                 focus-visible:ring-offset-4
                 focus-visible:ring-offset-[#211F1D]
                 sm:w-auto
-                sm:min-w-[205px]
+                sm:min-w-51.25
                 sm:justify-between
                 sm:gap-8
                 sm:px-6
