@@ -32,29 +32,50 @@ export const BookingFlowModal: React.FC = () => {
     releaseActiveHold,
     config,
     setActiveView,
-    openReceiptModal
+    openReceiptModal,
+    setIsAuthModalOpen
   } = useHostel();
 
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
 
-  // Student Form fields
+  // Student Form fields - pre-filled from authenticated student profile
   const [formData, setFormData] = useState({
-    name: currentStudent.name || '',
-    knustId: currentStudent.knustId || '',
-    email: currentStudent.email || '',
-    phone: currentStudent.phone || '',
-    gender: currentStudent.gender || 'Male',
-    program: currentStudent.program || 'BSc Computer Engineering',
-    level: currentStudent.level || 'Level 200',
+    name: currentStudent?.name || '',
+    knustId: currentStudent?.knustId || '',
+    email: currentStudent?.email || '',
+    phone: currentStudent?.phone || '',
+    gender: currentStudent?.gender || 'Male',
+    program: currentStudent?.program || '',
+    level: currentStudent?.level || 'Level 100',
   });
+
+  // Keep form fields synced whenever student signs in or modal opens
+  useEffect(() => {
+    if (isBookingModalOpen && currentStudent) {
+      setFormData((prev) => ({
+        name: currentStudent.name || prev.name || '',
+        knustId: currentStudent.knustId || prev.knustId || '',
+        email: currentStudent.email || prev.email || '',
+        phone: currentStudent.phone || prev.phone || '',
+        gender: currentStudent.gender || prev.gender || 'Male',
+        program: currentStudent.program && currentStudent.program !== 'Undergraduate Student'
+          ? currentStudent.program
+          : prev.program || '',
+        level: currentStudent.level || prev.level || 'Level 100',
+      }));
+      if (currentStudent.phone) {
+        setMomoNumber(currentStudent.phone);
+      }
+    }
+  }, [isBookingModalOpen, currentStudent]);
 
   // Payment selection
   const [paymentMethod, setPaymentMethod] = useState<'MTN Mobile Money' | 'Telecel Cash' | 'AirtelTigo Money' | 'Visa / Mastercard'>('MTN Mobile Money');
-  const [momoNumber, setMomoNumber] = useState(formData.phone || '0249918234');
-  const [cardNumber, setCardNumber] = useState('4123 4567 8901 2345');
-  const [cardExpiry, setCardExpiry] = useState('08/28');
-  const [cardCvv, setCardCvv] = useState('841');
+  const [momoNumber, setMomoNumber] = useState(currentStudent?.phone || '');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvv, setCardCvv] = useState('');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
@@ -295,6 +316,29 @@ export const BookingFlowModal: React.FC = () => {
                       Please enter your official KNUST student details for hostel registry and roommate matching.
                     </p>
                   </div>
+
+                  {currentStudent?.name ? (
+                    <div className="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>
+                        Information pre-filled from your account (<strong>{currentStudent.name}</strong>). You can make changes if needed.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-[#FEFB58]/20 border border-[#FEFB58]/50 rounded-xl text-xs text-[#5B514B]">
+                      <span>Already have an account? Sign in to automatically pre-fill your details.</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeBookingModal();
+                          setIsAuthModalOpen(true);
+                        }}
+                        className="font-bold text-[#2A2827] underline cursor-pointer shrink-0 ml-2"
+                      >
+                        Sign in
+                      </button>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>

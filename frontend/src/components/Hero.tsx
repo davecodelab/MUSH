@@ -2,7 +2,8 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
+import { useSafeReducedMotion } from '../hooks/useSafeReducedMotion';
 import {
   MapPin,
   ArrowRight,
@@ -16,7 +17,7 @@ import { MUSHIA_IMAGES } from '../data/seedRooms';
 
 export const Hero: React.FC = () => {
   const { setActiveView } = useHostel();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSafeReducedMotion();
 
   const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -70,9 +71,7 @@ export const Hero: React.FC = () => {
         <motion.img
           src={MUSHIA_IMAGES.exterior}
           alt="Exterior of Mushia Hostel in Ayeduase, Kumasi"
-          initial={{
-            scale: shouldReduceMotion ? 1 : 1.12,
-          }}
+          initial={false}
           animate={{ scale: 1 }}
           transition={{
             duration: shouldReduceMotion ? 0 : 2.2,
@@ -258,13 +257,13 @@ export const Hero: React.FC = () => {
             variants={itemVariants}
             className="
               max-w-5xl
-              text-[clamp(3.35rem,11.5vw,5.5rem)]
+              text-[clamp(2.35rem,9.5vw,4.5rem)]
               font-semibold
-              leading-[0.91]
-              tracking-[-0.065em]
+              leading-[0.93]
+              tracking-[-0.055em]
               text-[#F4EFE7]
-              sm:text-[clamp(4.5rem,8.5vw,7rem)]
-              lg:text-[clamp(5.5rem,7.6vw,8rem)]
+              sm:text-[clamp(3.75rem,8.5vw,6rem)]
+              lg:text-[clamp(5rem,7.6vw,7.5rem)]
             "
           >
             More than a room.
@@ -275,10 +274,12 @@ export const Hero: React.FC = () => {
                 relative
                 mt-1
                 inline-block
-                text-[clamp(3.35rem,11.5vw,5.5rem)]
+                text-[clamp(2.35rem,9.5vw,4.5rem)]
                 font-normal
-                tracking-[-0.055em]
+                tracking-[-0.045em]
                 text-[#FEFB58]
+                sm:text-[clamp(3.75rem,8.5vw,6rem)]
+                lg:text-[clamp(5rem,7.6vw,7.5rem)]
               "
             >
               A place to belong.

@@ -58,7 +58,7 @@ export const StudentDashboard: React.FC = () => {
 
   // Find user's confirmed booking
   const myBooking = bookings.find((b) => b.id === currentStudent.bookingId) || bookings[0];
-  const myRoom = rooms.find((r) => r.id === currentStudent.roomId || r.roomNumber === currentStudent.roomNumber) || rooms.find((r) => r.roomNumber === '305') || rooms[0];
+  const myRoom = rooms.find((r) => r.id === currentStudent.roomId || r.roomNumber === currentStudent.roomNumber) || rooms[0];
 
   const [liveRoommates, setLiveRoommates] = useState<any[]>([]);
 
