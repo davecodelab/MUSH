@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
+import { useSafeReducedMotion } from '../hooks/useSafeReducedMotion';
 import { useHostel } from '../context/HostelContext';
 import { RoomType } from '../types';
 import { MUSHIA_IMAGES } from '../data/seedRooms';
@@ -22,7 +23,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
   onSelectType,
 }) => {
   const { setActiveView } = useHostel();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSafeReducedMotion();
 
   const roomTypesData = [
     {

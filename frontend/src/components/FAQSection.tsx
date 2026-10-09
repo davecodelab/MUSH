@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useSafeReducedMotion } from '../hooks/useSafeReducedMotion';
 import { ChevronDown, HelpCircle } from 'lucide-react';
-import { div } from 'motion/react-client';
 
 export const FAQSection: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSafeReducedMotion();
 
   const faqs = [
     {

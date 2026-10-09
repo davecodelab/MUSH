@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
+import { useSafeReducedMotion } from '../hooks/useSafeReducedMotion';
 import {
   MapPin,
   Bed,
@@ -14,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const WhyMushia: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSafeReducedMotion();
 
   const features = [
     {

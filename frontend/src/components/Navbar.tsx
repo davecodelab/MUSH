@@ -26,6 +26,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     activeView,
     setActiveView,
     notifications,
+    markNotificationAsRead,
+    clearAllNotifications,
     currentStudent,
     isLoggedIn,
     logout,
@@ -496,7 +498,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* NOTIFICATIONS */}
               <div
                 ref={notifMenuRef}
-                className="relative hidden sm:block"
+                className="relative"
               >
                 <button
                   type="button"
@@ -570,41 +572,61 @@ export const Navbar: React.FC<NavbarProps> = ({
                         duration: 0.2,
                       }}
                       className="
-                        absolute
-                        right-0
-                        top-full
-                        mt-3
-                        w-80
-                        max-w-[calc(100vw-2rem)]
+                        fixed sm:absolute
+                        right-3 sm:right-0
+                        top-[70px] sm:top-full
+                        mt-2
+                        w-[calc(100vw-1.5rem)] sm:w-80
+                        max-w-sm
                         rounded-2xl
                         border
                         border-[#5B514B]
                         bg-[#2A2827]
                         shadow-2xl
                         overflow-hidden
+                        z-50
                       "
                     >
-                      <div className="px-4 py-3 border-b border-[#5B514B]">
-                        <div className="text-xs font-black uppercase tracking-wider text-[#F4EFE7]">
-                          Notifications
+                      <div className="px-4 py-3 border-b border-[#5B514B] flex items-center justify-between">
+                        <div className="text-xs font-black uppercase tracking-wider text-[#F4EFE7] flex items-center gap-2">
+                          <span>Notifications</span>
+                          {unreadCount > 0 && (
+                            <span className="text-[10px] text-[#FEFB58] font-bold">
+                              ({unreadCount} new)
+                            </span>
+                          )}
                         </div>
+                        {notifications?.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => clearAllNotifications()}
+                            className="text-[10px] uppercase font-bold text-[#A1927D] hover:text-[#FEFB58] transition-colors cursor-pointer"
+                          >
+                            Clear all
+                          </button>
+                        )}
                       </div>
 
-                      <div className="max-h-80 overflow-y-auto">
+                      <div className="max-h-80 overflow-y-auto divide-y divide-[#5B514B]/40">
                         {notifications?.length ? (
                           notifications.map(
                             (notification: any) => (
-                              <div
+                              <button
                                 key={notification.id}
+                                type="button"
+                                onClick={() => markNotificationAsRead(notification.id)}
                                 className="
+                                  w-full
+                                  text-left
                                   px-4
                                   py-3
-                                  border-b
-                                  border-[#5B514B]/60
-                                  last:border-0
+                                  hover:bg-[#5B514B]/30
+                                  transition-colors
+                                  cursor-pointer
+                                  block
                                 "
                               >
-                                <p className="text-xs text-[#F4EFE7]">
+                                <p className={`text-xs ${notification.read ? 'text-[#A1927D]' : 'text-[#F4EFE7] font-medium'}`}>
                                   {notification.message}
                                 </p>
 
@@ -613,7 +635,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                                     New
                                   </div>
                                 )}
-                              </div>
+                              </button>
                             )
                           )
                         ) : (
@@ -930,6 +952,48 @@ export const Navbar: React.FC<NavbarProps> = ({
                 })}
 
                 <div className="pt-3 border-t border-[#5B514B] space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setShowNotifDropdown(true);
+                    }}
+                    className="
+                      w-full
+                      h-12
+                      px-4
+                      rounded-xl
+                      border
+                      border-[#5B514B]
+                      text-[#A1927D]
+                      hover:text-[#F4EFE7]
+                      hover:bg-[#5B514B]/30
+                      text-xs
+                      font-bold
+                      uppercase
+                      tracking-wider
+                      flex
+                      items-center
+                      justify-between
+                      cursor-pointer
+                      transition-colors
+                    "
+                  >
+                    <div className="flex items-center gap-2">
+                      <Bell className="w-4 h-4 text-[#FEFB58]" />
+                      <span>Notifications</span>
+                    </div>
+                    {unreadCount > 0 ? (
+                      <span className="px-2 py-0.5 rounded-full bg-[#FEFB58] text-[#211F1D] text-[10px] font-black">
+                        {unreadCount} new
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-[#A1927D] font-medium lowercase">
+                        none unread
+                      </span>
+                    )}
+                  </button>
+
                   {isLoggedIn ? (
                     <button
                       type="button"

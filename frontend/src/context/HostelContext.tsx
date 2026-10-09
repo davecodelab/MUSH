@@ -326,7 +326,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const saved = safeGetStorage(STORAGE_KEYS.STUDENT);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.id === '20814522' && parsed.name === 'Dave Frimpong' && !parsed.hasPaid) {
+        if (parsed.name === 'Dave Frimpong') {
           return DEFAULT_STUDENT;
         }
         return parsed;
@@ -341,11 +341,11 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     currentStudent &&
     currentStudent.id &&
     currentStudent.id.trim() !== '' &&
-    currentStudent.id !== '20814522' &&
     currentStudent.name &&
     currentStudent.name.trim() !== '' &&
     currentStudent.name !== 'Guest Student' &&
-    currentStudent.name !== 'Guest'
+    currentStudent.name !== 'Guest' &&
+    currentStudent.name !== 'Dave Frimpong'
   );
 
   const [roommateRequests, setRoommateRequests] = useState<RoommateRequest[]>(() => {
@@ -901,17 +901,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       });
       setActiveView('home');
     } else if (role === 'paid_student') {
-      setCurrentStudent({
-        ...DEFAULT_STUDENT,
-        name: 'Dave Frimpong',
-        knustId: '20814522',
-        hasPaid: true,
-        bookingId: 'booking-seed-1',
-        roomId: 'mushia-room-305',
-        roomNumber: '305',
-        spaceNumber: 3,
-      });
-      setActiveView('dashboard');
+      setActiveView(currentStudent.hasPaid ? 'dashboard' : 'rooms');
     } else if (role === 'admin') {
       setActiveView('admin');
     }
