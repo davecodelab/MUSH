@@ -111,7 +111,7 @@ export const FloorExplorer: React.FC = () => {
               Interactive Floor Explorer
             </h2>
             <p className="mt-2 text-sm text-[#A5ABAA] max-w-xl">
-              Inspect all 20 rooms per floor across Mushia Hostel. Click any room to review individual space occupancies, student profiles, and secure your bed.
+              Inspect all {rooms.length} official rooms across 6 floors at Mushia Hostel. Click any room to review individual space occupancies and secure your bed.
             </p>
           </div>
 
@@ -119,7 +119,7 @@ export const FloorExplorer: React.FC = () => {
           <div className="mt-4 md:mt-0 flex items-center gap-6 bg-[#5B514B]/40 border border-[#7D6E66]/50 rounded-xl px-5 py-3 text-xs shadow-md">
             <div>
               <span className="text-[#A5ABAA] block">Rooms on {activeFloor}</span>
-              <span className="text-base font-bold text-[#F4EFE7] tabular-nums">20 Rooms</span>
+              <span className="text-base font-bold text-[#F4EFE7] tabular-nums">{floorRooms.length} Rooms</span>
             </div>
             <div className="w-px h-8 bg-[#7D6E66]/60"></div>
             <div>
@@ -151,7 +151,7 @@ export const FloorExplorer: React.FC = () => {
                 <Building className="w-4 h-4 shrink-0" />
                 <span>{fl.label}</span>
                 <span className={`text-[11px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-[#2A2827]/20 text-[#2A2827]' : 'bg-[#2A2827]/60 text-[#A5ABAA]'}`}>
-                  20 rms
+                  {fl.count} rms
                 </span>
               </motion.button>
             );
@@ -175,7 +175,7 @@ export const FloorExplorer: React.FC = () => {
           </span>
         </div>
 
-        {/* 20 Rooms Blueprint Grid with animated stagger */}
+        {/* Rooms Blueprint Grid with animated stagger */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeFloor}
