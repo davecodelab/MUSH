@@ -306,7 +306,7 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           referrerPolicy="no-referrer"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#2A2827]/80 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-linear-to-t from-[#2A2827]/80 via-transparent to-transparent"></div>
                         
                         {/* Room Badge */}
                         <div className="absolute top-3 left-3 bg-[#2A2827]/90 backdrop-blur-sm px-2.5 py-1 rounded text-white text-xs font-bold flex items-center gap-1.5 border border-white/10">
@@ -366,12 +366,6 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
                               </span>
                             </div>
                           ))}
-                        </div>
-
-                        {/* Features preview */}
-                        <div className="text-[11px] text-[#7D6E66] space-y-1 mb-2">
-                          <p>· {room.airConditioned ? 'Refrigerated Split AC' : 'High-Velocity Ceiling Fan'}</p>
-                          <p>· En-suite Modern Washroom & Study Desks</p>
                         </div>
                       </div>
                     </div>

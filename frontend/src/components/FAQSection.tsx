@@ -57,16 +57,14 @@ export const FAQSection: React.FC = () => {
       id="faq"
       className="relative overflow-hidden bg-[#2B272A] text-[#F3EEE7]"
     >
-      {/* =========================================================
-          SUBTLE BACKGROUND
-      ========================================================= */}
+      {/* =========================================================SUBTLE BACKGROUND========================================================= */}
 
       <div className="pointer-events-none absolute inset-0">
-        {/* soft blue glow inspired by the building windows/sky */}
-        <div className="absolute -right-40 -top-40 h-130 w-130 rounded-full bg-[#6D8EBC]/10 blur-3xl" />
+        {/* soft lime green glow inspired by the building windows/sky */}
+        <div className="absolute -right-40 -top-40 h-130 w-130 rounded-full bg-[#92ce91]/10 blur-3xl" />
 
         {/* warm architectural glow */}
-        <div className="absolute -bottom-48 -left-40 h-125 w-125 rounded-full bg-[#594C43]/20 blur-3xl" />
+        <div className="absolute -bottom-48 -left-40 h-125 w-125 rounded-full bg-[#5fe24b]/20 blur-3xl" />
 
         {/* extremely subtle architectural lines */}
         <div
@@ -102,7 +100,7 @@ export const FAQSection: React.FC = () => {
         >
           <div>
             <div className="mb-7 flex items-center gap-4">
-              <span className="h-px w-10 bg-[#6D8EBC]" />
+              <span className="h-px w-10 bg-[#92ce91]" />
 
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#A79C92]">
                 Need to know
@@ -124,7 +122,7 @@ export const FAQSection: React.FC = () => {
 
             <div className="mt-6 flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/4">
-                <HelpCircle className="h-4 w-4 text-[#AFC4DF]" />
+                <HelpCircle className="h-4 w-4 text-[#92ce91]" />
               </div>
 
               <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#D4CEC8]">
@@ -164,7 +162,7 @@ export const FAQSection: React.FC = () => {
                 }}
                 className={`overflow-hidden rounded-2xl border transition-all duration-500 ${
                   isOpen
-                    ? 'border-[#6D8EBC]/40 bg-[#F3EEE7]'
+                    ? 'border-[#92ce91]/40 bg-[#F3EEE7]'
                     : 'border-white/8 bg-white/[0.035] hover:border-white/16 hover:bg-white/5.5'
                 }`}
               >
@@ -178,7 +176,7 @@ export const FAQSection: React.FC = () => {
 
                   <span
                     className={`hidden shrink-0 font-mono text-[10px] font-bold tracking-[0.15em] sm:block ${
-                      isOpen ? 'text-[#6D8EBC]' : 'text-[#6B625B]'
+                      isOpen ? 'text-[#92ce91]' : 'text-[#6B625B]'
                     }`}
                   >
                     {String(idx + 1).padStart(2, '0')}
@@ -188,7 +186,7 @@ export const FAQSection: React.FC = () => {
 
                   <span
                     className={`flex-1 text-sm font-semibold transition-colors duration-300 sm:text-base ${
-                      isOpen ? 'text-[#2B272A]' : 'text-[#F3EEE7]'
+                      isOpen ? 'text-[#2B272A]' : 'text-[#e9f3e7]'
                     }`}
                   >
                     {faq.q}
@@ -199,7 +197,7 @@ export const FAQSection: React.FC = () => {
                   <span
                     className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${
                       isOpen
-                        ? 'rotate-180 border-[#6D8EBC]/30 bg-[#6D8EBC]/10 text-[#594C43]'
+                        ? 'rotate-180 border-[#92ce91]/30 bg-[#92ce91]/10 text-[#594C43]'
                         : 'border-white/10 bg-white/3 text-[#A79C92]'
                     }`}
                   >
@@ -264,7 +262,7 @@ export const FAQSection: React.FC = () => {
         >
           <div className="flex flex-col gap-6 px-6 py-7 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6D8EBC]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#92ce91]">
                 Still curious?
               </p>
 
@@ -279,7 +277,7 @@ export const FAQSection: React.FC = () => {
 
             <a
               href="tel:+233249203029"
-              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#F3EEE7] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#2B272A] transition-all duration-300 hover:bg-[#6D8EBC] hover:text-white hover:shadow-lg"
+              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#F3EEE7] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#2B272A] transition-all duration-300 hover:bg-[#92ce91] hover:text-white hover:shadow-lg"
             >
               <span>Call +233 24 920 3029</span>
 

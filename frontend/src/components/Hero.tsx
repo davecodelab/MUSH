@@ -1,515 +1,593 @@
+
 'use client';
 
 import React from 'react';
-import { motion } from 'motion/react';
-import { useHostel } from '../context/HostelContext';
-import { MUSHIA_IMAGES } from '../data/seedRooms';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   MapPin,
   ArrowRight,
-  Building,
+  Building2,
+  MoveUpRight,
+  CheckCircle2,
 } from 'lucide-react';
+
+import { useHostel } from '../context/HostelContext';
+import { MUSHIA_IMAGES } from '../data/seedRooms';
 
 export const Hero: React.FC = () => {
   const { setActiveView } = useHostel();
+  const shouldReduceMotion = useReducedMotion();
+
+  const ease = [0.22, 1, 0.36, 1] as const;
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: {},
     visible: {
-      opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
+        staggerChildren: shouldReduceMotion ? 0 : 0.12,
+        delayChildren: shouldReduceMotion ? 0 : 0.15,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 24,
+    },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: 'easeOut' as const,
+        duration: shouldReduceMotion ? 0 : 0.75,
+        ease,
       },
     },
   };
 
+  const goTo = (view: string) => {
+    setActiveView(view as any);
+  };
+
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-[#2A2827] text-[#F4EFE7]">
-      {/* =========================================================
-          BACKGROUND
-      ========================================================= */}
-      <div className="absolute inset-0 z-0">
+    <section
+      id="home"
+      className="
+        group/hero
+        relative
+        isolate
+        min-h-svh
+        overflow-hidden
+        bg-[#211F1D]
+        text-[#F4EFE7]
+      "
+    >
+      {/* ============================================================
+          CINEMATIC BACKGROUND
+      ============================================================ */}
+
+      <div className="absolute inset-0 -z-20 overflow-hidden">
         <motion.img
-          initial={{ scale: 1.08 }}
+          src={MUSHIA_IMAGES.exterior}
+          alt="Exterior of Mushia Hostel in Ayeduase, Kumasi"
+          initial={{
+            scale: shouldReduceMotion ? 1 : 1.12,
+          }}
           animate={{ scale: 1 }}
           transition={{
-            duration: 1.8,
-            ease: 'easeOut',
+            duration: shouldReduceMotion ? 0 : 2.2,
+            ease,
           }}
-          src={MUSHIA_IMAGES.exterior}
-          alt="Mushia Hostel exterior building at Ayeduase Kumasi"
           className="
             h-full
             w-full
             object-cover
-            object-center
-
+            object-[58%_center]
             sm:object-center
-            lg:object-center
+            lg:object-[center_45%]
           "
           referrerPolicy="no-referrer"
+          fetchPriority="high"
         />
 
-        {/* Main contrast scrim */}
+        {/* Dark cinematic scrim */}
         <div
           className="
             absolute
             inset-0
-            bg-gradient-to-r
-            from-[#2A2827]/95
-            via-[#2A2827]/80
-            to-[#2A2827]/45
-
-            max-sm:bg-gradient-to-b
-            max-sm:from-[#2A2827]/95
-            max-sm:via-[#2A2827]/80
-            max-sm:to-[#2A2827]/55
+            bg-[#211F1D]/55
           "
         />
 
-        {/* Bottom fade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2A2827] via-transparent to-transparent" />
+        {/* Directional contrast for headline */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-linear-to-r
+            from-[#211F1D]/95
+            via-[#211F1D]/80
+            to-[#211F1D]/20
+            max-md:bg-linear-to-b
+            max-md:from-[#211F1D]/80
+            max-md:via-[#211F1D]/70
+            max-md:to-[#211F1D]/65
+          "
+        />
 
-        {/* Mobile extra readability */}
-        <div className="absolute inset-0 bg-[#2A2827]/10 sm:bg-transparent" />
+        {/* Lower cinematic fade */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-linear-to-t
+            from-[#211F1D]
+            via-transparent
+            to-[#211F1D]/20
+          "
+        />
+
+        {/* Warm brand-toned ambient light */}
+        <div
+          aria-hidden="true"
+          className="
+            absolute
+            -left-40
+            top-[18%]
+            h-112
+            w-md
+            rounded-full
+            bg-[#FEFB58]/5.5
+            blur-[120px]
+          "
+        />
+
+        {/* Fine film-grain texture */}
+        <div
+          aria-hidden="true"
+          className="
+            absolute
+            inset-0
+            opacity-[0.07]
+            mix-blend-soft-light
+            pointer-events-none
+          "
+          style={{
+            backgroundImage:
+              'url("data:image/svg+xml,%3Csvg viewBox=%270 0 180 180%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%270.55%27/%3E%3C/svg%3E")',
+          }}
+        />
       </div>
 
-      {/* =========================================================
-          CONTENT
-      ========================================================= */}
+     
+
+      {/* ============================================================
+          MAIN CONTENT
+      ============================================================ */}
+
       <div
         className="
           relative
           z-10
           mx-auto
           flex
-          min-h-[100svh]
+          min-h-svh
           w-full
-          max-w-7xl
-          items-end
-
-          px-4
+          max-w-[1600px]
+          flex-col
+          justify-end
+          px-5
           pb-8
-          pt-28
-
-          sm:px-6
+          pt-32
+          sm:px-8
           sm:pb-12
-          sm:pt-32
-
-          lg:px-8
-          lg:pb-16
-          lg:pt-36
+          sm:pt-36
+          lg:px-14
+          lg:pb-14
+          xl:px-20
         "
       >
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="
-            w-full
-            max-w-3xl
-          "
+          className="w-full max-w-5xl"
         >
-          {/* =====================================================
-              LOCATION
-          ===================================================== */}
+          {/* LOCATION + AVAILABILITY */}
           <motion.div
             variants={itemVariants}
             className="
-              mb-5
-              inline-flex
-              max-w-full
+              mb-7
+              flex
+              flex-wrap
               items-center
-              gap-2
-              rounded-lg
-              border
-              border-[#7D6E66]/40
-              bg-[#5B514B]/80
-              px-3
-              py-2
-              text-[10px]
-              font-semibold
-              leading-4
-              tracking-wide
-              text-[#FEFB58]
-              shadow-sm
-              backdrop-blur-md
-
-              sm:mb-6
-              sm:px-3.5
-              sm:py-1.5
-              sm:text-xs
+              gap-x-4
+              gap-y-3
             "
           >
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#FEFB58]" />
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.16em]
+                text-[#FEFB58]
+                sm:text-[11px]
+                sm:tracking-[0.2em]
+              "
+            >
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
 
-            <span className="min-w-0 break-words">
-              FNF Junction, Ayeduase Newsite, Kumasi
-            </span>
+              <span>
+                Ayeduase Newsite, Kumasi
+              </span>
+            </div>
 
-            <span className="hidden shrink-0 text-[#A5ABAA] sm:inline">
-              · 3 mins to KNUST Gate
-            </span>
+            <span
+              aria-hidden="true"
+              className="hidden h-4 w-px bg-[#F4EFE7]/30 sm:block"
+            />
+
+            <div className="inline-flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span
+                  className="
+                    absolute
+                    inline-flex
+                    h-full
+                    w-full
+                    animate-ping
+                    rounded-full
+                    bg-[#FEFB58]/50
+                  "
+                />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#FEFB58]" />
+              </span>
+
+              <span className="text-[10px] font-medium tracking-wide text-[#F4EFE7]/75 sm:text-xs">
+                Your next chapter starts here
+              </span>
+            </div>
           </motion.div>
 
-          {/* =====================================================
-              HEADLINE
-          ===================================================== */}
+          {/* HEADLINE */}
           <motion.h1
             variants={itemVariants}
             className="
-              max-w-[900px]
-              text-[clamp(2.75rem,12vw,4rem)]
-              font-extrabold
-              leading-[0.98]
-              tracking-[-0.055em]
+              max-w-5xl
+              text-[clamp(3.35rem,11.5vw,5.5rem)]
+              font-semibold
+              leading-[0.91]
+              tracking-[-0.065em]
               text-[#F4EFE7]
-
-              sm:text-[clamp(3.25rem,9vw,5rem)]
-              sm:leading-[1]
-
-              lg:text-6xl
-              lg:leading-[1.05]
-          "
+              sm:text-[clamp(4.5rem,8.5vw,7rem)]
+              lg:text-[clamp(5.5rem,7.6vw,8rem)]
+            "
           >
-            Your KNUST Home
+            More than a room.
             <br />
 
-            <span className="relative inline-block text-[#FEFB58] drop-shadow-sm">
-              Starts Here.
+            <span
+              className="
+                relative
+                mt-1
+                inline-block
+                text-[clamp(3.35rem,11.5vw,5.5rem)]
+                font-normal
+                tracking-[-0.055em]
+                text-[#FEFB58]
+              "
+            >
+              A place to belong.
             </span>
           </motion.h1>
 
-          {/* =====================================================
-              DESCRIPTION
-          ===================================================== */}
+          {/* DESCRIPTION */}
           <motion.p
             variants={itemVariants}
             className="
-              mt-5
-              max-w-2xl
+              mt-6
+              max-w-xl
               text-[14px]
-              leading-6
-              text-[#F4EFE7]/85
-
-              sm:mt-6
+              leading-7
+              text-[#F4EFE7]/80
+              sm:mt-7
               sm:text-base
-              sm:leading-7
-
-              lg:text-lg
+              sm:leading-8
+              lg:mt-8
+              lg:text-[17px]
             "
           >
-            Comfortable, fully equipped student accommodation at Mushia Hostel,
-            conveniently located at FNF Junction, Ayeduase Newsite. Choose your
-            exact room space, make a secure reservation, and connect with
-            verified KNUST roommates.
+            Find your space at Mushia Hostel. Discover comfortable
+            student accommodation, explore your preferred room, and
+            make your next chapter at KNUST feel like home.
           </motion.p>
 
-          {/* =====================================================
-              CTA BUTTONS
-          ===================================================== */}
-          <motion.div
-            variants={itemVariants}
-            className="
-              mt-7
-              flex
-              w-full
-              flex-col
-              gap-3
-
-              sm:mt-8
-              sm:flex-row
-              sm:flex-wrap
-              sm:items-center
-              sm:gap-3
-            "
-          >
-            {/* Primary */}
-            <motion.button
-              whileHover={{
-                scale: 1.02,
-                y: -2,
-              }}
-              whileTap={{
-                scale: 0.98,
-              }}
-              onClick={() => setActiveView('rooms')}
-              className="
-                flex
-                min-h-[52px]
-                w-full
-                items-center
-                justify-center
-                gap-2
-                rounded-xl
-                bg-[#FEFB58]
-                px-5
-                py-3.5
-                text-sm
-                font-bold
-                text-[#2A2827]
-                shadow-lg
-                transition-all
-                duration-300
-                hover:bg-[#fff945]
-                hover:shadow-xl
-                active:scale-[0.98]
-
-                sm:w-auto
-                sm:min-w-[150px]
-                sm:px-6
-                sm:text-base
-              "
-            >
-              <span>Book a Room</span>
-              <ArrowRight className="h-4 w-4 shrink-0" />
-            </motion.button>
-
-            {/* Secondary */}
-            <motion.button
-              whileHover={{
-                scale: 1.01,
-                y: -1,
-              }}
-              whileTap={{
-                scale: 0.98,
-              }}
-              onClick={() => setActiveView('floor-explorer')}
-              className="
-                flex
-                min-h-[52px]
-                w-full
-                items-center
-                justify-center
-                gap-2
-                rounded-xl
-                border
-                border-[#7D6E66]/60
-                bg-[#5B514B]/70
-                px-5
-                py-3.5
-                text-sm
-                font-semibold
-                text-[#F4EFE7]
-                shadow-md
-                backdrop-blur-sm
-                transition-all
-                duration-300
-                hover:bg-[#5B514B]
-                active:scale-[0.98]
-
-                sm:w-auto
-                sm:px-5
-                sm:text-base
-              "
-            >
-              <Building className="h-4 w-4 shrink-0 text-[#FEFB58]" />
-
-              <span className="whitespace-normal text-center">
-                Explore 6 Floors
-                <span className="hidden sm:inline"> (103 Rooms)</span>
-                <span className="sm:hidden"> · 103 Rooms</span>
-              </span>
-            </motion.button>
-          </motion.div>
-
-          {/* =====================================================
-              TRUST SIGNALS
-          ===================================================== */}
+          {/* CTA BUTTONS */}
           <motion.div
             variants={itemVariants}
             className="
               mt-8
+              flex
+              w-full
+              flex-col
+              gap-3
+              sm:mt-9
+              sm:w-auto
+              sm:flex-row
+              sm:flex-wrap
+              sm:items-center
+              sm:gap-4
+            "
+          >
+            {/* PRIMARY CTA */}
+            <motion.button
+              type="button"
+              onClick={() => goTo('rooms')}
+              whileHover={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      y: -3,
+                      scale: 1.015,
+                    }
+              }
+              whileTap={{ scale: 0.98 }}
+              transition={{
+                duration: 0.25,
+                ease,
+              }}
+              className="
+                group/primary
+                relative
+                inline-flex
+                min-h-14
+                w-full
+                items-center
+                justify-center
+                gap-4
+                overflow-hidden
+                rounded-xl
+                bg-[#FEFB58]
+                px-6
+                py-4
+                text-sm
+                font-bold
+                text-[#211F1D]
+                shadow-[0_8px_30px_rgba(254,251,88,0.12)]
+                transition-[box-shadow,background-color]
+                duration-300
+                hover:bg-[#FFFDA0]
+                hover:shadow-[0_12px_40px_rgba(254,251,88,0.23)]
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#FEFB58]
+                focus-visible:ring-offset-4
+                focus-visible:ring-offset-[#211F1D]
+                sm:w-auto
+                sm:min-w-[205px]
+                sm:justify-between
+                sm:gap-8
+                sm:px-6
+                cursor-pointer
+              "
+            >
+              {/* Sliding highlight */}
+              <span
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+                  absolute
+                  inset-y-0
+                  -left-1/2
+                  w-1/3
+                  skew-x-[-20deg]
+                  bg-white/35
+                  transition-transform
+                  duration-700
+                  ease-out
+                  group-hover/primary:translate-x-[480%]
+                "
+              />
+
+              <span className="relative z-10">
+                Find your room
+              </span>
+
+              <span
+                className="
+                  relative
+                  z-10
+                  flex
+                  h-8
+                  w-8
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-lg
+                  bg-[#211F1D]/8
+                  transition-all
+                  duration-300
+                  group-hover/primary:translate-x-1
+                  group-hover/primary:bg-[#211F1D]/13
+                "
+              >
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </motion.button>
+
+            {/* SECONDARY CTA */}
+            <motion.button
+              type="button"
+              onClick={() => goTo('floor-explorer')}
+              whileHover={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      y: -3,
+                    }
+              }
+              whileTap={{ scale: 0.98 }}
+              transition={{
+                duration: 0.25,
+                ease,
+              }}
+              className="
+                group/secondary
+                inline-flex
+                min-h-[56px]
+                w-full
+                items-center
+                justify-center
+                gap-3
+                rounded-xl
+                border
+                border-[#F4EFE7]/35
+                bg-[#211F1D]/25
+                px-6
+                py-4
+                text-sm
+                font-semibold
+                text-[#F4EFE7]
+                transition-all
+                duration-300
+                hover:border-[#FEFB58]/70
+                hover:bg-[#F4EFE7]/[0.08]
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#FEFB58]
+                focus-visible:ring-offset-4
+                focus-visible:ring-offset-[#211F1D]
+                sm:w-auto
+                sm:min-w-[190px]
+                sm:justify-between
+                cursor-pointer
+              "
+            >
+              <Building2
+                className="
+                  h-4
+                  w-4
+                  shrink-0
+                  text-[#FEFB58]
+                  transition-transform
+                  duration-300
+                  group-hover/secondary:-translate-y-0.5
+                "
+              />
+
+              <span>Explore the floors</span>
+
+              <MoveUpRight
+                className="
+                  h-4
+                  w-4
+                  shrink-0
+                  text-[#F4EFE7]/65
+                  transition-all
+                  duration-300
+                  group-hover/secondary:-translate-y-1
+                  group-hover/secondary:translate-x-1
+                  group-hover/secondary:text-[#FEFB58]
+                "
+              />
+            </motion.button>
+          </motion.div>
+
+          {/* TRUST / QUICK FACTS */}
+          <motion.div
+            variants={itemVariants}
+            className="
+              mt-10
               border-t
-              border-[#5B514B]/80
-              pt-4
-
-              sm:mt-10
-              sm:pt-5
-
-              lg:mt-12
-              lg:pt-6
+              border-[#F4EFE7]/20
+              pt-5
+              sm:mt-12
+              sm:pt-6
+              lg:mt-14
             "
           >
             <div
               className="
                 grid
                 grid-cols-2
-                gap-2.5
-
+                gap-x-5
+                gap-y-5
                 sm:grid-cols-4
-                sm:gap-3
+                sm:gap-5
               "
             >
-              {/* 103 Rooms */}
-              <div
-                className="
-                  min-w-0
-                  rounded-xl
-                  border
-                  border-[#5B514B]/30
-                  bg-[#2A2827]/45
-                  p-3
-                  backdrop-blur-sm
-
-                  sm:p-3.5
-                "
-              >
-                <span
-                  className="
-                    block
-                    truncate
-                    text-lg
-                    font-black
-                    tabular-nums
-                    text-[#F4EFE7]
-
-                    sm:text-xl
-                  "
-                >
-                  103
+              {/* ROOM INVENTORY */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4EFE7]/15 bg-[#F4EFE7]/[0.05]">
+                  <Building2 className="h-4 w-4 text-[#FEFB58]" />
                 </span>
 
-                <span className="mt-0.5 block truncate text-[10px] text-[#A5ABAA] sm:text-xs">
-                  Official Rooms
-                </span>
+                <div className="min-w-0">
+                  <div className="text-xl font-semibold tracking-tight text-[#F4EFE7] sm:text-2xl">
+                    103
+                  </div>
+                  <p className="mt-1 text-[10px] leading-4 text-[#F4EFE7]/60 sm:text-xs">
+                    Rooms to explore
+                  </p>
+                </div>
               </div>
 
-              {/* Floors */}
-              <div
-                className="
-                  min-w-0
-                  rounded-xl
-                  border
-                  border-[#5B514B]/30
-                  bg-[#2A2827]/45
-                  p-3
-                  backdrop-blur-sm
-
-                  sm:p-3.5
-                "
-              >
-                <span
-                  className="
-                    block
-                    truncate
-                    text-lg
-                    font-black
-                    text-[#F4EFE7]
-
-                    sm:text-xl
-                  "
-                >
-                  6 Floors
+              {/* FLOORS */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4EFE7]/15 bg-[#F4EFE7]/[0.05]">
+                  <MoveUpRight className="h-4 w-4 text-[#FEFB58]" />
                 </span>
 
-                <span className="mt-0.5 block truncate text-[10px] text-[#A5ABAA] sm:text-xs">
-                  Ground to 5th
-                </span>
+                <div className="min-w-0">
+                  <div className="text-xl font-semibold tracking-tight text-[#F4EFE7] sm:text-2xl">
+                    6
+                  </div>
+                  <p className="mt-1 text-[10px] leading-4 text-[#F4EFE7]/60 sm:text-xs">
+                    Floors to discover
+                  </p>
+                </div>
               </div>
 
-              {/* Room types */}
-              <div
-                className="
-                  min-w-0
-                  rounded-xl
-                  border
-                  border-[#5B514B]/30
-                  bg-[#2A2827]/45
-                  p-3
-                  backdrop-blur-sm
-
-                  sm:p-3.5
-                "
-              >
-                <span
-                  className="
-                    block
-                    truncate
-                    text-lg
-                    font-black
-                    text-[#F4EFE7]
-
-                    sm:text-xl
-                  "
-                >
-                  4 Types
+              {/* ROOM OPTIONS */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4EFE7]/15 bg-[#F4EFE7]/[0.05]">
+                  <CheckCircle2 className="h-4 w-4 text-[#FEFB58]" />
                 </span>
 
-                <span className="mt-0.5 block truncate text-[10px] text-[#A5ABAA] sm:text-xs">
-                  1-in-1 to 4-in-1
-                </span>
+                <div className="min-w-0">
+                  <div className="text-xl font-semibold tracking-tight text-[#F4EFE7] sm:text-2xl">
+                    4 types
+                  </div>
+                  <p className="mt-1 text-[10px] leading-4 text-[#F4EFE7]/60 sm:text-xs">
+                    Different room options
+                  </p>
+                </div>
               </div>
 
-              {/* Payment */}
-              <div
-                className="
-                  min-w-0
-                  rounded-xl
-                  border
-                  border-[#5B514B]/30
-                  bg-[#2A2827]/45
-                  p-3
-                  backdrop-blur-sm
-
-                  sm:p-3.5
-                "
-              >
-                <span
-                  className="
-                    block
-                    truncate
-                    text-lg
-                    font-black
-                    text-[#FEFB58]
-
-                    sm:text-xl
-                  "
-                >
-                  Paystack
+              {/* PAYMENT */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#FEFB58]/25 bg-[#FEFB58]/[0.08]">
+                  <CheckCircle2 className="h-4 w-4 text-[#FEFB58]" />
                 </span>
 
-                <span className="mt-0.5 block truncate text-[10px] text-[#A5ABAA] sm:text-xs">
-                  MoMo &amp; Card
-                </span>
+                <div className="min-w-0">
+                  <div className="text-xl font-semibold tracking-tight text-[#F4EFE7] sm:text-2xl">
+                    Secure
+                  </div>
+                  <p className="mt-1 text-[10px] leading-4 text-[#F4EFE7]/60 sm:text-xs">
+                    Booking and payment
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>
         </motion.div>
       </div>
-
-      {/* =========================================================
-          MOBILE BOTTOM FADE
-      ========================================================= */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none
-          absolute
-          bottom-0
-          left-0
-          right-0
-          z-10
-          h-16
-          bg-gradient-to-t
-          from-[#2A2827]
-          to-transparent
-          sm:h-20
-        "
-      />
     </section>
   );
 };
+

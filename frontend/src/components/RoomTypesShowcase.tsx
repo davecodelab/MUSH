@@ -124,7 +124,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
       <div className="pointer-events-none absolute inset-0">
         {/* subtle architectural grid */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.065]"
           style={{
             backgroundImage: `
               linear-gradient(#2B272A 1px, transparent 1px),
@@ -138,10 +138,10 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         <div className="absolute -right-40 top-20 h-[500px] w-125 rounded-full bg-[#6D8EBC]/10 blur-3xl" />
 
         {/* warm architectural glow */}
-        <div className="absolute -left-40 bottom-40 h-[500px] w-[500px] rounded-full bg-[#594C43]/10 blur-3xl" />
+        <div className="absolute -left-40 bottom-40 h-125 w-125 rounded-full bg-[#594C43]/10 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
+      <div className="relative mx-auto max-w-350 px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
         {/* =========================================================
             HEADER
         ========================================================= */}
@@ -164,7 +164,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         >
           <div>
             <div className="mb-7 flex items-center gap-4">
-              <span className="h-px w-10 bg-[#6D8EBC]" />
+              <span className="h-px w-10 bg-[#5ac02a]" />
 
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#6B625B]">
                 Find your fit
@@ -242,7 +242,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
                   {/* image label */}
 
                   <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/20 bg-[#2B272A]/50 px-4 py-2 backdrop-blur-md">
-                    <Sparkles className="h-3 w-3 text-[#AFC4DF]" />
+                    <Sparkles className="h-3 w-3 text-[#f9eb29]" />
 
                     <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-white">
                       Most affordable
@@ -268,7 +268,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
                   <div>
                     <div className="mb-8 flex items-center justify-between">
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#AFC4DF]">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#f9eb29]">
                           {featured.label}
                         </p>
 
@@ -278,7 +278,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
                       </div>
 
                       <div className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/10 sm:flex">
-                        <Users className="h-4 w-4 text-[#AFC4DF]" />
+                        <Users className="h-4 w-4 text-[#f9eb29]" />
                       </div>
                     </div>
 
@@ -298,7 +298,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
                           key={highlight}
                           className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/3 p-3"
                         >
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#AFC4DF]" />
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#f9eb29]" />
 
                           <span className="text-[10px] leading-5 text-[#D4CEC8]">
                             {highlight}
@@ -331,7 +331,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
                           shouldReduceMotion ? undefined : { scale: 0.98 }
                         }
                         onClick={() => handleExplore(featured.type)}
-                        className="group/button inline-flex cursor-pointer items-center justify-center gap-3 rounded-full bg-[#F3EEE7] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.13em] text-[#2B272A] transition-colors hover:bg-[#6D8EBC] hover:text-white"
+                        className="group/button inline-flex cursor-pointer items-center justify-center gap-3 rounded-full bg-[#F3EEE7] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.13em] text-[#2B272A] transition-colors hover:bg-[#d8d340] hover:text-white"
                       >
                         Explore {featured.type}
 
@@ -495,10 +495,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
           ))}
         </div>
 
-        {/* =========================================================
-            BOTTOM INFORMATION STRIP
-        ========================================================= */}
-
+        {/* =========================================================BOTTOM INFORMATION STRIP========================================================= */}
         <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -508,7 +505,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         >
           <div className="grid sm:grid-cols-3">
             <div className="flex items-center gap-4 border-b border-white/10 px-6 py-5 sm:border-b-0 sm:border-r">
-              <DoorOpen className="h-5 w-5 text-[#AFC4DF]" />
+              <DoorOpen className="h-5 w-5 text-[#5ac02a]" />
 
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#A79C92]">
@@ -522,7 +519,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
             </div>
 
             <div className="flex items-center gap-4 border-b border-white/10 px-6 py-5 sm:border-b-0 sm:border-r">
-              <Snowflake className="h-5 w-5 text-[#AFC4DF]" />
+              <Snowflake className="h-5 w-5 text-[#5ac02a]" />
 
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#A79C92]">
@@ -536,7 +533,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
             </div>
 
             <div className="flex items-center gap-4 px-6 py-5">
-              <Sparkles className="h-5 w-5 text-[#AFC4DF]" />
+              <Sparkles className="h-5 w-5 text-[#5ac02a]" />
 
               <div>
                 <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#A79C92]">
@@ -545,7 +542,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
 
                 <button
                   onClick={() => setActiveView('rooms')}
-                  className="mt-1 cursor-pointer text-xs font-medium text-[#F3EEE7] underline decoration-[#6D8EBC] underline-offset-4 transition-colors hover:text-[#AFC4DF]"
+                  className="mt-1 cursor-pointer text-xs font-medium text-[#F3EEE7] underline decoration-[#5ac02a] underline-offset-4 transition-colors hover:text-[#5ac02a]"
                 >
                   Check live availability
                 </button>

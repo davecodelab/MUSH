@@ -99,28 +99,24 @@ export const WhyMushia: React.FC = () => {
             absolute
             -right-40
             -top-32
-            h-[300px]
-            w-[300px]
+            h-75
+            w-75
             rounded-full
             bg-[#FEFB58]/20
             blur-3xl
             sm:-right-32
             sm:-top-32
-            sm:h-[420px]
-            sm:w-[420px]
-            md:h-[500px]
-            md:w-[500px]
-            lg:h-[600px]
-            lg:w-[600px]
+            sm:h-105
+            sm:w-105
+            md:h-125
+            md:w-125
+            lg:h-150
+            lg:w-150
           "
         />
 
         {/* Horizontal editorial line */}
-        <div className="absolute left-0 top-[34%] h-px w-full bg-[#2A2827]/[0.06] sm:top-[38%]" />
-
-        {/* Small decorative points */}
-        <div className="absolute left-[8%] top-[22%] hidden h-2 w-2 rounded-full bg-[#FEFB58] lg:block" />
-
+        <div className="absolute left-0 top-[34%] h-px w-full bg-[#2A2827]/6 sm:top-[38%]" />
         <div className="absolute right-[12%] top-[64%] hidden h-1.5 w-1.5 rounded-full bg-[#7D6E66]/50 lg:block" />
 
         {/* Editorial grid — hidden on small screens */}
@@ -441,7 +437,7 @@ export const WhyMushia: React.FC = () => {
                           sm:rounded-2xl
                         "
                       >
-                        <Icon className="h-[18px] w-[18px] text-[#FEFB58] transition-colors duration-500 group-hover:text-[#2A2827] sm:h-5 sm:w-5" />
+                        <Icon className="h-4.5 w-4.5 text-[#FEFB58] transition-colors duration-500 group-hover:text-[#2A2827] sm:h-5 sm:w-5" />
                       </div>
 
                       <span className="font-mono text-[10px] font-medium text-white/30 sm:text-xs">

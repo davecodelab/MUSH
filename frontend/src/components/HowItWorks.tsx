@@ -56,14 +56,12 @@ export const HowItWorks: React.FC = () => {
       id="how-it-works"
       className="relative overflow-hidden bg-[#F3EEE7] text-[#2B272A]"
     >
-      {/* =========================================================
-          ATMOSPHERE
-      ========================================================= */}
+      {/* ========================================================= ATMOSPHERE========================================================= */}
 
       <div className="pointer-events-none absolute inset-0">
         {/* architectural grid */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.045]"
           style={{
             backgroundImage: `
               linear-gradient(#2B272A 1px, transparent 1px),
@@ -74,9 +72,8 @@ export const HowItWorks: React.FC = () => {
         />
 
         {/* soft blue architectural glow */}
-        <div className="absolute -right-40 top-20 h-125 w-125 rounded-full bg-[#6D8EBC]/10 blur-3xl" />
-
-        <div className="absolute -left-40 bottom-0 h-100 w-100 rounded-full bg-[#594C43]/10 blur-3xl" />
+        <div className="absolute -right-40 top-20 h-125 w-125 rounded-full bg-[#92ce91]/10 blur-3xl" />
+        <div className="absolute -left-40 bottom-0 h-100 w-100 rounded-full bg-[#92ce91]/10 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-350 px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
@@ -99,7 +96,7 @@ export const HowItWorks: React.FC = () => {
           className="mb-20 max-w-4xl lg:mb-28"
         >
           <div className="mb-7 flex items-center gap-4">
-            <span className="h-px w-10 bg-[#6D8EBC]" />
+            <span className="h-px w-10 bg-[#5ac02a]" />
 
             <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#6B625B] sm:text-[11px]">
               Booking & Move-in
@@ -145,7 +142,7 @@ export const HowItWorks: React.FC = () => {
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 style={{ transformOrigin: 'left' }}
-                className="absolute inset-y-0 left-0 w-full bg-[#6D8EBC]"
+                className="absolute inset-y-0 left-0 w-full bg-[#92ce91]"
               />
             </div>
           </div>
@@ -188,9 +185,7 @@ export const HowItWorks: React.FC = () => {
                     <div className="absolute left-6.75 top-18 h-[calc(100%+24px)] w-px bg-[#A79C92]/40 md:hidden" />
                   )}
 
-                  {/* =================================================
-                      NUMBER / NODE
-                  ================================================= */}
+                  {/* ================================================= NUMBER / NODE================================================= */}
 
                   <div className="relative mb-7 flex items-center gap-5 lg:mb-10 lg:block">
                     <motion.div
@@ -203,13 +198,13 @@ export const HowItWorks: React.FC = () => {
                       }
                       className="relative z-10 flex h-13.5 w-13.5 shrink-0 items-center justify-center rounded-full border border-[#A79C92]/70 bg-[#F3EEE7] shadow-[0_0_0_8px_#F3EEE7]"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2B272A] text-[#F3EEE7] transition-colors duration-500 group-hover:bg-[#6D8EBC]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2B272A] text-[#F3EEE7] transition-colors duration-500 group-hover:bg-[#92ce91]">
                         <Icon className="h-4 w-4" strokeWidth={1.8} />
                       </div>
                     </motion.div>
 
                     <div className="lg:absolute lg:-top-3 lg:left-18">
-                      <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#6D8EBC]">
+                      <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#5ac02a]">
                         STEP {step.num}
                       </span>
                     </div>
@@ -217,7 +212,7 @@ export const HowItWorks: React.FC = () => {
 
                   {/* ================================================= CONTENT ================================================= */}
 
-                  <div className="rounded-4xl border border-[#A79C92]/45 bg-white/45 p-7 backdrop-blur-[2px] transition-all duration-500 group-hover:border-[#6D8EBC]/50 group-hover:bg-white/70 sm:p-8 lg:min-h-90 lg:rounded-[2.2rem]">
+                  <div className="rounded-4xl border border-[#A79C92]/45 bg-white/45 p-7 backdrop-blur-[2px] transition-all duration-500 group-hover:border-[#92ce91]/50 group-hover:bg-white/70 sm:p-8 lg:min-h-90 lg:rounded-[2.2rem]">
                     <div className="flex h-full flex-col">
                       <div>
                         <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#6B625B]">
@@ -228,7 +223,7 @@ export const HowItWorks: React.FC = () => {
                           {step.title}
                         </h3>
 
-                        <div className="mt-5 h-px w-10 bg-[#6D8EBC] transition-all duration-500 group-hover:w-20" />
+                        <div className="mt-5 h-px w-10 bg-[#92ce91] transition-all duration-500 group-hover:w-20" />
 
                         <p className="mt-6 text-sm leading-7 text-[#6B625B]">
                           {step.description}
@@ -289,13 +284,13 @@ export const HowItWorks: React.FC = () => {
         >
           <div className="relative px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
             {/* CTA decoration */}
-            <div className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full border border-[#6D8EBC]/20" />
-            <div className="pointer-events-none absolute -right-8 -top-20 h-48 w-48 rounded-full border border-[#6D8EBC]/15" />
+            <div className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full border border-[#92ce91]/20" />
+            <div className="pointer-events-none absolute -right-8 -top-20 h-48 w-48 rounded-full border border-[#92ce91]/15" />
 
             <div className="relative flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
                 <div className="mb-5 flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-[#6D8EBC]" />
+                  <span className="h-2 w-2 rounded-full bg-[#5ac02a]" />
 
                   <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#A79C92]">
                     Ready when you are
@@ -305,7 +300,7 @@ export const HowItWorks: React.FC = () => {
                 <h3 className="text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#F3EEE7] sm:text-4xl lg:text-5xl">
                   Your next chapter
                   <br />
-                  starts at <span className="text-[#AFC4DF]">Mushia.</span>
+                  starts at <span className="text-[#92ce91]">Mushia.</span>
                 </h3>
 
                 <p className="mt-5 max-w-xl text-sm leading-7 text-[#A79C92]">
@@ -330,7 +325,7 @@ export const HowItWorks: React.FC = () => {
                       }
                 }
                 onClick={() => setActiveView('rooms')}
-                className="group inline-flex shrink-0 cursor-pointer items-center justify-center gap-4 rounded-full bg-[#F3EEE7] px-7 py-4 text-xs font-bold uppercase tracking-[0.12em] text-[#2B272A] shadow-xl transition-colors duration-300 hover:bg-[#6D8EBC] hover:text-white sm:px-8"
+                className="group inline-flex shrink-0 cursor-pointer items-center justify-center gap-4 rounded-full bg-[#F3EEE7] px-7 py-4 text-xs font-bold uppercase tracking-[0.12em] text-[#2B272A] shadow-xl transition-colors duration-300 hover:bg-[#92ce91] hover:text-white sm:px-8"
               >
                 <span>Start Your Reservation</span>
 
@@ -363,7 +358,7 @@ export const HowItWorks: React.FC = () => {
               key={item}
               className="flex items-center gap-2 bg-[#F3EEE7] px-4 py-4 sm:px-5"
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#6D8EBC]/15 text-[#594C43]">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#92ce91]/15 text-[#594C43]">
                 <Check className="h-3 w-3" strokeWidth={2.5} />
               </span>
 
