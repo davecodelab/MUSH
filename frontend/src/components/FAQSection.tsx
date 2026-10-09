@@ -64,7 +64,7 @@ export const FAQSection: React.FC = () => {
         <div className="absolute -right-40 -top-40 h-130 w-130 rounded-full bg-[#92ce91]/10 blur-3xl" />
 
         {/* warm architectural glow */}
-        <div className="absolute -bottom-48 -left-40 h-125 w-125 rounded-full bg-[#5fe24b]/20 blur-3xl" />
+        <div className="absolute -bottom-48 -left-40 h-125 w-125 rounded-full bg-[#92ce91]/20 blur-3xl" />
 
         {/* extremely subtle architectural lines */}
         <div

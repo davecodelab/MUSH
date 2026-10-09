@@ -135,7 +135,7 @@ export const WhyMushia: React.FC = () => {
       {/* =========================================================
           MAIN CONTAINER
       ========================================================= */}
-      <div className="relative mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="relative mx-auto w-full max-w-360 px-4 sm:px-6 md:px-8 lg:px-12">
         {/* =======================================================
             INTRO
         ======================================================= */}

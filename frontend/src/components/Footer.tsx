@@ -5,7 +5,6 @@ import { motion } from 'motion/react';
 import { useHostel } from '../context/HostelContext';
 import {
   ArrowUpRight,
-  Building2,
   MapPin,
   Phone,
   Mail,
@@ -14,6 +13,7 @@ import {
   Facebook,
   MessageCircle,
 } from 'lucide-react';
+import Image from 'next/image';
 
 export const Footer: React.FC = () => {
   const { setActiveView, config } = useHostel();
@@ -165,9 +165,17 @@ export const Footer: React.FC = () => {
               onClick={() => handleNav('home')}
               className="group mb-6 flex items-center gap-3"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FEFB58] text-[#211F1D] transition-transform duration-300 group-hover:rotate-3">
-                <Building2 className="h-5 w-5" />
-              </span>
+             
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-[#5B514B]">
+                                <Image
+                                  src="/mush_logo.png"
+                                  alt="Mushia Hostel"
+                                  fill
+                                  sizes="40px"
+                                  className="object-cover"
+                                />
+                     </div>
+              
 
               <span className="text-xl font-black tracking-[-0.03em] text-[#FAF6EF]">
                 Mushia

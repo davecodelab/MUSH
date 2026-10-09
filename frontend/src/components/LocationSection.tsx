@@ -24,22 +24,22 @@ export const LocationSection: React.FC = () => {
   const proximities = [
     {
       name: 'KNUST Ayeduase Gate',
-      time: '3 min walk',
+      time: '6 mins drive',
       icon: MapPin,
     },
     {
       name: 'Commercial Area & Banks',
-      time: '5 min drive',
+      time: '10 mins drive',
       icon: Building2,
     },
     {
-      name: 'College of Engineering & Sciences',
-      time: '6 min shuttle',
+      name: 'Medical Enclave-Boadi',
+      time: '8 mins walk',
       icon: Bus,
     },
     {
-      name: 'KNUST Hospital & Pharmacy Faculty',
-      time: '8 min drive',
+      name: 'KNUST Hospital & Tech Junction',
+      time: '10 min drive',
       icon: Clock3,
     },
   ];
