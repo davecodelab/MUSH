@@ -8,12 +8,12 @@ class Room(models.Model):
         ('FEMALE', 'Female'),
     )
 
-    room_number = models.CharField(max_length=10, unique=True)
+    room_number = models.CharField(max_length=50, unique=True)
     floor = models.CharField(max_length=50) # e.g., "GROUND FLOOR"
-    room_type = models.CharField(max_length=10) # e.g., "2IN1", "4IN1"
+    room_type = models.CharField(max_length=50) # e.g., "2IN1", "2IN1(LARGE)"
     capacity = models.PositiveIntegerField()
     price_per_space = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    gender_policy = models.CharField(max_length=10, choices=GENDER_CHOICES, default='UNASSIGNED')
+    gender_policy = models.CharField(max_length=20, choices=GENDER_CHOICES, default='UNASSIGNED')
     amenities = models.JSONField(default=list, blank=True)
 
     def __str__(self):

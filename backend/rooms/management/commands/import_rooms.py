@@ -26,6 +26,10 @@ class Command(BaseCommand):
         rooms_created = 0
         spaces_created = 0
 
+        existing_room_nums = set(Room.objects.values_list('room_number', flat=True))
+        rooms_to_create = []
+        seen_in_file = set()
+
         for i in floor_col_indices:
             if i >= len(df.columns): continue
             
@@ -40,6 +44,10 @@ class Command(BaseCommand):
                 if pd.notna(room_num) and pd.notna(room_type):
                     room_num_str = str(room_num).strip()
                     room_type_str = str(room_type).strip()
+
+                    if room_num_str in existing_room_nums or room_num_str in seen_in_file:
+                        continue
+                    seen_in_file.add(room_num_str)
                     
                     amenities = []
                     if 'AC' in room_type_str.upper():
@@ -57,28 +65,27 @@ class Command(BaseCommand):
                     if capacity >= 3 and 'Big' not in amenities:
                         amenities.append('Big')
                         
-                    # Create or get Room
-                    room, created = Room.objects.get_or_create(
-                        room_number=room_num_str,
-                        defaults={
-                            'floor': floor_name,
-                            'room_type': room_type_str,
-                            'capacity': capacity,
-                            'price_per_space': 0.00,
-                            'amenities': amenities,
-                        }
+                    rooms_to_create.append(
+                        Room(
+                            room_number=room_num_str,
+                            floor=floor_name,
+                            room_type=room_type_str,
+                            capacity=capacity,
+                            price_per_space=0.00,
+                            amenities=amenities,
+                        )
                     )
-                    
-                    if created:
-                        rooms_created += 1
-                        # Create RoomSpaces (e.g., A, B, C, D)
-                        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        for j in range(capacity):
-                            space_id = letters[j]
-                            RoomSpace.objects.create(
-                                room=room,
-                                space_identifier=space_id
-                            )
-                            spaces_created += 1
+
+        if rooms_to_create:
+            created_rooms = Room.objects.bulk_create(rooms_to_create)
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            spaces_to_create = [
+                RoomSpace(room=room, space_identifier=letters[j])
+                for room in created_rooms
+                for j in range(room.capacity)
+            ]
+            RoomSpace.objects.bulk_create(spaces_to_create)
+            rooms_created = len(created_rooms)
+            spaces_created = len(spaces_to_create)
 
         self.stdout.write(self.style.SUCCESS(f"Successfully created {rooms_created} rooms and {spaces_created} spaces!"))

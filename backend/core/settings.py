@@ -91,11 +91,16 @@ if DATABASE_URL and not DATABASE_URL.startswith('sqlite:'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
+            'NAME': url.path.lstrip('/') or 'neondb',
+            'USER': urllib.parse.unquote(url.username or ''),
+            'PASSWORD': urllib.parse.unquote(url.password or ''),
             'HOST': url.hostname,
             'PORT': url.port or 5432,
+            'CONN_MAX_AGE': 60,
+            'CONN_HEALTH_CHECKS': True,
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
         }
     }
 else:
