@@ -163,11 +163,19 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3001',
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'https://frontend-lyart-chi-72.vercel.app',
 ]
 
 cors_env = os.environ.get('CORS_ALLOWED_ORIGINS')
 if cors_env:
-    CORS_ALLOWED_ORIGINS.extend([origin.strip() for origin in cors_env.split(',') if origin.strip()])
+    for origin in cors_env.split(','):
+        cleaned = origin.strip().rstrip('/')
+        if cleaned:
+            parsed = urllib.parse.urlparse(cleaned)
+            if parsed.scheme and parsed.netloc:
+                cleaned = f"{parsed.scheme}://{parsed.netloc}"
+            if cleaned not in CORS_ALLOWED_ORIGINS:
+                CORS_ALLOWED_ORIGINS.append(cleaned)
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://localhost:\d+$",
@@ -178,6 +186,11 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.onrender\.com$",
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'https://*.onrender.com',
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
