@@ -101,10 +101,8 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
         {/* Title and stats */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-[#A1927D]/40">
           <div>
-            <span className="text-xs font-bold tracking-widest text-[#7D6E66] uppercase mb-1 block">
-              Direct Space Reservation
-            </span>
-            <h2 className="text-3xl font-extrabold text-[#2A2827] tracking-tight">
+           
+            <h2 className="mt-4 text-3xl font-extrabold text-[#2A2827] tracking-tight">
               Mushia Hostel Room Inventory
             </h2>
             <p className="text-xs sm:text-sm text-[#5B514B] mt-1">

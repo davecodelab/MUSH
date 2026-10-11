@@ -4,19 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useHostel } from '../context/HostelContext';
 import { getRoommates } from '../services/api';
 import { 
-  Building2, 
   CheckCircle2, 
   Download, 
   FileText, 
-  CreditCard, 
   Bell, 
   User, 
   HeartHandshake, 
   Phone, 
-  Mail, 
-  ArrowRight,
   ShieldCheck,
-  Bed
 } from 'lucide-react';
 
 export const StudentDashboard: React.FC = () => {

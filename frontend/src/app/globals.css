@@ -58,3 +58,123 @@
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
+
+
+/* Receipt modal: keep scrolling inside the dialog */
+.receipt-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c9c2b6 transparent;
+}
+
+.receipt-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.receipt-scroll::-webkit-scrollbar-thumb {
+  background: #c9c2b6;
+  border-radius: 999px;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .receipt-modal-overlay,
+  .receipt-modal-overlay * {
+    visibility: visible !important;
+  }
+
+  .receipt-modal-overlay {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    backdrop-filter: none !important;
+  }
+
+  .receipt-modal-panel {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .receipt-scroll {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #printable-receipt {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #292622 !important;
+    box-shadow: none !important;
+  }
+
+  #printable-receipt table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  #printable-receipt thead {
+    display: table-header-group;
+  }
+
+  #printable-receipt tr,
+  #printable-receipt section,
+  #printable-receipt footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #printable-receipt p,
+  #printable-receipt h1,
+  #printable-receipt h2 {
+    orphans: 2;
+    widows: 2;
+  }
+}
