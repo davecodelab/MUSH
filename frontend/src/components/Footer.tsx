@@ -8,7 +8,6 @@ import {
   MapPin,
   Phone,
   Mail,
-  ShieldCheck,
   Instagram,
   Facebook,
   MessageCircle,
@@ -41,10 +40,6 @@ export const Footer: React.FC = () => {
     { label: 'Roommate Matching', view: 'roommates' },
     { label: 'Student Dashboard', view: 'dashboard' },
     { label: 'Location & Directions', view: 'location' },
-  ] as const;
-
-  const managementLinks = [
-    { label: 'Admin Portal', view: 'admin' },
   ] as const;
 
   return (
@@ -146,7 +141,7 @@ export const Footer: React.FC = () => {
       ========================================================== */}
 
       <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
-        <div className="grid gap-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:gap-12">
+        <div className="grid gap-14 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-12">
           {/* =====================================================
               BRAND COLUMN
           ====================================================== */}
@@ -282,39 +277,6 @@ export const Footer: React.FC = () => {
             links={studentLinks}
             onNavigate={handleNav}
           />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8F8177]">
-              Management
-            </h3>
-
-            <div className="space-y-4">
-              {managementLinks.map((link) => (
-                <FooterNavButton
-                  key={link.label}
-                  label={link.label}
-                  onClick={() => handleNav(link.view)}
-                  icon={<ShieldCheck className="h-3.5 w-3.5" />}
-                />
-              ))}
-
-              <div className="pt-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#A1927D]/20 px-3 py-1.5 text-[10px] font-semibold text-[#9E9289]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#FEFB58]" />
-                  Paystack verified
-                </span>
-              </div>
-
-              <p className="max-w-[180px] pt-1 text-xs leading-6 text-[#82776F]">
-                Secure student accommodation in Ayeduase, Kumasi.
-              </p>
-            </div>
-          </motion.div>
         </div>
 
         {/* =========================================================
