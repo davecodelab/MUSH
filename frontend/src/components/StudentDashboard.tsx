@@ -87,7 +87,7 @@ export const StudentDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Welcome Greeting Banner */}
-        <div className="bg-[#2A2827] rounded-2xl p-6 sm:p-8 text-white mb-8 border border-[#5B514B] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
+        <div className="bg-[#2A2827] rounded-2xl mt-4 p-6 sm:p-8 text-white mb-8 border border-[#5B514B] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
           <div>
             <span className="text-xs font-bold text-[#FEFB58] uppercase tracking-wider block mb-1">
               KNUST Student Resident Portal

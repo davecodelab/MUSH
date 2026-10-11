@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
 import { useHostel } from '../context/HostelContext';
 import {
@@ -9,7 +10,6 @@ import {
   Printer,
   CheckCircle2,
   ShieldCheck,
-  Building2,
   MapPin,
   Phone,
   CalendarDays,
@@ -159,7 +159,13 @@ export const ReceiptModal: React.FC = () => {
                   <div className="min-w-0">
                     <div className="flex items-center gap-3">
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#211F1D] text-[#FEFB58] sm:h-14 sm:w-14">
-                        <Building2 className="h-6 w-6 sm:h-7 sm:w-7" />
+                        <Image
+                          src="/images/mushia_logo.png"
+                          alt="Mushia Hostel logo"
+                          width={40}
+                          height={40}
+                          className="h-6 w-6 sm:h-8 sm:w-8"
+                        />
                       </div>
 
                       <div>

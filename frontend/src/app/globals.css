@@ -60,6 +60,164 @@
 }
 
 
+/* =========================================
+   MUSHIA HOSTEL — ONE-PAGE RECEIPT PRINT
+========================================= */
+
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #2A2827 !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Hide everything except the receipt */
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printable-receipt,
+  #printable-receipt * {
+    visibility: visible !important;
+  }
+
+  #printable-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #2A2827 !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Remove screen-only spacing */
+  #printable-receipt.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 8px !important;
+  }
+
+  #printable-receipt .pb-6 {
+    padding-bottom: 8px !important;
+  }
+
+  #printable-receipt .pt-6 {
+    padding-top: 8px !important;
+  }
+
+  #printable-receipt .pt-4 {
+    padding-top: 6px !important;
+  }
+
+  #printable-receipt .p-8 {
+    padding: 0 !important;
+  }
+
+  #printable-receipt .p-4 {
+    padding: 8px !important;
+  }
+
+  #printable-receipt .py-3 {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  #printable-receipt .px-4 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  #printable-receipt .rounded-xl,
+  #printable-receipt .rounded-lg {
+    border-radius: 0 !important;
+  }
+
+  #printable-receipt table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 9px !important;
+  }
+
+  #printable-receipt th,
+  #printable-receipt td {
+    padding: 6px 8px !important;
+    vertical-align: top !important;
+  }
+
+  #printable-receipt .text-2xl {
+    font-size: 19px !important;
+    line-height: 1.15 !important;
+  }
+
+  #printable-receipt .text-base {
+    font-size: 11px !important;
+  }
+
+  #printable-receipt .text-sm {
+    font-size: 10px !important;
+  }
+
+  #printable-receipt .text-xs {
+    font-size: 9px !important;
+  }
+
+  #printable-receipt .text-\[11px\] {
+    font-size: 8px !important;
+  }
+
+  #printable-receipt .text-\[10px\] {
+    font-size: 7px !important;
+  }
+
+  #printable-receipt .grid {
+    gap: 8px !important;
+  }
+
+  #printable-receipt tr,
+  #printable-receipt thead,
+  #printable-receipt tfoot,
+  #printable-receipt .border-t,
+  #printable-receipt .border-b-2 {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #printable-receipt .no-print {
+    display: none !important;
+  }
+
+  /* Remove unnecessary modal and backdrop styling */
+  body:has(#printable-receipt) {
+    background: #ffffff !important;
+  }
+
+  /* Keep the receipt compact and prevent extra pages */
+  #printable-receipt {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+
+
 /* Receipt modal: keep scrolling inside the dialog */
 .receipt-scroll {
   scrollbar-width: thin;
@@ -176,5 +334,34 @@
   #printable-receipt h2 {
     orphans: 2;
     widows: 2;
+  }
+}
+
+
+@media print {
+  .receipt-overlay {
+    position: static !important;
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+  }
+
+  .receipt-modal {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .no-print {
+    display: none !important;
   }
 }
