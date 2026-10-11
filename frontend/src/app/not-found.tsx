@@ -99,7 +99,7 @@ export default function NotFoundPage() {
             transition={{ duration: 0.65, ease: 'easeOut' }}
             className="max-w-2xl"
           >
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#FEFB58]/20 bg-[#FEFB58]/[0.06] px-3.5 py-2">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#FEFB58]/20 bg-[#FEFB58]/6 px-3.5 py-2">
               <Compass size={14} className="text-[#FEFB58]" />
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#FEFB58]">
                 Looks like you took a wrong turn
@@ -140,7 +140,7 @@ export default function NotFoundPage() {
               <button
                 type="button"
                 onClick={() => window.history.back()}
-                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/10 px-7 py-4 text-sm font-semibold text-[#F4EFE7] transition-colors hover:border-white/25 hover:bg-white/[0.04]"
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/10 px-7 py-4 text-sm font-semibold text-[#F4EFE7] transition-colors hover:border-white/25 hover:bg-white/4"
               >
                 <ArrowLeft size={16} />
                 Previous page
@@ -164,7 +164,7 @@ export default function NotFoundPage() {
             transition={{ duration: 0.8, delay: 0.12, ease: 'easeOut' }}
             className="relative mx-auto w-full max-w-lg lg:max-w-none"
           >
-            <div className="relative aspect-[4/4.1] overflow-hidden rounded-[2rem] border border-white/[0.09] bg-[#2A2827] p-5 sm:p-8">
+            <div className="relative aspect-[4/4.1] overflow-hidden rounded-4xl border border-white/9 bg-[#2A2827] p-5 sm:p-8">
               {/* Decorative grid */}
               <div
                 aria-hidden="true"
@@ -203,10 +203,10 @@ export default function NotFoundPage() {
                     }}
                     className="relative flex h-64 w-52 max-w-[72%] items-end justify-center rounded-t-[7rem] border border-[#FEFB58]/30 bg-[#211F1D] sm:h-72 sm:w-60"
                   >
-                    <div className="absolute inset-x-5 top-5 bottom-0 rounded-t-[5.5rem] border border-white/[0.08]" />
+                    <div className="absolute inset-x-5 top-5 bottom-0 rounded-t-[5.5rem] border border-white/8" />
 
                     <div className="relative mb-0 flex h-[78%] w-[70%] flex-col items-center justify-end rounded-t-[5rem] border border-[#FEFB58]/50 bg-[#FEFB58]/[0.07] pb-5">
-                      <div className="absolute inset-x-3 top-3 bottom-0 rounded-t-[4rem] border border-white/[0.08]" />
+                      <div className="absolute inset-x-3 top-3 bottom-0 rounded-t-[4rem] border border-white/8" />
 
                       <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FEFB58] text-[#211F1D] shadow-[0_0_50px_rgba(254,251,88,0.15)]">
                         <House size={24} strokeWidth={1.8} />
@@ -264,7 +264,7 @@ export default function NotFoundPage() {
       </section>
 
       {/* Quick navigation */}
-      <section className="relative z-10 border-t border-white/[0.08] bg-[#1C1A18]/80">
+      <section className="relative z-10 border-t border-white/8 bg-[#1C1A18]/80">
         <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 sm:py-10 lg:px-12">
           <div className="mb-5 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -300,9 +300,9 @@ export default function NotFoundPage() {
                 >
                   <Link
                     href={item.href}
-                    className="group flex h-full items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 transition-all duration-300 hover:border-[#FEFB58]/30 hover:bg-[#FEFB58]/[0.04] sm:p-5"
+                    className="group flex h-full items-center gap-4 rounded-2xl border border-white/8 bg-white/2 p-4 transition-all duration-300 hover:border-[#FEFB58]/30 hover:bg-[#FEFB58]/[0.04] sm:p-5"
                   >
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] text-[#A1927D] transition-colors group-hover:bg-[#FEFB58] group-hover:text-[#211F1D]">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/5 text-[#A1927D] transition-colors group-hover:bg-[#FEFB58] group-hover:text-[#211F1D]">
                       <Icon size={21} />
                     </span>
 

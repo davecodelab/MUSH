@@ -85,7 +85,7 @@ export const ReceiptModal: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="receipt-modal-overlay fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto overscroll-contain bg-[#171513]/80 p-0 backdrop-blur-md sm:p-4 md:p-6"
+        className="receipt-modal-overlay fixed inset-0 z-200 flex items-center justify-center overflow-y-auto overscroll-contain bg-[#171513]/80 p-0 backdrop-blur-md sm:p-4 md:p-6"
         onMouseDown={(event) => {
           if (event.target === event.currentTarget) {
             closeReceiptModal();
@@ -101,7 +101,7 @@ export const ReceiptModal: React.FC = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="receipt-modal-panel relative my-auto flex max-h-[100dvh] w-full max-w-3xl flex-col overflow-hidden bg-[#F8F6F1] shadow-2xl sm:max-h-[94dvh] sm:rounded-2xl lg:max-w-4xl"
+          className="receipt-modal-panel relative my-auto flex max-h-dvh w-full max-w-3xl flex-col overflow-hidden bg-[#F8F6F1] shadow-2xl sm:max-h-[94dvh] sm:rounded-2xl lg:max-w-4xl"
         >
           {/* Modal toolbar */}
           <header className="no-print flex shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-[#211F1D] px-4 py-3.5 text-white sm:px-6">
@@ -194,7 +194,7 @@ export const ReceiptModal: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start justify-between gap-4 sm:block sm:min-w-[190px] sm:text-right">
+                  <div className="flex items-start justify-between gap-4 sm:block sm:min-w-47.5 sm:text-right">
                     <div>
                       <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#A1927D]">
                         Official receipt
@@ -219,8 +219,8 @@ export const ReceiptModal: React.FC = () => {
 
                 {/* Total summary */}
                 <section className="relative overflow-hidden rounded-2xl bg-[#211F1D] p-5 text-white sm:p-7">
-                  <div className="pointer-events-none absolute -right-8 -top-12 h-40 w-40 rounded-full border-[24px] border-white/[0.04]" />
-                  <div className="pointer-events-none absolute -bottom-16 right-20 h-32 w-32 rounded-full bg-[#FEFB58]/[0.05] blur-2xl" />
+                  <div className="pointer-events-none absolute -right-8 -top-12 h-40 w-40 rounded-full border-24 border-white/4" />
+                  <div className="pointer-events-none absolute -bottom-16 right-20 h-32 w-32 rounded-full bg-[#FEFB58]/5 blur-2xl" />
 
                   <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -235,7 +235,7 @@ export const ReceiptModal: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2 self-start rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5 sm:self-center">
+                    <div className="flex items-center gap-2 self-start rounded-xl border border-white/10 bg-white/6 px-3 py-2.5 sm:self-center">
                       <ShieldCheck className="h-5 w-5 shrink-0 text-[#FEFB58]" />
                       <div>
                         <p className="text-xs font-bold">Payment record</p>
@@ -264,7 +264,7 @@ export const ReceiptModal: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="break-words text-base font-extrabold text-[#211F1D]">
+                    <p className="wrap-break-word text-base font-extrabold text-[#211F1D]">
                       {booking.studentName}
                     </p>
 
@@ -355,7 +355,7 @@ export const ReceiptModal: React.FC = () => {
 
                       <tbody className="divide-y divide-[#EEEAE3]">
                         <tr>
-                          <td className="break-words px-3 py-4 sm:px-4">
+                          <td className="wrap-break-word px-3 py-4 sm:px-4">
                             <p className="font-bold leading-relaxed text-[#292622]">
                               Accommodation rental
                             </p>
@@ -363,13 +363,13 @@ export const ReceiptModal: React.FC = () => {
                               Two-semester accommodation · Room {booking.roomNumber}, Space {booking.spaceNumber}
                             </p>
                           </td>
-                          <td className="break-words px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
+                          <td className="wrap-break-word px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
                             {formatMoney(accommodationAmount)}
                           </td>
                         </tr>
 
                         <tr>
-                          <td className="break-words px-3 py-4 sm:px-4">
+                          <td className="wrap-break-word px-3 py-4 sm:px-4">
                             <p className="font-bold leading-relaxed text-[#292622]">
                               Utilities & security maintenance
                             </p>
@@ -377,13 +377,13 @@ export const ReceiptModal: React.FC = () => {
                               Water, standby generator, Wi-Fi and CCTV
                             </p>
                           </td>
-                          <td className="break-words px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
+                          <td className="wrap-break-word px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
                             {formatMoney(utilitiesAmount)}
                           </td>
                         </tr>
 
                         <tr>
-                          <td className="break-words px-3 py-4 sm:px-4">
+                          <td className="wrap-break-word px-3 py-4 sm:px-4">
                             <p className="font-bold leading-relaxed text-[#292622]">
                               Refundable security & key deposit
                             </p>
@@ -391,7 +391,7 @@ export const ReceiptModal: React.FC = () => {
                               Subject to the hostel&apos;s deposit and checkout terms
                             </p>
                           </td>
-                          <td className="break-words px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
+                          <td className="wrap-break-word px-3 py-4 text-right font-mono text-[11px] font-bold text-[#292622] sm:px-4 sm:text-xs">
                             {formatMoney(depositAmount)}
                           </td>
                         </tr>

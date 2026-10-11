@@ -574,14 +574,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       className="
                         fixed sm:absolute
                         right-3 sm:right-0
-                        top-[70px] sm:top-full
-                        mt-2
-                        w-[calc(100vw-1.5rem)] sm:w-80
+                        top-17.5 sm:top-full
+                        mt-2 w-[calc(100vw-1.5rem)] sm:w-80
                         max-w-sm
-                        rounded-2xl
-                        border
-                        border-[#5B514B]
-                        bg-[#2A2827]
+                        rounded-2xl border border-[#5B514B] bg-[#2A2827]
                         shadow-2xl
                         overflow-hidden
                         z-50

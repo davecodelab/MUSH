@@ -162,7 +162,7 @@ export const StudentDashboard: React.FC = () => {
 
               <div className="bg-white p-5 rounded-xl border border-[#A1927D]/40">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#7D6E66] block">Booking Status</span>
-                <span className="text-xl font-extrabold text-emerald-700 block mt-1 flex items-center gap-1.5">
+                <span className="text-xl font-extrabold text-emerald-700 block mt-1 items-center gap-1.5">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   Confirmed
                 </span>

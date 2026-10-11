@@ -299,7 +299,7 @@ export const RoommateMatching: React.FC = () => {
     <section className="min-h-screen overflow-hidden bg-[#F7F5F0] pb-16">
       {/* Intro hero */}
       <div className="relative overflow-hidden bg-[#211F1D] text-white">
-        <div className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full border-[50px] border-white/[0.035]" />
+        <div className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full border-50 border-white/[0.035]" />
         <div className="pointer-events-none absolute -bottom-36 left-[35%] h-72 w-72 rounded-full bg-[#FEFB58]/6 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:px-8 lg:pb-16">
@@ -314,12 +314,12 @@ export const RoommateMatching: React.FC = () => {
 
           <div className="grid gap-9 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#FEFB58]/20 bg-[#FEFB58]/[0.08] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.17em] text-[#FEFB58]">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#FEFB58]/20 bg-[#FEFB58]/8 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.17em] text-[#FEFB58]">
                 <Sparkles className="h-3.5 w-3.5" />
                 Your Mushia community
               </div>
 
-              <h1 className="text-4xl font-black leading-[1.08] tracking-[-0.05em] sm:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-black leading-[1.08] tracking-tighter sm:text-5xl lg:text-6xl">
                 Good rooms.
                 <br />
                 <span className="text-[#FEFB58]">Better together.</span>
