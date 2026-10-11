@@ -116,6 +116,11 @@ class HoldSpaceView(views.APIView):
                 )
 
             room = space.room
+            req_gender = (request.data.get('gender') or '').strip().upper()
+            if req_gender in ('MALE', 'FEMALE') and request.user.gender != req_gender:
+                request.user.gender = req_gender
+                request.user.save(update_fields=['gender'])
+
             user_gender = (request.user.gender or '').upper()
             if room.gender_policy != 'UNASSIGNED' and user_gender and room.gender_policy != user_gender:
                 return Response(
@@ -163,6 +168,7 @@ class InitializePaymentView(views.APIView):
 
     def post(self, request):
         booking_id = request.data.get('booking_id')
+        callback_url = (request.data.get('callback_url') or '').strip()
         booking = (
             Booking.objects.select_related('room_space__room')
             .filter(id=booking_id, student=request.user)
@@ -187,18 +193,23 @@ class InitializePaymentView(views.APIView):
 
         if is_real_paystack():
             try:
-                payload = json.dumps({
+                body_dict = {
                     "email": request.user.email or f"{request.user.username}@st.knust.edu.gh",
                     "amount": amount_pesewas,
                     "reference": ref,
                     "currency": "GHS",
+                    "channels": ["mobile_money", "card", "bank", "ussd", "qr"],
                     "metadata": {
                         "booking_id": booking.id,
                         "student_id": request.user.id,
                         "room_number": booking.room_space.room.room_number,
                         "space": booking.room_space.space_identifier,
                     },
-                }).encode('utf-8')
+                }
+                if callback_url:
+                    body_dict["callback_url"] = callback_url
+
+                payload = json.dumps(body_dict).encode('utf-8')
 
                 req = urllib.request.Request(
                     "https://api.paystack.co/transaction/initialize",
@@ -206,9 +217,11 @@ class InitializePaymentView(views.APIView):
                     headers={
                         "Authorization": f"Bearer {get_paystack_secret()}",
                         "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "User-Agent": "Mozilla/5.0 (compatible; MushiaHostel/1.0)",
                     },
                 )
-                with urllib.request.urlopen(req, timeout=10) as resp:
+                with urllib.request.urlopen(req, timeout=12) as resp:
                     res_data = json.loads(resp.read().decode('utf-8'))
                     if res_data.get('status'):
                         return Response({
@@ -216,13 +229,17 @@ class InitializePaymentView(views.APIView):
                             "access_code": res_data['data']['access_code'],
                             "reference": ref,
                             "amount": float(booking.amount_paid),
+                            "currency": "GHS",
                         })
-            except Exception:
-                pass
+            except Exception as exc:
+                return Response(
+                    {"detail": f"Paystack initialization error: {str(exc)}"},
+                    status=status.HTTP_502_BAD_GATEWAY,
+                )
 
         return Response(
             {
-                "message": "Payment initialized successfully (Test/Sandbox mode)",
+                "message": "Payment initialized successfully (Paystack Sandbox)",
                 "reference": ref,
                 "amount": float(booking.amount_paid),
                 "currency": "GHS",
@@ -263,9 +280,11 @@ class VerifyPaymentView(views.APIView):
                     headers={
                         "Authorization": f"Bearer {get_paystack_secret()}",
                         "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "User-Agent": "Mozilla/5.0 (compatible; MushiaHostel/1.0)",
                     },
                 )
-                with urllib.request.urlopen(req, timeout=10) as resp:
+                with urllib.request.urlopen(req, timeout=12) as resp:
                     res_data = json.loads(resp.read().decode('utf-8'))
                     tx_data = res_data.get('data') or {}
                     expected_pesewas = int(float(booking.amount_paid) * 100)
@@ -275,7 +294,7 @@ class VerifyPaymentView(views.APIView):
                         and int(tx_data.get('amount', 0)) >= expected_pesewas
                     ):
                         return Response(
-                            {"detail": "Payment verification failed or amount mismatch with Paystack."},
+                            {"detail": "Payment verification failed or payment was not completed on Paystack."},
                             status=status.HTTP_400_BAD_REQUEST,
                         )
             except Exception:

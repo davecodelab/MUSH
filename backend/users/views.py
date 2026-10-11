@@ -8,10 +8,11 @@ from .serializers import RegisterSerializer, StudentSerializer
 
 def set_auth_cookies(response, user):
     refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
     jwt_cfg = settings.SIMPLE_JWT
     response.set_cookie(
         key=jwt_cfg['AUTH_COOKIE'],
-        value=str(refresh.access_token),
+        value=access_token,
         max_age=int(jwt_cfg['ACCESS_TOKEN_LIFETIME'].total_seconds()),
         secure=jwt_cfg['AUTH_COOKIE_SECURE'],
         httponly=jwt_cfg['AUTH_COOKIE_HTTP_ONLY'],
@@ -27,6 +28,7 @@ def set_auth_cookies(response, user):
         samesite=jwt_cfg['AUTH_COOKIE_SAMESITE'],
         path=jwt_cfg['AUTH_COOKIE_PATH'],
     )
+    return access_token
 
 
 class RegisterView(views.APIView):
@@ -41,7 +43,8 @@ class RegisterView(views.APIView):
                 {"message": "Registration successful", "user": StudentSerializer(user).data},
                 status=status.HTTP_201_CREATED,
             )
-            set_auth_cookies(res, user)
+            access_token = set_auth_cookies(res, user)
+            res.data['access_token'] = access_token
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -54,17 +57,25 @@ class LoginView(views.APIView):
         username = (request.data.get('username') or '').strip()
         password = request.data.get('password') or ''
         if not username or not password:
-            return Response({"detail": "Username and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Student ID / Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(request=request, username=username, password=password)
+        if user is None and '@' in username:
+            from django.contrib.auth import get_user_model
+            Student = get_user_model()
+            matched = Student.objects.filter(email__iexact=username).first()
+            if matched:
+                user = authenticate(request=request, username=matched.username, password=password)
+
         if user is not None and user.is_active:
             res = Response(
                 {"message": "Login successful", "user": StudentSerializer(user).data},
                 status=status.HTTP_200_OK,
             )
-            set_auth_cookies(res, user)
+            access_token = set_auth_cookies(res, user)
+            res.data['access_token'] = access_token
             return res
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"detail": "Invalid Student ID/Email or password."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class LogoutView(views.APIView):

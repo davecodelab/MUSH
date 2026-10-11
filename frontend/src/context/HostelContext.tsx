@@ -60,6 +60,7 @@ interface HostelContextType {
     };
     paymentMethod: 'MTN Mobile Money' | 'Telecel Cash' | 'AirtelTigo Money' | 'Visa / Mastercard';
     paymentRef: string;
+    skipBackendSync?: boolean;
   }) => Promise<Booking>;
   updateStudentPreferences: (prefs: RoommatePreferences) => void;
   sendRoommateRequest: (receiverId: string, receiverName: string, roomId: string, roomNumber: string) => void;
@@ -488,7 +489,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const space = room.spaces.find((s) => s.spaceNumber === spaceNumber);
     if (!space || space.status === 'paid') return false;
 
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes lock
+    const expiresAt = Date.now() + 15 * 60 * 1000; // 15 minutes lock
 
     setRooms((prevRooms) =>
       prevRooms.map((r) => {
@@ -504,10 +505,16 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     setActiveBookingHold({ roomId, spaceNumber, expiresAt });
-    // Also notify Django backend of the hold
-    holdSpace({ room_number: room.roomNumber, space_number: spaceNumber }).catch((e) => {
-      console.warn("Backend hold notification:", e?.response?.data?.detail || e.message);
-    });
+    // Notify Django backend of the hold only if student is already logged in
+    if (isLoggedIn) {
+      holdSpace({
+        room_number: room.roomNumber,
+        space_number: spaceNumber,
+        gender: currentStudent.gender ? currentStudent.gender.toUpperCase() : undefined,
+      }).catch((e) => {
+        console.warn("Backend hold notification:", e?.response?.data?.detail || e.message);
+      });
+    }
     return true;
   };
 
@@ -529,10 +536,9 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     setActiveBookingHold(null);
-    // Release hold in Django backend
-    releaseHold().catch((e) => {
-      console.warn("Backend release hold notification:", e?.response?.data?.detail || e.message);
-    });
+    if (isLoggedIn) {
+      releaseHold().catch(() => {});
+    }
   };
 
   const startBookingFlow = (room: Room, spaceNum: number) => {
@@ -568,6 +574,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
     paymentMethod: 'MTN Mobile Money' | 'Telecel Cash' | 'AirtelTigo Money' | 'Visa / Mastercard';
     paymentRef: string;
+    skipBackendSync?: boolean;
   }): Promise<Booking> => {
     if (!selectedRoom || selectedSpaceNumber === null) {
       throw new Error('No room or space selected for booking.');
@@ -578,7 +585,32 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const spaceNum = selectedSpaceNumber;
     const amount = selectedRoom.price;
 
-    const bookingRef = `MSH-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    let finalRef = params.paymentRef;
+
+    // Synchronize booking with Django database FIRST unless already verified by Paystack flow
+    if (!params.skipBackendSync) {
+      try {
+        const holdRes = await holdSpace({
+          room_number: roomNumber,
+          space_number: spaceNum,
+          gender: params.student.gender ? params.student.gender.toUpperCase() : undefined,
+        });
+        const bId = holdRes?.booking?.id;
+        if (!bId) {
+          throw new Error('Could not create reservation hold on the server.');
+        }
+        const initRes = await initializePayment(bId);
+        finalRef = initRes?.reference || params.paymentRef;
+        await verifyPayment(finalRef);
+      } catch (err: any) {
+        const msg = err?.response?.data?.detail || err?.message || 'Payment verification failed on server.';
+        throw new Error(msg);
+      }
+    }
+
+    const bookingRef = finalRef.startsWith('MSH-')
+      ? finalRef
+      : `MSH-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const bookingId = `booking-${Date.now()}`;
 
     const newBooking: Booking = {
@@ -601,7 +633,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       spaceNumber: spaceNum,
       amount,
       paymentMethod: params.paymentMethod,
-      paymentReference: params.paymentRef,
+      paymentReference: finalRef,
       status: 'Confirmed',
       paymentStatus: 'Paid',
       createdAt: new Date().toISOString(),
@@ -614,7 +646,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       bookingReference: bookingRef,
       studentName: params.student.name,
       amount,
-      reference: params.paymentRef,
+      reference: finalRef,
       method: params.paymentMethod,
       status: 'Successful',
       date: new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
@@ -653,9 +685,9 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       })
     );
 
-    // Update Student State to confirmed and paid
     const updatedStudent: StudentProfile = {
       ...currentStudent,
+      id: currentStudent.id || params.student.knustId,
       name: params.student.name,
       firstName: params.student.name.split(' ')[0] || currentStudent.firstName || '',
       knustId: params.student.knustId,
@@ -676,20 +708,6 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setPayments((prev) => [newPayment, ...prev]);
     setActiveBookingHold(null);
 
-    // Synchronize booking with Django database
-    try {
-      const holdRes = await holdSpace({ room_number: roomNumber, space_number: spaceNum });
-      const bId = holdRes?.booking?.id;
-      if (bId) {
-        const initRes = await initializePayment(bId);
-        const refToVerify = initRes?.reference || params.paymentRef;
-        await verifyPayment(refToVerify);
-      }
-    } catch (err: any) {
-      console.warn("Django backend payment synchronization notice:", err?.response?.data?.detail || err.message);
-    }
-
-    // Add confirmation notification
     setNotifications((prev) => [
       {
         id: `notif-${Date.now()}`,
@@ -704,6 +722,88 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     return newBooking;
   };
+
+  // Automatically verify Paystack redirect callback (?reference=MSH-... or ?trxref=MSH-...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('reference') || params.get('trxref');
+    if (!ref || !ref.startsWith('MSH-')) return;
+
+    // Clean query params from URL immediately so we don't double-verify
+    window.history.replaceState({}, '', window.location.pathname);
+
+    const verifyFromCallback = async () => {
+      try {
+        const res = await verifyPayment(ref);
+        const savedMetaRaw = localStorage.getItem('mushia_pending_paystack');
+        const savedMeta = savedMetaRaw ? JSON.parse(savedMetaRaw) : null;
+        localStorage.removeItem('mushia_pending_paystack');
+
+        const bData = res?.booking;
+        const rmNum = savedMeta?.roomNumber || bData?.room_space?.room_number || currentStudent.roomNumber || 'R101';
+        const spNum = savedMeta?.spaceNumber || 1;
+        const matchedRoom = rooms.find((r) => r.roomNumber === rmNum);
+
+        const confirmedBooking: Booking = {
+          id: `booking-${bData?.id || Date.now()}`,
+          bookingReference: ref,
+          studentId: savedMeta?.student?.knustId || currentStudent.knustId || 'Student',
+          studentName: savedMeta?.student?.name || currentStudent.name || 'Student',
+          studentEmail: savedMeta?.student?.email || currentStudent.email || '',
+          studentPhone: savedMeta?.student?.phone || currentStudent.phone || '',
+          studentKnustId: savedMeta?.student?.knustId || currentStudent.knustId || '',
+          gender: savedMeta?.student?.gender || currentStudent.gender || 'Male',
+          program: savedMeta?.student?.program || currentStudent.program || 'Undergraduate Student',
+          level: savedMeta?.student?.level || currentStudent.level || 'Level 100',
+          roomId: matchedRoom?.id || `mushia-room-${String(rmNum).toLowerCase()}`,
+          roomNumber: String(rmNum),
+          floor: matchedRoom?.floor || 'Ground',
+          roomType: matchedRoom?.roomType || '2-in-1',
+          airConditioned: Boolean(matchedRoom?.airConditioned),
+          size: matchedRoom?.size || 'Standard',
+          spaceNumber: Number(spNum),
+          amount: Number(bData?.amount_paid || matchedRoom?.price || 7000),
+          paymentMethod: savedMeta?.paymentMethod || 'MTN Mobile Money',
+          paymentReference: ref,
+          status: 'Confirmed',
+          paymentStatus: 'Paid',
+          createdAt: new Date().toISOString(),
+          bookingPeriod: config.academicYear,
+        };
+
+        setBookings((prev) => [confirmedBooking, ...prev]);
+        setPayments((prev) => [
+          {
+            id: `tx-${Date.now()}`,
+            bookingId: confirmedBooking.id,
+            bookingReference: ref,
+            studentName: confirmedBooking.studentName,
+            amount: confirmedBooking.amount,
+            reference: ref,
+            method: confirmedBooking.paymentMethod as any,
+            status: 'Successful',
+            date: new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
+          },
+          ...prev,
+        ]);
+        setCurrentStudent((prev) => ({
+          ...prev,
+          hasPaid: true,
+          bookingId: confirmedBooking.id,
+          roomId: confirmedBooking.roomId,
+          roomNumber: confirmedBooking.roomNumber,
+          spaceNumber: confirmedBooking.spaceNumber,
+        }));
+        openReceiptModal(confirmedBooking);
+        setActiveView('dashboard');
+      } catch (err) {
+        console.error('Paystack callback verification error:', err);
+      }
+    };
+
+    verifyFromCallback();
+  }, []);
 
   const updateStudentPreferences = (prefs: RoommatePreferences) => {
     setCurrentStudent((prev) => ({
