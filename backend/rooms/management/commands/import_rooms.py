@@ -58,17 +58,16 @@ class Command(BaseCommand):
                 amenities = []
                 if has_ac:
                     amenities.append('AC')
-                if 'LARGE' in upper_type or 'BIG' in upper_type:
-                    amenities.append('Big')
+                if 'SMALL' in upper_type:
+                    amenities.append('Small')
+                else:
+                    amenities.append('Standard')
 
                 if 'RESERVED' in upper_type:
                     amenities.append('Reserved')
                     capacity = 1
                 else:
                     capacity = int(room_type_str[0]) if room_type_str[0].isdigit() else 1
-
-                if capacity >= 3 and 'Big' not in amenities:
-                    amenities.append('Big')
 
                 rooms_to_create.append(
                     Room(
@@ -95,13 +94,34 @@ class Command(BaseCommand):
             rooms_created = len(created_rooms)
             spaces_created = len(spaces_to_create)
 
-        # Backfill default prices for any existing rooms still at 0.00
-        zero_price_rooms = list(Room.objects.filter(price_per_space=0))
-        if zero_price_rooms:
-            for r in zero_price_rooms:
-                has_ac = 'AC' in (r.room_type or '').upper() or 'AC' in (r.amenities or [])
+        # Backfill default prices and normalize size amenities for existing rooms
+        all_existing = list(Room.objects.all())
+        rooms_to_update = []
+        for r in all_existing:
+            upper_t = (r.room_type or '').upper()
+            has_ac = 'AC' in upper_t or 'AC' in (r.amenities or [])
+            expected_amenities = []
+            if has_ac:
+                expected_amenities.append('AC')
+            if 'SMALL' in upper_t:
+                expected_amenities.append('Small')
+            else:
+                expected_amenities.append('Standard')
+            if 'RESERVED' in upper_t:
+                expected_amenities.append('Reserved')
+
+            needs_save = False
+            if r.price_per_space == 0:
                 r.price_per_space = default_room_price(r.capacity, has_ac)
-            Room.objects.bulk_update(zero_price_rooms, ['price_per_space'])
+                needs_save = True
+            if r.amenities != expected_amenities:
+                r.amenities = expected_amenities
+                needs_save = True
+            if needs_save:
+                rooms_to_update.append(r)
+
+        if rooms_to_update:
+            Room.objects.bulk_update(rooms_to_update, ['price_per_space', 'amenities'])
 
         self.stdout.write(self.style.SUCCESS(f"Successfully created {rooms_created} rooms and {spaces_created} spaces!"))
 

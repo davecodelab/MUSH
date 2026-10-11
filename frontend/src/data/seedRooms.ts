@@ -32,7 +32,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -42,7 +42,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -52,7 +52,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -62,7 +62,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -72,7 +72,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -82,7 +82,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -92,7 +92,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -102,7 +102,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -112,7 +112,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -122,7 +122,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -132,7 +132,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -142,7 +142,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -152,7 +152,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -162,7 +162,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -172,7 +172,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -182,7 +182,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -192,7 +192,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -202,7 +202,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -222,7 +222,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -232,7 +232,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -242,7 +242,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -252,7 +252,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -262,7 +262,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -272,7 +272,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -282,7 +282,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -292,7 +292,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -312,7 +312,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -322,7 +322,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -332,7 +332,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -342,7 +342,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -352,7 +352,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: true,
-    size: 'Big',
+    size: 'Standard',
     rawType: '1IN1\'LARGE\'AC',
   },
   {
@@ -362,7 +362,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -372,7 +372,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -382,7 +382,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -392,7 +392,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -402,7 +402,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -412,7 +412,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -422,7 +422,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -432,7 +432,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -442,7 +442,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -452,7 +452,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -462,7 +462,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -472,7 +472,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -482,7 +482,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -502,7 +502,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -512,7 +512,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -522,7 +522,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -532,7 +532,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -542,7 +542,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -552,7 +552,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -562,7 +562,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -572,7 +572,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -582,7 +582,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -592,7 +592,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -602,7 +602,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -612,7 +612,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -622,7 +622,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -632,7 +632,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -642,7 +642,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -652,7 +652,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -662,7 +662,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -672,7 +672,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -682,7 +682,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -692,7 +692,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -702,7 +702,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -712,7 +712,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -722,7 +722,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -732,7 +732,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -742,7 +742,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -752,7 +752,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -762,7 +762,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -772,7 +772,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -782,7 +782,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -792,7 +792,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -802,7 +802,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '3-in-1',
     capacity: 3,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '3IN1',
   },
   {
@@ -812,7 +812,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -822,7 +822,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -832,7 +832,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -842,7 +842,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: true,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1\'AC',
   },
   {
@@ -852,7 +852,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -862,7 +862,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -872,7 +872,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -882,7 +882,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -892,7 +892,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -902,7 +902,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -912,7 +912,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -922,7 +922,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -932,7 +932,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -942,7 +942,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -952,7 +952,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -962,7 +962,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -972,7 +972,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -982,7 +982,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: 'RESERVED',
     isReserved: true,
   },
@@ -993,7 +993,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '4-in-1',
     capacity: 4,
     airConditioned: false,
-    size: 'Big',
+    size: 'Standard',
     rawType: '4IN1',
   },
   {
@@ -1003,7 +1003,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -1013,7 +1013,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -1023,7 +1023,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
   {
@@ -1033,7 +1033,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -1043,7 +1043,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '1-in-1',
     capacity: 1,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '1IN1',
   },
   {
@@ -1053,7 +1053,7 @@ export const MUSHIA_EXCEL_ROOMS: ExcelRoomManifest[] = [
     roomType: '2-in-1',
     capacity: 2,
     airConditioned: false,
-    size: 'Small',
+    size: 'Standard',
     rawType: '2IN1',
   },
 ];
@@ -1066,10 +1066,8 @@ export function generateSeedRooms(): Room[] {
     let price = 6500;
     if (item.roomType === '4-in-1') price = item.airConditioned ? 7800 : 6500;
     else if (item.roomType === '3-in-1') price = item.airConditioned ? 9500 : 8200;
-    else if (item.roomType === '2-in-1') price = item.airConditioned ? 12500 : 10800;
+    else if (item.roomType === '2-in-1') price = item.airConditioned ? 7500 : 7000;
     else if (item.roomType === '1-in-1') price = item.airConditioned ? 16500 : 14000;
-
-    if (item.size === 'Big') price += 400;
 
     const spaces: RoomSpace[] = [];
 

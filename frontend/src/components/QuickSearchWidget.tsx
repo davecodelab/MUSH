@@ -132,8 +132,8 @@ export const QuickSearchWidget: React.FC<QuickSearchProps> = ({ onSearchApply })
               className="w-full bg-[#2A2827] border border-[#7D6E66] rounded-lg px-3 py-2.5 text-xs sm:text-sm text-[#F4EFE7] focus:outline-none focus:border-[#FEFB58] transition-colors"
             >
               <option value="either">Any Size</option>
-              <option value="Big">Big Room (Balcony / Extra Area)</option>
-              <option value="Small">Small Room (Compact Standard)</option>
+              <option value="Standard">Standard Room</option>
+              <option value="Small">Small Room</option>
             </select>
           </div>
 

@@ -1,5 +1,5 @@
 export type RoomType = '4-in-1' | '3-in-1' | '2-in-1' | '1-in-1';
-export type RoomSize = 'Small' | 'Big';
+export type RoomSize = 'Standard' | 'Small';
 export type Floor = 'Ground' | '1st' | '2nd' | '3rd' | '4th' | '5th';
 
 export type SpaceStatus = 'available' | 'reserved' | 'paid';

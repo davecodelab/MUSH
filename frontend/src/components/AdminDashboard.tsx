@@ -42,7 +42,7 @@ export const AdminDashboard: React.FC = () => {
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<number>(0);
   const [editAc, setEditAc] = useState<boolean>(false);
-  const [editSize, setEditSize] = useState<'Small' | 'Big'>('Small');
+  const [editSize, setEditSize] = useState<'Standard' | 'Small'>('Standard');
 
   // Editable config state
   const [configForm, setConfigForm] = useState(config);
@@ -364,8 +364,8 @@ export const AdminDashboard: React.FC = () => {
                               onChange={(e) => setEditSize(e.target.value as any)}
                               className="bg-[#2A2827] border border-[#7D6E66] rounded px-2 py-1 text-xs"
                             >
+                              <option value="Standard">Standard</option>
                               <option value="Small">Small</option>
-                              <option value="Big">Big</option>
                             </select>
                           ) : (
                             <span>{room.roomType} · {room.size}</span>

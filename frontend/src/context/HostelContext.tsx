@@ -80,7 +80,7 @@ interface HostelContextType {
 }
 
 const STORAGE_KEYS = {
-  ROOMS: 'mushia_rooms_v3',
+  ROOMS: 'mushia_rooms_v4',
   BOOKINGS: 'mushia_bookings_v1',
   PAYMENTS: 'mushia_payments_v1',
   STUDENT: 'mushia_student_v1',
@@ -173,6 +173,7 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [rooms, setRooms] = useState<Room[]>(() => {
     if (typeof window !== 'undefined') {
       try {
+        localStorage.removeItem('mushia_rooms_v3');
         localStorage.removeItem('mushia_rooms_v2');
         localStorage.removeItem('mushia_rooms_v1');
         localStorage.removeItem('mushia_rooms');
@@ -210,10 +211,10 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const airConditioned = Boolean(
               r.amenities?.includes('AC') || (r.room_type && r.room_type.includes('AC'))
             );
-            const isLarge = Boolean(
-              r.amenities?.includes('Big') || (r.room_type && r.room_type.includes('LARGE')) || r.capacity >= 3
+            const isSmall = Boolean(
+              r.amenities?.includes('Small') || (r.room_type && r.room_type.toUpperCase().includes('SMALL'))
             );
-            const size: RoomSize = isLarge ? 'Big' : 'Small';
+            const size: RoomSize = isSmall ? 'Small' : 'Standard';
             const price = parseFloat(r.price_per_space) > 0 ? parseFloat(r.price_per_space) : getDefaultPrice(roomType, airConditioned);
             
             const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => ({
