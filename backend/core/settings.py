@@ -11,6 +11,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0%584yttww5@dg=t!0qq4
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 IS_PRODUCTION = os.environ.get('RENDER') == 'true' or not DEBUG
 
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', '').strip()
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', '').strip()
+
 allowed_hosts_env = os.environ.get('ALLOWED_HOSTS')
 ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(',') if h.strip()] if allowed_hosts_env else ['*']
 

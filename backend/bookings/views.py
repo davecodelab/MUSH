@@ -15,8 +15,14 @@ from .serializers import BookingSerializer
 from rooms.models import Room, RoomSpace
 
 
+from django.conf import settings
+
+
 def get_paystack_secret():
-    return os.getenv('PAYSTACK_SECRET_KEY', '').strip()
+    return (
+        os.getenv('PAYSTACK_SECRET_KEY', '').strip()
+        or getattr(settings, 'PAYSTACK_SECRET_KEY', '').strip()
+    )
 
 
 def is_real_paystack():
