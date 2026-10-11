@@ -62,8 +62,12 @@ def get_hostel_analytics():
     for r in floor_rows:
         t_beds = r['total_beds'] or 0
         o_beds = r['occupied_beds'] or 0
+        raw_fl = (r['floor'] or '').strip()
+        fl_label = raw_fl.title()
+        for ord_src, ord_dst in (('1St', '1st'), ('2Nd', '2nd'), ('3Rd', '3rd'), ('4Th', '4th'), ('5Th', '5th')):
+            fl_label = fl_label.replace(ord_src, ord_dst)
         floors.append({
-            'name': (r['floor'] or '').title(),
+            'name': fl_label,
             'rooms_count': r['rooms_count'],
             'total_beds': t_beds,
             'occupied_beds': o_beds,
