@@ -6,6 +6,16 @@ from django.db import transaction
 from rooms.models import Room, RoomSpace
 
 
+def default_room_price(capacity, has_ac):
+    if capacity == 1:
+        return 16500.00 if has_ac else 14000.00
+    if capacity == 2:
+        return 7500.00 if has_ac else 7000.00
+    if capacity == 3:
+        return 9500.00 if has_ac else 8200.00
+    return 7800.00 if has_ac else 6500.00
+
+
 class Command(BaseCommand):
     help = 'Import rooms from MUSHIA.xlsx and ensure admin superuser exists'
 
@@ -44,8 +54,9 @@ class Command(BaseCommand):
                 seen.add(room_num_str)
 
                 upper_type = room_type_str.upper()
+                has_ac = 'AC' in upper_type
                 amenities = []
-                if 'AC' in upper_type:
+                if has_ac:
                     amenities.append('AC')
                 if 'LARGE' in upper_type or 'BIG' in upper_type:
                     amenities.append('Big')
@@ -65,7 +76,7 @@ class Command(BaseCommand):
                         floor=floor_name,
                         room_type=room_type_str,
                         capacity=capacity,
-                        price_per_space=0.00,
+                        price_per_space=default_room_price(capacity, has_ac),
                         amenities=amenities,
                     )
                 )
@@ -83,6 +94,14 @@ class Command(BaseCommand):
             RoomSpace.objects.bulk_create(spaces_to_create)
             rooms_created = len(created_rooms)
             spaces_created = len(spaces_to_create)
+
+        # Backfill default prices for any existing rooms still at 0.00
+        zero_price_rooms = list(Room.objects.filter(price_per_space=0))
+        if zero_price_rooms:
+            for r in zero_price_rooms:
+                has_ac = 'AC' in (r.room_type or '').upper() or 'AC' in (r.amenities or [])
+                r.price_per_space = default_room_price(r.capacity, has_ac)
+            Room.objects.bulk_update(zero_price_rooms, ['price_per_space'])
 
         self.stdout.write(self.style.SUCCESS(f"Successfully created {rooms_created} rooms and {spaces_created} spaces!"))
 

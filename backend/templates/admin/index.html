@@ -1,125 +1,405 @@
 {% extends "admin/index.html" %}
 
-{% block content %}
-{% if analytics %}
+{% block coltype %}colM{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
 <style>
-  .mush-analytics {
-    width: 100%;
-    margin-bottom: 28px;
-    font-family: inherit;
+  /* Force Django Admin Index to span 100% full width responsively */
+  .dashboard #content,
+  .dashboard .main > .content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 24px 28px !important;
+    box-sizing: border-box !important;
   }
+  .dashboard #content-main {
+    width: 100% !important;
+    float: none !important;
+  }
+  .dashboard #content-related {
+    width: 100% !important;
+    float: none !important;
+    margin: 24px 0 0 0 !important;
+  }
+  @media (max-width: 768px) {
+    .dashboard #content,
+    .dashboard .main > .content {
+      padding: 14px !important;
+    }
+  }
+
+  /* Mushia Executive Dashboard Styles */
+  .mush-wrap {
+    width: 100%;
+    margin-bottom: 32px;
+    box-sizing: border-box;
+  }
+
+  /* Top Hero Header Bar */
+  .mush-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #211f1d 0%, #2c2926 100%);
+    border: 1px solid rgba(254, 251, 88, 0.22);
+    color: #faf6ef;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  }
+  .mush-hero-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #faf6ef;
+    margin: 0 0 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mush-hero-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fefb58;
+    box-shadow: 0 0 10px #fefb58;
+    display: inline-block;
+  }
+  .mush-hero-sub {
+    font-size: 12.5px;
+    color: #b9ada2;
+    margin: 0;
+  }
+  .mush-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .mush-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 15px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .mush-btn-primary {
+    background: #fefb58;
+    color: #211f1d !important;
+  }
+  .mush-btn-primary:hover {
+    background: #fff97a;
+    transform: translateY(-1px);
+  }
+  .mush-btn-ghost {
+    background: rgba(255, 255, 255, 0.08);
+    color: #faf6ef !important;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .mush-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* 5-Column Responsive KPI Grid */
   .mush-kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 14px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
   }
+  @media (max-width: 1280px) {
+    .mush-kpi-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 840px) {
+    .mush-kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .mush-kpi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .mush-card {
-    background: var(--darkened-bg, #f8fafc);
-    border: 1px solid var(--hairline-color, #e2e8f0);
-    border-radius: 10px;
-    padding: 16px 18px;
+    background: var(--darkened-bg, #1e1e1e);
+    border: 1px solid var(--hairline-color, #333);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .mush-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
   .mush-card-label {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--body-quiet-color, #64748b);
-    margin-bottom: 6px;
+    color: var(--body-quiet-color, #94a3b8);
+  }
+  .mush-card-pill {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(254, 251, 88, 0.14);
+    color: #d97706;
   }
   .mush-card-value {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
-    color: var(--body-fg, #0f172a);
-    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--body-fg, #f8fafc);
+    line-height: 1.15;
   }
   .mush-card-sub {
     font-size: 12px;
-    color: var(--body-quiet-color, #64748b);
-    margin-top: 6px;
+    color: var(--body-quiet-color, #94a3b8);
+    margin-top: 10px;
+    line-height: 1.4;
   }
-  .mush-bar-track {
+  .mush-progress-track {
     width: 100%;
-    height: 7px;
-    background: var(--hairline-color, #e2e8f0);
+    height: 8px;
+    background: var(--hairline-color, #333);
     border-radius: 999px;
     overflow: hidden;
-    margin-top: 8px;
+    margin-top: 10px;
   }
-  .mush-bar-fill {
+  .mush-progress-fill {
     height: 100%;
-    background: #16a34a;
+    background: linear-gradient(90deg, #16a34a, #22c55e);
     border-radius: 999px;
+    transition: width 0.4s ease;
   }
-  .mush-panels-grid {
+
+  /* Two-Column Main Layout */
+  .mush-main-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
-    margin-bottom: 20px;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
   }
-  .mush-section-title {
-    font-size: 13px;
-    font-weight: 700;
+  @media (max-width: 1080px) {
+    .mush-main-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .mush-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hairline-color, #333);
+  }
+  .mush-panel-title {
+    font-size: 14px;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin: 0 0 12px 0;
-    color: var(--body-fg, #0f172a);
+    margin: 0;
+    color: var(--body-fg, #f8fafc);
+  }
+  .mush-panel-sub {
+    font-size: 11.5px;
+    color: var(--body-quiet-color, #94a3b8);
+  }
+
+  /* Responsive Table Wrapper */
+  .mush-table-scroll {
+    width: 100%;
+    overflow-x: auto;
   }
   .mush-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12.5px;
+    font-size: 13px;
   }
   .mush-table th,
   .mush-table td {
-    padding: 8px 6px;
+    padding: 10px 8px;
     text-align: left;
-    border-bottom: 1px solid var(--hairline-color, #e2e8f0);
+    border-bottom: 1px solid var(--hairline-color, #2d2d2d);
+    white-space: nowrap;
   }
   .mush-table th {
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    color: var(--body-quiet-color, #64748b);
+    letter-spacing: 0.05em;
+    color: var(--body-quiet-color, #94a3b8);
   }
+
   .mush-badge {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 999px;
     font-size: 11px;
     font-weight: 700;
   }
-  .mush-badge-green { background: rgba(22, 163, 74, 0.15); color: #16a34a; }
-  .mush-badge-amber { background: rgba(217, 119, 6, 0.15); color: #d97706; }
-  .mush-badge-gray  { background: rgba(107, 114, 128, 0.15); color: #6b7280; }
-</style>
+  .mush-badge-green { background: rgba(22, 163, 74, 0.16); color: #22c55e; }
+  .mush-badge-amber { background: rgba(217, 119, 6, 0.16); color: #f59e0b; }
+  .mush-badge-gray  { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 
-<div class="mush-analytics">
-  <!-- Top KPI Cards -->
+  /* Pricing Manager Forms */
+  .mush-price-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 640px) {
+    .mush-price-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .mush-tier-box {
+    border: 1px solid var(--hairline-color, #333);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .mush-tier-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--body-fg, #f8fafc);
+    display: flex;
+    justify-content: space-between;
+  }
+  .mush-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .mush-input-row label {
+    font-size: 11.5px;
+    color: var(--body-quiet-color, #94a3b8);
+    min-width: 78px;
+  }
+  .mush-input,
+  .mush-select {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--hairline-color, #444);
+    background: var(--body-bg, #121212);
+    color: var(--body-fg, #fff);
+    font-size: 13px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+  .mush-single-room-bar {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid var(--hairline-color, #333);
+  }
+  @media (max-width: 720px) {
+    .mush-single-room-bar {
+      grid-template-columns: 1fr;
+    }
+  }
+  .mush-field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--body-quiet-color, #94a3b8);
+    margin-bottom: 5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if analytics %}
+<div class="mush-wrap">
+
+  <!-- Executive Header Banner -->
+  <div class="mush-hero">
+    <div>
+      <h2 class="mush-hero-title">
+        <span class="mush-hero-dot"></span>
+        Mushia Hostel — Live Operations & Pricing Control
+      </h2>
+      <p class="mush-hero-sub">
+        2026/2027 Academic Session &nbsp;·&nbsp; {{ analytics.total_rooms }} Official Rooms &nbsp;·&nbsp; {{ analytics.total_spaces }} Bed Spaces
+      </p>
+    </div>
+    <div class="mush-quick-links">
+      <a href="/admin/rooms/room/" class="mush-btn mush-btn-primary">Manage All 103 Rooms</a>
+      <a href="/admin/bookings/booking/" class="mush-btn mush-btn-ghost">Bookings ({{ analytics.confirmed_bookings }})</a>
+      <a href="/admin/users/student/" class="mush-btn mush-btn-ghost">Students ({{ analytics.total_students }})</a>
+      <a href="https://frontend-lyart-chi-72.vercel.app" target="_blank" rel="noopener" class="mush-btn mush-btn-ghost">View Live Website ↗</a>
+    </div>
+  </div>
+
+  <!-- 5 Responsive KPI Cards -->
   <div class="mush-kpi-grid">
     <div class="mush-card">
-      <div class="mush-card-label">Confirmed Revenue</div>
-      <div class="mush-card-value" style="color: #16a34a;">GHS {{ analytics.confirmed_revenue }}</div>
+      <div>
+        <div class="mush-card-top">
+          <span class="mush-card-label">Confirmed Revenue</span>
+          <span class="mush-badge mush-badge-green">Paid</span>
+        </div>
+        <div class="mush-card-value" style="color: #22c55e;">GHS {{ analytics.confirmed_revenue }}</div>
+      </div>
       <div class="mush-card-sub">
-        Pending Holds Pipeline: <strong>GHS {{ analytics.pending_revenue }}</strong>
+        Active Holds: <strong>GHS {{ analytics.pending_revenue }}</strong><br>
+        Full Capacity Value: <strong>GHS {{ analytics.potential_revenue }}</strong>
       </div>
     </div>
 
     <div class="mush-card">
-      <div class="mush-card-label">Bed Space Occupancy</div>
-      <div class="mush-card-value">
-        {{ analytics.occupied_spaces }} / {{ analytics.total_spaces }}
-        <span style="font-size: 14px; font-weight: 600; color: #16a34a;">({{ analytics.occupancy_pct }}%)</span>
+      <div>
+        <div class="mush-card-top">
+          <span class="mush-card-label">Bed Occupancy</span>
+          <span class="mush-badge mush-badge-green">{{ analytics.occupancy_pct }}%</span>
+        </div>
+        <div class="mush-card-value">{{ analytics.occupied_spaces }} / {{ analytics.total_spaces }}</div>
+        <div class="mush-progress-track">
+          <div class="mush-progress-fill" style="width: {{ analytics.occupancy_pct }}%;"></div>
+        </div>
       </div>
-      <div class="mush-bar-track">
-        <div class="mush-bar-fill" style="width: {{ analytics.occupancy_pct }}%;"></div>
+      <div class="mush-card-sub">
+        <strong style="color: #22c55e;">{{ analytics.vacant_spaces }}</strong> bed spaces currently vacant
       </div>
-      <div class="mush-card-sub">{{ analytics.vacant_spaces }} vacant bed spaces available</div>
     </div>
 
     <div class="mush-card">
-      <div class="mush-card-label">Room Inventory ({{ analytics.total_rooms }} Rooms)</div>
-      <div class="mush-card-value">{{ analytics.unassigned_rooms }} Unassigned</div>
+      <div>
+        <div class="mush-card-top">
+          <span class="mush-card-label">Room Gender Allocation</span>
+          <span class="mush-badge mush-badge-gray">{{ analytics.total_rooms }} Rms</span>
+        </div>
+        <div class="mush-card-value">{{ analytics.unassigned_rooms }} Open</div>
+      </div>
       <div class="mush-card-sub">
         Male Locked: <strong>{{ analytics.male_rooms }}</strong> &nbsp;·&nbsp;
         Female Locked: <strong>{{ analytics.female_rooms }}</strong>
@@ -127,115 +407,222 @@
     </div>
 
     <div class="mush-card">
-      <div class="mush-card-label">Bookings & Active Holds</div>
-      <div class="mush-card-value">{{ analytics.confirmed_bookings }} Confirmed</div>
+      <div>
+        <div class="mush-card-top">
+          <span class="mush-card-label">Reservations & Holds</span>
+          <span class="mush-badge mush-badge-amber">{{ analytics.active_holds }} Holds</span>
+        </div>
+        <div class="mush-card-value">{{ analytics.confirmed_bookings }} Confirmed</div>
+      </div>
       <div class="mush-card-sub">
-        Active 15-min Holds: <strong style="color: #d97706;">{{ analytics.active_holds }}</strong> &nbsp;·&nbsp;
+        15-Min Checkout Holds: <strong>{{ analytics.active_holds }}</strong> &nbsp;·&nbsp;
         Cancelled: <strong>{{ analytics.cancelled_bookings }}</strong>
       </div>
     </div>
 
     <div class="mush-card">
-      <div class="mush-card-label">Registered Students</div>
-      <div class="mush-card-value">{{ analytics.total_students }}</div>
+      <div>
+        <div class="mush-card-top">
+          <span class="mush-card-label">Registered Students</span>
+          <span class="mush-badge mush-badge-green">Active</span>
+        </div>
+        <div class="mush-card-value">{{ analytics.total_students }}</div>
+      </div>
       <div class="mush-card-sub">
-        Male: <strong>{{ analytics.male_students }}</strong> &nbsp;·&nbsp;
-        Female: <strong>{{ analytics.female_students }}</strong>
+        Male Students: <strong>{{ analytics.male_students }}</strong> &nbsp;·&nbsp;
+        Female Students: <strong>{{ analytics.female_students }}</strong>
       </div>
     </div>
   </div>
 
-  <!-- Breakdown Tables -->
-  <div class="mush-panels-grid">
-    <!-- Floor-by-Floor Occupancy -->
+  <!-- Main Two-Column Grid: Room Pricing Control + Floor & Room Type Analytics -->
+  <div class="mush-main-grid">
+
+    <!-- LEFT PANEL: Interactive Room Pricing & Rate Manager -->
     <div class="mush-card">
-      <h3 class="mush-section-title">Floor-by-Floor Occupancy</h3>
-      <table class="mush-table">
-        <thead>
-          <tr>
-            <th>Floor</th>
-            <th>Rooms</th>
-            <th>Occupied</th>
-            <th>Vacant</th>
-            <th>Rate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for fl in analytics.floors %}
-          <tr>
-            <td><strong>{{ fl.name }}</strong></td>
-            <td>{{ fl.rooms_count }}</td>
-            <td>{{ fl.occupied_beds }} / {{ fl.total_beds }}</td>
-            <td style="color: #16a34a; font-weight: 600;">{{ fl.vacant_beds }} free</td>
-            <td>
-              <span class="mush-badge {% if fl.pct >= 90 %}mush-badge-amber{% else %}mush-badge-green{% endif %}">
-                {{ fl.pct }}%
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div>
+        <div class="mush-panel-header">
+          <div>
+            <h3 class="mush-panel-title">Room Pricing & Rate Manager (GHS / Year)</h3>
+            <span class="mush-panel-sub">Changes save directly to Neon PostgreSQL and update the live website immediately</span>
+          </div>
+        </div>
+
+        <!-- Bulk Tier Price Form -->
+        <form method="post" action="/admin/">
+          {% csrf_token %}
+          <input type="hidden" name="pricing_action" value="bulk_tier_update">
+          <div class="mush-price-grid">
+            {% for cap in analytics.capacities %}
+            <div class="mush-tier-box">
+              <div class="mush-tier-title">
+                <span>{{ cap.label }}</span>
+                <span style="font-size: 11px; color: #94a3b8;">{{ cap.rooms_count }} rooms ({{ cap.total_beds }} beds)</span>
+              </div>
+              <div class="mush-input-row">
+                <label>Non-AC (GHS):</label>
+                <input
+                  type="number"
+                  step="50"
+                  min="0"
+                  name="price_{{ cap.capacity }}_non_ac"
+                  value="{{ cap.non_ac_price }}"
+                  class="mush-input"
+                >
+              </div>
+              {% if cap.has_ac_rooms %}
+              <div class="mush-input-row">
+                <label>AC Suite (GHS):</label>
+                <input
+                  type="number"
+                  step="50"
+                  min="0"
+                  name="price_{{ cap.capacity }}_ac"
+                  value="{{ cap.ac_price }}"
+                  class="mush-input"
+                >
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          <button type="submit" class="mush-btn mush-btn-primary" style="width: 100%; justify-content: center; padding: 11px;">
+            Save All Room Tier Prices
+          </button>
+        </form>
+
+        <!-- Single Room Quick Price & Gender Override -->
+        <form method="post" action="/admin/" class="mush-single-room-bar">
+          {% csrf_token %}
+          <input type="hidden" name="pricing_action" value="single_room_update">
+          <div>
+            <label class="mush-field-label">Quick Override Single Room</label>
+            <select name="room_id" id="mush-room-select" class="mush-select" onchange="mushSyncRoomSelect(this)">
+              {% for rm in analytics.all_rooms %}
+              <option
+                value="{{ rm.id }}"
+                data-price="{{ rm.price_per_space|floatformat:0 }}"
+                data-gender="{{ rm.gender_policy }}"
+              >
+                {{ rm.room_number }} — {{ rm.room_type }} ({{ rm.floor }}) · GHS {{ rm.price_per_space|floatformat:0 }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="mush-field-label">Bed Price (GHS)</label>
+            <input
+              type="number"
+              step="50"
+              min="0"
+              name="single_price"
+              id="mush-single-price"
+              value="{% if analytics.all_rooms %}{{ analytics.all_rooms.0.price_per_space|floatformat:0 }}{% endif %}"
+              class="mush-input"
+            >
+          </div>
+          <div>
+            <label class="mush-field-label">Gender Policy</label>
+            <select name="single_gender" id="mush-single-gender" class="mush-select">
+              <option value="UNASSIGNED">Unassigned</option>
+              <option value="MALE">Male Only</option>
+              <option value="FEMALE">Female Only</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="mush-btn mush-btn-ghost" style="padding: 9px 16px; height: 35px;">
+              Update Room
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Room Type Breakdown -->
+    <!-- RIGHT PANEL: Floor-by-Floor & Room Type Occupancy -->
     <div class="mush-card">
-      <h3 class="mush-section-title">Occupancy by Room Type</h3>
-      <table class="mush-table">
-        <thead>
-          <tr>
-            <th>Room Type</th>
-            <th>Rooms</th>
-            <th>Occupied</th>
-            <th>Vacant</th>
-            <th>Rate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for cap in analytics.capacities %}
-          <tr>
-            <td><strong>{{ cap.label }}</strong></td>
-            <td>{{ cap.rooms_count }}</td>
-            <td>{{ cap.occupied_beds }} / {{ cap.total_beds }}</td>
-            <td style="color: #16a34a; font-weight: 600;">{{ cap.vacant_beds }} free</td>
-            <td>
-              <span class="mush-badge mush-badge-green">{{ cap.pct }}%</span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div>
+        <div class="mush-panel-header">
+          <div>
+            <h3 class="mush-panel-title">Floor-by-Floor Live Occupancy</h3>
+            <span class="mush-panel-sub">All 6 residential floors from Ground to 5th Floor</span>
+          </div>
+        </div>
 
-      {% if analytics.recent_bookings %}
-      <h3 class="mush-section-title" style="margin-top: 18px;">Latest Bookings</h3>
-      <table class="mush-table">
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Bed</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for b in analytics.recent_bookings %}
-          <tr>
-            <td><a href="/admin/bookings/booking/{{ b.id }}/change/">{{ b.student.username }}</a></td>
-            <td>{{ b.room_space }}</td>
-            <td>GHS {{ b.amount_paid }}</td>
-            <td>
-              <span class="mush-badge {% if b.status == 'CONFIRMED' %}mush-badge-green{% elif b.status == 'PENDING' %}mush-badge-amber{% else %}mush-badge-gray{% endif %}">
-                {{ b.status }}
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% endif %}
+        <div class="mush-table-scroll">
+          <table class="mush-table">
+            <thead>
+              <tr>
+                <th>Floor Level</th>
+                <th>Rooms</th>
+                <th>Occupied</th>
+                <th>Vacant</th>
+                <th>Occupancy</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for fl in analytics.floors %}
+              <tr>
+                <td><strong>{{ fl.name }}</strong></td>
+                <td>{{ fl.rooms_count }} rms</td>
+                <td>{{ fl.occupied_beds }} / {{ fl.total_beds }} beds</td>
+                <td style="color: #22c55e; font-weight: 700;">{{ fl.vacant_beds }} free</td>
+                <td>
+                  <span class="mush-badge {% if fl.pct >= 85 %}mush-badge-amber{% else %}mush-badge-green{% endif %}">
+                    {{ fl.pct }}%
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mush-panel-header" style="margin-top: 20px;">
+          <div>
+            <h3 class="mush-panel-title">Occupancy & Pricing by Suite Type</h3>
+          </div>
+        </div>
+
+        <div class="mush-table-scroll">
+          <table class="mush-table">
+            <thead>
+              <tr>
+                <th>Suite Type</th>
+                <th>Inventory</th>
+                <th>Vacant</th>
+                <th>Standard Rate</th>
+                <th>AC Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cap in analytics.capacities %}
+              <tr>
+                <td><strong>{{ cap.label }}</strong></td>
+                <td>{{ cap.rooms_count }} rms ({{ cap.total_beds }} beds)</td>
+                <td style="color: #22c55e; font-weight: 700;">{{ cap.vacant_beds }} free</td>
+                <td>GHS {{ cap.non_ac_price }}</td>
+                <td>{% if cap.has_ac_rooms %}GHS {{ cap.ac_price }}{% else %}—{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
+
+<script>
+  function mushSyncRoomSelect(sel) {
+    var opt = sel.options[sel.selectedIndex];
+    if (!opt) return;
+    var priceInput = document.getElementById('mush-single-price');
+    var genderSelect = document.getElementById('mush-single-gender');
+    if (priceInput) priceInput.value = opt.getAttribute('data-price') || '';
+    if (genderSelect) genderSelect.value = opt.getAttribute('data-gender') || 'UNASSIGNED';
+  }
+</script>
 {% endif %}
 
 {{ block.super }}
