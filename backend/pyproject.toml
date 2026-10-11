@@ -1,7 +1,7 @@
 [project]
 name = "mush-backend"
 version = "0.1.0"
-description = "Add your description here"
+description = "Mushia Hostel Reservation System Backend API"
 readme = "README.md"
 authors = [
     { name = "Anapey01", email = "gabriel.k.anapey@gmail.com" }
@@ -13,9 +13,7 @@ dependencies = [
     "djangorestframework>=3.18.3",
     "djangorestframework-simplejwt>=5.5.1",
     "openpyxl>=3.1.5",
-    "pandas>=3.0.6",
     "psycopg2-binary>=2.9.13",
-    "python-docx>=1.2.0",
     "python-dotenv>=1.2.4",
     "gunicorn>=23.0.0",
     "whitenoise>=6.8.0",

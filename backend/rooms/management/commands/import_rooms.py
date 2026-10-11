@@ -1,7 +1,8 @@
-import pandas as pd
+from openpyxl import load_workbook
 from django.core.management.base import BaseCommand
-from rooms.models import Room, RoomSpace
 from django.db import transaction
+from rooms.models import Room, RoomSpace
+
 
 class Command(BaseCommand):
     help = 'Import rooms from MUSHIA.xlsx'
@@ -11,71 +12,64 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        excel_path = kwargs['excel_path']
-        self.stdout.write(f"Reading {excel_path}...")
-
-        try:
-            df = pd.read_excel(excel_path)
-        except Exception as e:
-            self.stderr.write(f"Error reading file: {e}")
+        wb = load_workbook(kwargs['excel_path'], data_only=True)
+        rows = list(wb.active.iter_rows(values_only=True))
+        if len(rows) < 3:
             return
 
-        # The specific indices of the floor headers in the Excel file
+        headers = rows[0]
         floor_col_indices = [1, 4, 7, 10, 13, 16]
-        
-        rooms_created = 0
-        spaces_created = 0
-
         existing_room_nums = set(Room.objects.values_list('room_number', flat=True))
         rooms_to_create = []
-        seen_in_file = set()
+        seen = set()
 
-        for i in floor_col_indices:
-            if i >= len(df.columns): continue
-            
-            floor_name = df.columns[i]
-            
-            for idx, row in df.iterrows():
-                if idx == 0: continue # Skip the "ROOM #" "ROOM TYPE" row
-                
-                room_num = row.iloc[i]
-                room_type = row.iloc[i+1] if (i+1) < len(row) else None
-                
-                if pd.notna(room_num) and pd.notna(room_type):
-                    room_num_str = str(room_num).strip()
-                    room_type_str = str(room_type).strip()
+        for col in floor_col_indices:
+            if col >= len(headers) or not headers[col]:
+                continue
+            floor_name = str(headers[col]).strip()
 
-                    if room_num_str in existing_room_nums or room_num_str in seen_in_file:
-                        continue
-                    seen_in_file.add(room_num_str)
-                    
-                    amenities = []
-                    if 'AC' in room_type_str.upper():
-                        amenities.append('AC')
-                    if 'LARGE' in room_type_str.upper() or 'BIG' in room_type_str.upper():
-                        amenities.append('Big')
-                    if 'RESERVED' in room_type_str.upper():
-                        amenities.append('Reserved')
-                        capacity = 1
-                    else:
-                        try:
-                            capacity = int(room_type_str[0])
-                        except ValueError:
-                            capacity = 1
-                    if capacity >= 3 and 'Big' not in amenities:
-                        amenities.append('Big')
-                        
-                    rooms_to_create.append(
-                        Room(
-                            room_number=room_num_str,
-                            floor=floor_name,
-                            room_type=room_type_str,
-                            capacity=capacity,
-                            price_per_space=0.00,
-                            amenities=amenities,
-                        )
+            for row in rows[2:]:
+                if col + 1 >= len(row):
+                    continue
+                room_num, room_type = row[col], row[col + 1]
+                if room_num is None or room_type is None:
+                    continue
+
+                room_num_str = str(room_num).strip()
+                room_type_str = str(room_type).strip()
+                if not room_num_str or room_num_str in existing_room_nums or room_num_str in seen:
+                    continue
+                seen.add(room_num_str)
+
+                upper_type = room_type_str.upper()
+                amenities = []
+                if 'AC' in upper_type:
+                    amenities.append('AC')
+                if 'LARGE' in upper_type or 'BIG' in upper_type:
+                    amenities.append('Big')
+
+                if 'RESERVED' in upper_type:
+                    amenities.append('Reserved')
+                    capacity = 1
+                else:
+                    capacity = int(room_type_str[0]) if room_type_str[0].isdigit() else 1
+
+                if capacity >= 3 and 'Big' not in amenities:
+                    amenities.append('Big')
+
+                rooms_to_create.append(
+                    Room(
+                        room_number=room_num_str,
+                        floor=floor_name,
+                        room_type=room_type_str,
+                        capacity=capacity,
+                        price_per_space=0.00,
+                        amenities=amenities,
                     )
+                )
 
+        rooms_created = 0
+        spaces_created = 0
         if rooms_to_create:
             created_rooms = Room.objects.bulk_create(rooms_to_create)
             letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

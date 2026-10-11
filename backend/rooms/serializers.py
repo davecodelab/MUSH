@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Room, RoomSpace
 from django.utils import timezone
+from .models import Room, RoomSpace
+
 
 class RoomSpaceSerializer(serializers.ModelSerializer):
     is_available = serializers.SerializerMethodField()
@@ -10,32 +11,28 @@ class RoomSpaceSerializer(serializers.ModelSerializer):
         fields = ['id', 'space_identifier', 'is_available']
 
     def get_is_available(self, obj):
-        if obj.occupant is not None:
+        if obj.occupant_id is not None:
             return False
-            
-        # Check if there are any active holds (pending bookings that are not expired)
-        # or confirmed bookings.
-        active_holds = obj.bookings.filter(
-            status='PENDING',
-            expires_at__gt=timezone.now()
-        ).exists()
-        
-        confirmed_bookings = obj.bookings.filter(status='CONFIRMED').exists()
-        
-        return not (active_holds or confirmed_bookings)
+        now = timezone.now()
+        for booking in obj.bookings.all():
+            if booking.status == 'CONFIRMED' or (booking.status == 'PENDING' and booking.expires_at > now):
+                return False
+        return True
+
 
 class RoomSerializer(serializers.ModelSerializer):
     spaces = RoomSpaceSerializer(many=True, read_only=True)
-    available_spaces_count = serializers.SerializerMethodField()
+    available_spaces_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'floor', 'room_type', 'capacity', 'price_per_space', 'gender_policy', 'amenities', 'spaces', 'available_spaces_count']
+        fields = [
+            'id', 'room_number', 'floor', 'room_type', 'capacity',
+            'price_per_space', 'gender_policy', 'amenities',
+            'spaces', 'available_spaces_count',
+        ]
 
-    def get_available_spaces_count(self, obj):
-        count = 0
-        spaces_serializer = RoomSpaceSerializer(obj.spaces.all(), many=True)
-        for space in spaces_serializer.data:
-            if space['is_available']:
-                count += 1
-        return count
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['available_spaces_count'] = sum(1 for s in data['spaces'] if s['is_available'])
+        return data
