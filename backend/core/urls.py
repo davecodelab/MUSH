@@ -202,7 +202,7 @@ _original_admin_index = admin.site.index
 def custom_admin_index(request, extra_context=None):
     if request.method == 'POST' and request.user.is_staff and request.POST.get('pricing_action'):
         handle_pricing_post(request)
-        return redirect('/admin/')
+        return redirect('/admin/#pricing')
 
     extra_context = extra_context or {}
     try:
