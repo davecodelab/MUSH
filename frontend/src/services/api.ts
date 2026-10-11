@@ -78,11 +78,19 @@ export const getUserProfile = async () => {
   return response.data;
 };
 
+export const getMyBookings = async () => {
+  const response = await api.get('/bookings/my-bookings/');
+  return response.data;
+};
+
 export const holdSpace = async (data: {
   space_id?: number | string;
   room_number?: string;
   space_number?: number;
   gender?: string;
+  full_name?: string;
+  email?: string;
+  phone_number?: string;
 }) => {
   const response = await api.post('/bookings/hold/', data);
   return response.data;
@@ -102,6 +110,7 @@ export const verifyPayment = async (reference: string) => {
   const response = await api.post('/bookings/verify-payment/', { reference });
   return response.data;
 };
+
 
 export const getRoommates = async (room_id: string | number) => {
   const response = await api.get(`/bookings/roommates/${room_id}/`);

@@ -1,24 +1,44 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  Room, 
-  RoomSpace, 
-  Booking, 
-  PaymentTransaction, 
-  StudentProfile, 
-  RoommateRequest, 
-  RoommatePreferences, 
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  Room,
+  RoomSpace,
+  Booking,
+  PaymentTransaction,
+  StudentProfile,
+  RoommateRequest,
+  RoommatePreferences,
   AppNotification,
   HostelConfig,
   Floor,
   RoomType,
   RoomSize,
   RoomStatus,
-  SpaceStatus
+  SpaceStatus,
 } from '../types';
-import { generateSeedRooms, generate120Rooms, MUSHIA_IMAGES } from '../data/seedRooms';
-import { getRooms, holdSpace, releaseHold, initializePayment, verifyPayment, getUserProfile, logoutUser } from '../services/api';
+import { MUSHIA_IMAGES } from '../data/seedRooms';
+import {
+  getRooms,
+  getMyBookings,
+  holdSpace,
+  releaseHold,
+  initializePayment,
+  verifyPayment,
+  getUserProfile,
+  logoutUser,
+} from '../services/api';
+
+type ActiveViewType =
+  | 'home'
+  | 'rooms'
+  | 'floor-explorer'
+  | 'facilities'
+  | 'gallery'
+  | 'location'
+  | 'how-it-works'
+  | 'roommates'
+  | 'dashboard';
 
 interface HostelContextType {
   rooms: Room[];
@@ -27,11 +47,13 @@ interface HostelContextType {
   currentStudent: StudentProfile;
   isLoggedIn: boolean;
   logout: () => Promise<void>;
+  refreshRooms: () => Promise<void>;
+  refreshUserAndBookings: () => Promise<void>;
   activeBookingHold: { roomId: string; spaceNumber: number; expiresAt: number } | null;
   roommateRequests: RoommateRequest[];
   notifications: AppNotification[];
   config: HostelConfig;
-  activeView: 'home' | 'rooms' | 'floor-explorer' | 'facilities' | 'gallery'  | 'location' | 'how-it-works' | 'roommates' | 'dashboard' | 'admin';
+  activeView: ActiveViewType;
   selectedRoom: Room | null;
   selectedSpaceNumber: number | null;
   isBookingModalOpen: boolean;
@@ -39,7 +61,7 @@ interface HostelContextType {
   activeReceiptBooking: Booking | null;
 
   // Actions
-  setActiveView: (view: 'home' | 'rooms' | 'floor-explorer' | 'facilities' | 'gallery' | 'location' | 'how-it-works' | 'roommates' | 'dashboard' | 'admin') => void;
+  setActiveView: (view: ActiveViewType) => void;
   openRoomDetails: (room: Room, spaceNum?: number) => void;
   closeRoomDetails: () => void;
   startBookingFlow: (room: Room, spaceNum: number) => void;
@@ -67,37 +89,10 @@ interface HostelContextType {
   respondToRoommateRequest: (requestId: string, status: 'accepted' | 'declined') => void;
   markNotificationAsRead: (id: string) => void;
   clearAllNotifications: () => void;
-
-  // Admin Actions
-  adminUpdateRoom: (roomId: string, updates: Partial<Room>) => void;
-  adminToggleMaintenance: (roomId: string) => void;
-  adminCancelBooking: (bookingId: string) => void;
-  adminUpdateConfig: (newConfig: Partial<HostelConfig>) => void;
-  resetAllData: () => void;
-  switchUserRole: (role: 'guest' | 'paid_student' | 'admin') => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   setCurrentStudent: React.Dispatch<React.SetStateAction<StudentProfile>>;
 }
-
-const STORAGE_KEYS = {
-  ROOMS: 'mushia_rooms_v4',
-  BOOKINGS: 'mushia_bookings_v1',
-  PAYMENTS: 'mushia_payments_v1',
-  STUDENT: 'mushia_student_v1',
-  REQUESTS: 'mushia_requests_v1',
-  NOTIFS: 'mushia_notifs_v1',
-  CONFIG: 'mushia_config_v1',
-};
-
-const safeGetStorage = (key: string): string | null => {
-  if (typeof window === 'undefined') return null;
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
 
 const DEFAULT_CONFIG: HostelConfig = {
   name: 'Mushia Hostel',
@@ -107,7 +102,8 @@ const DEFAULT_CONFIG: HostelConfig = {
   academicYear: '2026/2027 Academic Year',
   bankAccount: 'CalBank - KNUST Branch (Acct: 140003892019)',
   momoNumber: '0245891240 (Mushia Management Services)',
-  cancellationPolicy: 'Cancellations made within 14 days of booking receive an 85% refund. No refunds are issued after check-in week.',
+  cancellationPolicy:
+    'Cancellations made within 14 days of booking receive an 85% refund. No refunds are issued after check-in week.',
 };
 
 const DEFAULT_STUDENT: StudentProfile = {
@@ -144,9 +140,9 @@ const normalizeFloor = (f: string): Floor => {
 
 const normalizeRoomType = (t: string, capacity: number): RoomType => {
   const cleaned = (t || '').replace(/[^0-9]/g, '');
-  if (cleaned === '1' || capacity === 1) return '1-in-1';
-  if (cleaned === '2' || capacity === 2) return '2-in-1';
-  if (cleaned === '3' || capacity === 3) return '3-in-1';
+  if (cleaned.startsWith('1') || capacity === 1) return '1-in-1';
+  if (cleaned.startsWith('2') || capacity === 2) return '2-in-1';
+  if (cleaned.startsWith('3') || capacity === 3) return '3-in-1';
   return '4-in-1';
 };
 
@@ -157,294 +153,282 @@ const getDefaultPrice = (type: RoomType, hasAc: boolean) => {
   return hasAc ? 7800 : 6500;
 };
 
+export const mapBackendBookingToFrontend = (b: any): Booking => {
+  const roomNumber = String(b.room_number || 'R101');
+  const floor = normalizeFloor(b.floor || 'Ground');
+  const roomType = normalizeRoomType(b.room_type || '2IN1', b.capacity || 2);
+  const airConditioned = Boolean(b.air_conditioned);
+  const size: RoomSize = b.room_size === 'Small' ? 'Small' : 'Standard';
+  const spaceNum = Number(b.space_number || 1);
+  const amount = parseFloat(b.amount_paid) || getDefaultPrice(roomType, airConditioned);
+  const ref = b.paystack_reference || `MSH-${b.id}`;
+  const isConfirmed = b.status === 'CONFIRMED';
+
+  return {
+    id: String(b.id),
+    bookingReference: ref,
+    studentId: String(b.student_knust_id || b.student || ''),
+    studentName: b.student_name || b.student_knust_id || 'KNUST Student',
+    studentEmail: b.student_email || '',
+    studentPhone: b.student_phone || '',
+    studentKnustId: b.student_knust_id || '',
+    gender: b.student_gender === 'Female' ? 'Female' : 'Male',
+    program: 'KNUST Student',
+    level: '2026/2027 Session',
+    roomId: `mushia-room-${roomNumber.toLowerCase()}`,
+    roomNumber,
+    floor,
+    roomType,
+    airConditioned,
+    size,
+    spaceNumber: spaceNum,
+    amount,
+    paymentMethod: 'Paystack Checkout',
+    paymentReference: ref,
+    status: isConfirmed ? 'Confirmed' : b.status === 'PENDING' ? 'Pending Payment' : 'Cancelled',
+    paymentStatus: isConfirmed ? 'Paid' : 'Pending',
+    createdAt: b.created_at || new Date().toISOString(),
+    bookingPeriod: DEFAULT_CONFIG.academicYear,
+  };
+};
+
 const HostelContext = createContext<HostelContextType | undefined>(undefined);
 
 export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Navigation & Modal states
-  const [activeView, setActiveView] = useState<'home' | 'rooms' | 'floor-explorer' | 'facilities' | 'gallery' | 'location' | 'how-it-works' | 'roommates' | 'dashboard' | 'admin'>('home');
+  const [activeView, setActiveView] = useState<ActiveViewType>('home');
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [selectedSpaceNumber, setSelectedSpaceNumber] = useState<number | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [activeReceiptBooking, setActiveReceiptBooking] = useState<Booking | null>(null);
-  const [activeBookingHold, setActiveBookingHold] = useState<{ roomId: string; spaceNumber: number; expiresAt: number } | null>(null);
+  const [activeBookingHold, setActiveBookingHold] = useState<{
+    roomId: string;
+    spaceNumber: number;
+    expiresAt: number;
+  } | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Initialize Persistent State with exact 103 Excel rooms
-  const [rooms, setRooms] = useState<Room[]>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.removeItem('mushia_rooms_v3');
-        localStorage.removeItem('mushia_rooms_v2');
-        localStorage.removeItem('mushia_rooms_v1');
-        localStorage.removeItem('mushia_rooms');
-      } catch {
-        // ignore
-      }
-    }
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.ROOMS);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === 103) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    return generateSeedRooms();
-  });
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [payments, setPayments] = useState<PaymentTransaction[]>([]);
+  const [currentStudent, setCurrentStudent] = useState<StudentProfile>(DEFAULT_STUDENT);
+  const [roommateRequests, setRoommateRequests] = useState<RoommateRequest[]>([]);
+  const [notifications, setNotifications] = useState<AppNotification[]>([
+    {
+      id: 'notif-welcome',
+      title: 'Welcome to Mushia Hostel',
+      message:
+        'Explore 103 rooms across 6 floors at Ayeduase Newsite. Reserve your bed space and complete payment via Paystack to unlock your student portal and roommate directory.',
+      timestamp: 'Live Portal',
+      read: false,
+      type: 'system',
+    },
+  ]);
+  const [config] = useState<HostelConfig>(DEFAULT_CONFIG);
 
-  // Fetch live rooms from Django backend (MUSHIA database)
+  // Purge any legacy Vite prototype mock keys from browser storage on mount
   useEffect(() => {
-    const fetchLiveRooms = async () => {
-      try {
-        const data = await getRooms();
-        if (Array.isArray(data) && data.length > 0) {
-          const floorIndexMap: Record<string, number> = {
-            'Ground': 0, '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5
-          };
-
-          const mapped: Room[] = data.map((r: any) => {
-            const floor = normalizeFloor(r.floor);
-            const roomType = normalizeRoomType(r.room_type, r.capacity);
-            const airConditioned = Boolean(
-              r.amenities?.includes('AC') || (r.room_type && r.room_type.includes('AC'))
-            );
-            const isSmall = Boolean(
-              r.amenities?.includes('Small') || (r.room_type && r.room_type.toUpperCase().includes('SMALL'))
-            );
-            const size: RoomSize = isSmall ? 'Small' : 'Standard';
-            const price = parseFloat(r.price_per_space) > 0 ? parseFloat(r.price_per_space) : getDefaultPrice(roomType, airConditioned);
-            
-            const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => ({
-              id: `${r.room_number}-space-${idx + 1}`,
-              spaceNumber: idx + 1,
-              status: s.is_available ? 'available' : 'paid',
-            }));
-
-            const isReserved = Boolean(r.room_type?.includes('RESERVED') || r.amenities?.includes('Reserved'));
-            const occupiedCount = spaces.filter(s => s.status === 'paid').length;
-            let status: RoomStatus = 'available';
-            if (occupiedCount === r.capacity || isReserved) {
-              status = 'fully_occupied';
-            } else if (occupiedCount > 0) {
-              status = 'partially_occupied';
-            }
-
-            return {
-              id: `mushia-room-${String(r.room_number).toLowerCase()}`,
-              roomNumber: String(r.room_number),
-              floor,
-              floorIndex: floorIndexMap[floor] ?? 0,
-              roomType,
-              capacity: r.capacity,
-              size,
-              airConditioned,
-              price,
-              status,
-              spaces,
-              images: [
-                MUSHIA_IMAGES.interior,
-                MUSHIA_IMAGES.exterior,
-                MUSHIA_IMAGES.studyRoom,
-                MUSHIA_IMAGES.lounge,
-              ],
-              features: [
-                airConditioned ? 'Split-Unit Air Conditioning' : 'High-Velocity Ceiling Fan',
-                'Built-in Wooden Wardrobe',
-                'Study Desk & Ergonomic Chair',
-                'En-suite Modern Washroom',
-                '24/7 Water & Standby Generator Power',
-                'High-Speed Wi-Fi Connectivity',
-              ],
-              description: `Comfortable ${roomType} accommodation located on the ${floor} Floor of Mushia Hostel. Features en-suite modern washroom, study desks, and 24/7 power backup.`,
-            };
-          });
-
-          setRooms(mapped);
-        }
-      } catch (err) {
-        console.warn('Could not load rooms from Django backend, using default inventory:', err);
-      }
-    };
-
-    fetchLiveRooms();
+    if (typeof window === 'undefined') return;
+    try {
+      const legacyKeys = [
+        'mushia_rooms',
+        'mushia_rooms_v1',
+        'mushia_rooms_v2',
+        'mushia_rooms_v3',
+        'mushia_rooms_v4',
+        'mushia_bookings_v1',
+        'mushia_payments_v1',
+        'mushia_student_v1',
+        'mushia_requests_v1',
+        'mushia_notifs_v1',
+        'mushia_config_v1',
+      ];
+      legacyKeys.forEach((k) => localStorage.removeItem(k));
+    } catch {
+      // ignore storage errors
+    }
   }, []);
-
-  // Check authenticated session on load from Django backend
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const data = await getUserProfile();
-        if (data && (data.user || data.id || data.email)) {
-          const u = data.user || data;
-          setCurrentStudent({
-            id: String(u.id || u.username),
-            name: u.name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username,
-            knustId: u.knustId || u.username || String(u.id),
-            email: u.email || '',
-            phone: u.phone || u.phone_number || '',
-            gender: u.gender === 'Female' || u.gender === 'FEMALE' ? 'Female' : 'Male',
-            program: u.program_of_study || 'Undergraduate Student',
-            level: u.year_of_study ? `Level ${u.year_of_study}00` : 'Level 100',
-            hasPaid: Boolean(u.hasPaid),
-            bookingId: u.bookingId,
-            roomId: u.roomId,
-            roomNumber: u.roomNumber,
-            spaceNumber: u.spaceNumber,
-          });
-        }
-      } catch (e) {
-        // Guest session
-      }
-    };
-    checkAuth();
-  }, []);
-
-  const [bookings, setBookings] = useState<Booking[]>(() => {
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.BOOKINGS);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return [];
-  });
-
-  const [payments, setPayments] = useState<PaymentTransaction[]>(() => {
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.PAYMENTS);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return [];
-  });
-
-  const [currentStudent, setCurrentStudent] = useState<StudentProfile>(() => {
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.STUDENT);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.name === 'Dave Frimpong') {
-          return DEFAULT_STUDENT;
-        }
-        return parsed;
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    return DEFAULT_STUDENT;
-  });
 
   const isLoggedIn = Boolean(
     currentStudent &&
-    currentStudent.id &&
-    currentStudent.id.trim() !== '' &&
-    currentStudent.name &&
-    currentStudent.name.trim() !== '' &&
-    currentStudent.name !== 'Guest Student' &&
-    currentStudent.name !== 'Guest' &&
-    currentStudent.name !== 'Dave Frimpong'
+      currentStudent.id &&
+      currentStudent.id.trim() !== '' &&
+      currentStudent.name &&
+      currentStudent.name.trim() !== ''
   );
 
-  const [roommateRequests, setRoommateRequests] = useState<RoommateRequest[]>(() => {
+  // Load 103 rooms strictly from the live Django + Neon PostgreSQL database
+  const refreshRooms = useCallback(async () => {
     try {
-      const saved = safeGetStorage(STORAGE_KEYS.REQUESTS);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return [];
-  });
+      const data = await getRooms();
+      if (Array.isArray(data)) {
+        const floorIndexMap: Record<string, number> = {
+          Ground: 0,
+          '1st': 1,
+          '2nd': 2,
+          '3rd': 3,
+          '4th': 4,
+          '5th': 5,
+        };
 
-  const [notifications, setNotifications] = useState<AppNotification[]>(() => {
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.NOTIFS);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return [
-      {
-        id: 'notif-1',
-        title: 'Welcome to Mushia Hostel',
-        message: 'Explore 103 rooms across 6 floors at Ayeduase Newsite. Lock your space and complete payment via Paystack to unlock roommate matching.',
-        timestamp: 'Just now',
-        read: false,
-        type: 'system',
+        const mapped: Room[] = data.map((r: any) => {
+          const floor = normalizeFloor(r.floor);
+          const roomType = normalizeRoomType(r.room_type, r.capacity);
+          const rawUpper = String(r.room_type || '').toUpperCase();
+          const airConditioned = Boolean(
+            r.amenities?.includes('AC') || rawUpper.includes('A/C') || rawUpper.includes('AC')
+          );
+          const isSmall = Boolean(r.amenities?.includes('Small') || rawUpper.includes('SMALL'));
+          const size: RoomSize = isSmall ? 'Small' : 'Standard';
+          const price =
+            parseFloat(r.price_per_space) > 0
+              ? parseFloat(r.price_per_space)
+              : getDefaultPrice(roomType, airConditioned);
+
+          const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => {
+            const spaceStatus: SpaceStatus =
+              s.status === 'paid'
+                ? 'paid'
+                : s.status === 'reserved'
+                ? 'reserved'
+                : s.is_available === false
+                ? 'paid'
+                : 'available';
+            return {
+              id: `${r.room_number}-space-${s.space_number || idx + 1}`,
+              spaceNumber: s.space_number || idx + 1,
+              status: spaceStatus,
+            };
+          });
+
+          const isReserved = Boolean(rawUpper.includes('RESERVED') || r.amenities?.includes('Reserved'));
+          const occupiedCount = spaces.filter((s) => s.status !== 'available').length;
+          let status: RoomStatus = 'available';
+          if (occupiedCount >= r.capacity || isReserved) {
+            status = 'fully_occupied';
+          } else if (occupiedCount > 0) {
+            status = 'partially_occupied';
+          }
+
+          return {
+            id: `mushia-room-${String(r.room_number).toLowerCase()}`,
+            roomNumber: String(r.room_number),
+            floor,
+            floorIndex: floorIndexMap[floor] ?? 0,
+            roomType,
+            capacity: r.capacity,
+            size,
+            airConditioned,
+            price,
+            status,
+            spaces,
+            images: [
+              MUSHIA_IMAGES.interior,
+              MUSHIA_IMAGES.exterior,
+              MUSHIA_IMAGES.studyRoom,
+              MUSHIA_IMAGES.lounge,
+            ],
+            features: [
+              airConditioned ? 'Split-Unit Air Conditioning' : 'High-Velocity Ceiling Fan',
+              'Built-in Wooden Wardrobe',
+              'Study Desk & Ergonomic Chair',
+              'En-suite Modern Washroom',
+              '24/7 Water & Standby Generator Power',
+              'High-Speed Wi-Fi Connectivity',
+            ],
+            description: `Comfortable ${roomType} accommodation located on the ${floor} Floor of Mushia Hostel. Features en-suite modern washroom, study desks, and 24/7 power backup.`,
+          };
+        });
+
+        setRooms(mapped);
       }
-    ];
-  });
-
-  const [config, setConfig] = useState<HostelConfig>(() => {
-    try {
-      const saved = safeGetStorage(STORAGE_KEYS.CONFIG);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error('Failed to load rooms from Django backend:', err);
     }
-    return DEFAULT_CONFIG;
-  });
+  }, []);
 
-  // Save changes to localStorage
+  // Load authenticated student profile and their confirmed/pending bookings from PostgreSQL
+  const refreshUserAndBookings = useCallback(async () => {
+    try {
+      const data = await getUserProfile();
+      if (data && (data.user || data.id || data.username)) {
+        const u = data.user || data;
+        const fullName = u.name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username;
+
+        // Fetch bookings from PostgreSQL
+        let myBookingsList: Booking[] = [];
+        let myPaymentsList: PaymentTransaction[] = [];
+        try {
+          const rawBookings = await getMyBookings();
+          if (Array.isArray(rawBookings)) {
+            myBookingsList = rawBookings.map(mapBackendBookingToFrontend);
+            myPaymentsList = myBookingsList
+              .filter((b) => b.status === 'Confirmed')
+              .map((b) => ({
+                id: `tx-${b.id}`,
+                bookingId: b.id,
+                bookingReference: b.bookingReference,
+                studentName: b.studentName,
+                amount: b.amount,
+                reference: b.paymentReference,
+                method: 'Visa / Mastercard',
+                status: 'Successful',
+                date: new Date(b.createdAt).toLocaleString('en-GB', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                }),
+              }));
+          }
+        } catch {
+          // ignore if no bookings
+        }
+
+        const confirmedBooking = myBookingsList.find((b) => b.status === 'Confirmed');
+        const pendingBooking = myBookingsList.find((b) => b.status === 'Pending Payment');
+
+        setBookings(myBookingsList);
+        setPayments(myPaymentsList);
+
+        setCurrentStudent((prev) => ({
+          ...prev,
+          id: String(u.id || u.username),
+          name: fullName,
+          firstName: u.first_name || fullName.split(' ')[0] || u.username,
+          knustId: u.knustId || u.username || String(u.id),
+          email: u.email || '',
+          phone: u.phone || u.phone_number || '',
+          gender: u.gender === 'Female' || u.gender === 'FEMALE' ? 'Female' : 'Male',
+          program: prev.program || 'KNUST Student',
+          level: prev.level || 'Level 100',
+          hasPaid: Boolean(u.hasPaid || confirmedBooking),
+          bookingId: confirmedBooking?.id || (u.bookingId ? String(u.bookingId) : undefined),
+          roomId:
+            confirmedBooking?.roomId ||
+            (u.roomNumber ? `mushia-room-${String(u.roomNumber).toLowerCase()}` : undefined),
+          roomNumber: confirmedBooking?.roomNumber || u.roomNumber || undefined,
+          spaceNumber: confirmedBooking?.spaceNumber || u.spaceNumber || undefined,
+        }));
+
+        if (pendingBooking && !confirmedBooking) {
+          setActiveBookingHold({
+            roomId: pendingBooking.roomId,
+            spaceNumber: pendingBooking.spaceNumber,
+            expiresAt: Date.now() + 15 * 60 * 1000,
+          });
+        }
+      }
+    } catch {
+      // Guest user (not authenticated)
+      setCurrentStudent(DEFAULT_STUDENT);
+      setBookings([]);
+      setPayments([]);
+    }
+  }, []);
+
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(rooms));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [rooms]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [bookings]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(payments));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [payments]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.STUDENT, JSON.stringify(currentStudent));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [currentStudent]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(roommateRequests));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [roommateRequests]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.NOTIFS, JSON.stringify(notifications));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [notifications]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(config));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [config]);
+    refreshRooms();
+    refreshUserAndBookings();
+  }, [refreshRooms, refreshUserAndBookings]);
 
   // Hold Timer Expired Checker
   useEffect(() => {
@@ -456,7 +440,8 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           {
             id: 'notif-' + Date.now(),
             title: 'Reservation Hold Expired',
-            message: `Your temporary 10-minute hold on Room space expired. Space is now available to other KNUST students.`,
+            message:
+              'Your temporary 15-minute hold on the room space expired. The space is now available to other KNUST students.',
             timestamp: 'Just now',
             read: false,
             type: 'system',
@@ -489,32 +474,19 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const space = room.spaces.find((s) => s.spaceNumber === spaceNumber);
     if (!space || space.status === 'paid') return false;
 
-    const expiresAt = Date.now() + 15 * 60 * 1000; // 15 minutes lock
+    const expiresAt = Date.now() + 15 * 60 * 1000;
 
     setRooms((prevRooms) =>
       prevRooms.map((r) => {
         if (r.id !== roomId) return r;
-        const updatedSpaces = r.spaces.map((s) => {
-          if (s.spaceNumber === spaceNumber) {
-            return { ...s, status: 'reserved' as const, reservedUntil: expiresAt };
-          }
-          return s;
-        });
+        const updatedSpaces = r.spaces.map((s) =>
+          s.spaceNumber === spaceNumber ? { ...s, status: 'reserved' as const, reservedUntil: expiresAt } : s
+        );
         return { ...r, spaces: updatedSpaces };
       })
     );
 
     setActiveBookingHold({ roomId, spaceNumber, expiresAt });
-    // Notify Django backend of the hold only if student is already logged in
-    if (isLoggedIn) {
-      holdSpace({
-        room_number: room.roomNumber,
-        space_number: spaceNumber,
-        gender: currentStudent.gender ? currentStudent.gender.toUpperCase() : undefined,
-      }).catch((e) => {
-        console.warn("Backend hold notification:", e?.response?.data?.detail || e.message);
-      });
-    }
     return true;
   };
 
@@ -525,19 +497,20 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setRooms((prevRooms) =>
       prevRooms.map((r) => {
         if (r.id !== roomId) return r;
-        const updatedSpaces = r.spaces.map((s) => {
-          if (s.spaceNumber === spaceNumber && s.status === 'reserved') {
-            return { ...s, status: 'available' as const, reservedUntil: undefined };
-          }
-          return s;
-        });
+        const updatedSpaces = r.spaces.map((s) =>
+          s.spaceNumber === spaceNumber && s.status === 'reserved'
+            ? { ...s, status: 'available' as const, reservedUntil: undefined }
+            : s
+        );
         return { ...r, spaces: updatedSpaces };
       })
     );
 
     setActiveBookingHold(null);
     if (isLoggedIn) {
-      releaseHold().catch(() => {});
+      releaseHold()
+        .then(() => refreshRooms())
+        .catch(() => {});
     }
   };
 
@@ -576,151 +549,16 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     paymentRef: string;
     skipBackendSync?: boolean;
   }): Promise<Booking> => {
-    if (!selectedRoom || selectedSpaceNumber === null) {
-      throw new Error('No room or space selected for booking.');
-    }
+    const verifyRes = await verifyPayment(params.paymentRef);
+    await refreshRooms();
+    await refreshUserAndBookings();
 
-    const roomId = selectedRoom.id;
-    const roomNumber = selectedRoom.roomNumber;
-    const spaceNum = selectedSpaceNumber;
-    const amount = selectedRoom.price;
+    const mapped = verifyRes?.booking
+      ? mapBackendBookingToFrontend(verifyRes.booking)
+      : bookings[0];
 
-    let finalRef = params.paymentRef;
-
-    // Synchronize booking with Django database FIRST unless already verified by Paystack flow
-    if (!params.skipBackendSync) {
-      try {
-        const holdRes = await holdSpace({
-          room_number: roomNumber,
-          space_number: spaceNum,
-          gender: params.student.gender ? params.student.gender.toUpperCase() : undefined,
-        });
-        const bId = holdRes?.booking?.id;
-        if (!bId) {
-          throw new Error('Could not create reservation hold on the server.');
-        }
-        const initRes = await initializePayment(bId);
-        finalRef = initRes?.reference || params.paymentRef;
-        await verifyPayment(finalRef);
-      } catch (err: any) {
-        const msg = err?.response?.data?.detail || err?.message || 'Payment verification failed on server.';
-        throw new Error(msg);
-      }
-    }
-
-    const bookingRef = finalRef.startsWith('MSH-')
-      ? finalRef
-      : `MSH-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-    const bookingId = `booking-${Date.now()}`;
-
-    const newBooking: Booking = {
-      id: bookingId,
-      bookingReference: bookingRef,
-      studentId: params.student.knustId,
-      studentName: params.student.name,
-      studentEmail: params.student.email,
-      studentPhone: params.student.phone,
-      studentKnustId: params.student.knustId,
-      gender: params.student.gender,
-      program: params.student.program,
-      level: params.student.level,
-      roomId,
-      roomNumber,
-      floor: selectedRoom.floor,
-      roomType: selectedRoom.roomType,
-      airConditioned: selectedRoom.airConditioned,
-      size: selectedRoom.size,
-      spaceNumber: spaceNum,
-      amount,
-      paymentMethod: params.paymentMethod,
-      paymentReference: finalRef,
-      status: 'Confirmed',
-      paymentStatus: 'Paid',
-      createdAt: new Date().toISOString(),
-      bookingPeriod: config.academicYear,
-    };
-
-    const newPayment: PaymentTransaction = {
-      id: `tx-${Date.now()}`,
-      bookingId,
-      bookingReference: bookingRef,
-      studentName: params.student.name,
-      amount,
-      reference: finalRef,
-      method: params.paymentMethod,
-      status: 'Successful',
-      date: new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
-    };
-
-    // Update room spaces atomically
-    setRooms((prevRooms) =>
-      prevRooms.map((r) => {
-        if (r.id !== roomId) return r;
-        const updatedSpaces = r.spaces.map((s) => {
-          if (s.spaceNumber === spaceNum) {
-            return {
-              ...s,
-              status: 'paid' as const,
-              studentId: params.student.knustId,
-              studentName: params.student.name,
-              studentKnustId: params.student.knustId,
-              studentProgram: params.student.program,
-              studentLevel: params.student.level,
-              gender: params.student.gender,
-              reservedUntil: undefined,
-            };
-          }
-          return s;
-        });
-
-        const occupiedCount = updatedSpaces.filter((s) => s.status === 'paid').length;
-        let newStatus: Room['status'] = 'available';
-        if (occupiedCount === r.capacity) {
-          newStatus = 'fully_occupied';
-        } else if (occupiedCount > 0) {
-          newStatus = 'partially_occupied';
-        }
-
-        return { ...r, spaces: updatedSpaces, status: newStatus };
-      })
-    );
-
-    const updatedStudent: StudentProfile = {
-      ...currentStudent,
-      id: currentStudent.id || params.student.knustId,
-      name: params.student.name,
-      firstName: params.student.name.split(' ')[0] || currentStudent.firstName || '',
-      knustId: params.student.knustId,
-      email: params.student.email,
-      phone: params.student.phone,
-      gender: params.student.gender,
-      program: params.student.program,
-      level: params.student.level,
-      hasPaid: true,
-      bookingId,
-      roomId,
-      roomNumber,
-      spaceNumber: spaceNum,
-    };
-
-    setCurrentStudent(updatedStudent);
-    setBookings((prev) => [newBooking, ...prev]);
-    setPayments((prev) => [newPayment, ...prev]);
     setActiveBookingHold(null);
-
-    setNotifications((prev) => [
-      {
-        id: `notif-${Date.now()}`,
-        title: 'Booking & Payment Confirmed 🎉',
-        message: `Your space in Room ${roomNumber} (Space #${spaceNum}) is officially confirmed! Roommate matching is now unlocked for you.`,
-        timestamp: 'Just now',
-        read: false,
-        type: 'booking',
-      },
-      ...prev,
-    ]);
-
-    return newBooking;
+    return mapped;
   };
 
   // Automatically verify Paystack redirect callback (?reference=MSH-... or ?trxref=MSH-...)
@@ -736,94 +574,61 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const verifyFromCallback = async () => {
       try {
         const res = await verifyPayment(ref);
-        const savedMetaRaw = localStorage.getItem('mushia_pending_paystack');
-        const savedMeta = savedMetaRaw ? JSON.parse(savedMetaRaw) : null;
         localStorage.removeItem('mushia_pending_paystack');
 
-        const bData = res?.booking;
-        const rmNum = savedMeta?.roomNumber || bData?.room_space?.room_number || currentStudent.roomNumber || 'R101';
-        const spNum = savedMeta?.spaceNumber || 1;
-        const matchedRoom = rooms.find((r) => r.roomNumber === rmNum);
+        await refreshRooms();
+        await refreshUserAndBookings();
 
-        const confirmedBooking: Booking = {
-          id: `booking-${bData?.id || Date.now()}`,
-          bookingReference: ref,
-          studentId: savedMeta?.student?.knustId || currentStudent.knustId || 'Student',
-          studentName: savedMeta?.student?.name || currentStudent.name || 'Student',
-          studentEmail: savedMeta?.student?.email || currentStudent.email || '',
-          studentPhone: savedMeta?.student?.phone || currentStudent.phone || '',
-          studentKnustId: savedMeta?.student?.knustId || currentStudent.knustId || '',
-          gender: savedMeta?.student?.gender || currentStudent.gender || 'Male',
-          program: savedMeta?.student?.program || currentStudent.program || 'Undergraduate Student',
-          level: savedMeta?.student?.level || currentStudent.level || 'Level 100',
-          roomId: matchedRoom?.id || `mushia-room-${String(rmNum).toLowerCase()}`,
-          roomNumber: String(rmNum),
-          floor: matchedRoom?.floor || 'Ground',
-          roomType: matchedRoom?.roomType || '2-in-1',
-          airConditioned: Boolean(matchedRoom?.airConditioned),
-          size: matchedRoom?.size || 'Standard',
-          spaceNumber: Number(spNum),
-          amount: Number(bData?.amount_paid || matchedRoom?.price || 7000),
-          paymentMethod: savedMeta?.paymentMethod || 'MTN Mobile Money',
-          paymentReference: ref,
-          status: 'Confirmed',
-          paymentStatus: 'Paid',
-          createdAt: new Date().toISOString(),
-          bookingPeriod: config.academicYear,
-        };
-
-        setBookings((prev) => [confirmedBooking, ...prev]);
-        setPayments((prev) => [
+        if (res?.booking) {
+          const confirmed = mapBackendBookingToFrontend(res.booking);
+          setNotifications((prev) => [
+            {
+              id: `notif-${Date.now()}`,
+              title: 'Booking & Payment Confirmed 🎉',
+              message: `Your space in Room ${confirmed.roomNumber} (Space #${confirmed.spaceNumber}) is officially confirmed in the Mushia database!`,
+              timestamp: 'Just now',
+              read: false,
+              type: 'booking',
+            },
+            ...prev,
+          ]);
+          openReceiptModal(confirmed);
+          setActiveView('dashboard');
+        }
+      } catch (err: any) {
+        console.error('Paystack callback verification error:', err);
+        setNotifications((prev) => [
           {
-            id: `tx-${Date.now()}`,
-            bookingId: confirmedBooking.id,
-            bookingReference: ref,
-            studentName: confirmedBooking.studentName,
-            amount: confirmedBooking.amount,
-            reference: ref,
-            method: confirmedBooking.paymentMethod as any,
-            status: 'Successful',
-            date: new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
+            id: `notif-err-${Date.now()}`,
+            title: 'Payment Verification Notice',
+            message:
+              err?.response?.data?.detail ||
+              'We could not automatically verify your Paystack transaction. Please check your dashboard or contact management.',
+            timestamp: 'Just now',
+            read: false,
+            type: 'payment',
           },
           ...prev,
         ]);
-        setCurrentStudent((prev) => ({
-          ...prev,
-          hasPaid: true,
-          bookingId: confirmedBooking.id,
-          roomId: confirmedBooking.roomId,
-          roomNumber: confirmedBooking.roomNumber,
-          spaceNumber: confirmedBooking.spaceNumber,
-        }));
-        openReceiptModal(confirmedBooking);
-        setActiveView('dashboard');
-      } catch (err) {
-        console.error('Paystack callback verification error:', err);
       }
     };
 
     verifyFromCallback();
-  }, []);
+  }, [refreshRooms, refreshUserAndBookings]);
 
   const updateStudentPreferences = (prefs: RoommatePreferences) => {
     setCurrentStudent((prev) => ({
       ...prev,
       preferences: prefs,
     }));
-    setNotifications((prev) => [
-      {
-        id: `notif-${Date.now()}`,
-        title: 'Roommate Preferences Updated',
-        message: 'Your lifestyle criteria and interests have been updated. Compatible roommate recommendations have refreshed.',
-        timestamp: 'Just now',
-        read: false,
-        type: 'roommate',
-      },
-      ...prev,
-    ]);
   };
 
-  const sendRoommateRequest = (receiverId: string, receiverName: string, roomId: string, roomNumber: string) => {
+  const sendRoommateRequest = (
+    receiverId: string,
+    receiverName: string,
+    roomId: string,
+    roomNumber: string
+  ) => {
     const newRequest: RoommateRequest = {
       id: `req-${Date.now()}`,
       senderId: currentStudent.knustId,
@@ -840,172 +645,21 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       contactPhone: currentStudent.phone,
       contactEmail: currentStudent.email,
     };
-
     setRoommateRequests((prev) => [newRequest, ...prev]);
-    setNotifications((prev) => [
-      {
-        id: `notif-${Date.now()}`,
-        title: 'Roommate Request Sent',
-        message: `You sent a roommate connection invitation to ${receiverName} for Room ${roomNumber}.`,
-        timestamp: 'Just now',
-        read: false,
-        type: 'roommate',
-      },
-      ...prev,
-    ]);
   };
 
   const respondToRoommateRequest = (requestId: string, status: 'accepted' | 'declined') => {
     setRoommateRequests((prev) =>
-      prev.map((r) => {
-        if (r.id === requestId) {
-          return {
-            ...r,
-            status,
-            contactPhone: currentStudent.phone,
-            contactEmail: currentStudent.email,
-          };
-        }
-        return r;
-      })
+      prev.map((r) => (r.id === requestId ? { ...r, status } : r))
     );
-
-    setNotifications((prev) => [
-      {
-        id: `notif-${Date.now()}`,
-        title: status === 'accepted' ? 'Roommate Connected 🎉' : 'Request Declined',
-        message: status === 'accepted' 
-          ? `You accepted the roommate invitation! Direct phone and email contact details are now exchanged.`
-          : 'You declined the connection request.',
-        timestamp: 'Just now',
-        read: false,
-        type: 'roommate',
-      },
-      ...prev,
-    ]);
   };
 
   const markNotificationAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
   };
 
   const clearAllNotifications = () => {
     setNotifications([]);
-  };
-
-  // Admin Actions
-  const adminUpdateRoom = (roomId: string, updates: Partial<Room>) => {
-    setRooms((prev) =>
-      prev.map((r) => {
-        if (r.id !== roomId) return r;
-        return { ...r, ...updates };
-      })
-    );
-  };
-
-  const adminToggleMaintenance = (roomId: string) => {
-    setRooms((prev) =>
-      prev.map((r) => {
-        if (r.id !== roomId) return r;
-        const newStatus = r.status === 'maintenance' ? 'available' : 'maintenance';
-        return { ...r, status: newStatus };
-      })
-    );
-  };
-
-  const adminCancelBooking = (bookingId: string) => {
-    const booking = bookings.find((b) => b.id === bookingId);
-    if (!booking) return;
-
-    // Free the room space
-    setRooms((prev) =>
-      prev.map((r) => {
-        if (r.id !== booking.roomId) return r;
-        const updatedSpaces = r.spaces.map((s) => {
-          if (s.spaceNumber === booking.spaceNumber) {
-            return {
-              ...s,
-              status: 'available' as const,
-              studentId: undefined,
-              studentName: undefined,
-              studentKnustId: undefined,
-              studentProgram: undefined,
-              studentLevel: undefined,
-            };
-          }
-          return s;
-        });
-        const occupiedCount = updatedSpaces.filter((s) => s.status === 'paid').length;
-        const newStatus = occupiedCount === 0 ? 'available' : 'partially_occupied';
-        return { ...r, spaces: updatedSpaces, status: newStatus };
-      })
-    );
-
-    // Update booking status
-    setBookings((prev) =>
-      prev.map((b) => (b.id === bookingId ? { ...b, status: 'Cancelled' as const } : b))
-    );
-
-    // If cancelled booking belongs to current active student, reset paid status
-    if (currentStudent.bookingId === bookingId) {
-      setCurrentStudent((prev) => ({
-        ...prev,
-        hasPaid: false,
-        bookingId: undefined,
-        roomId: undefined,
-        roomNumber: undefined,
-        spaceNumber: undefined,
-      }));
-    }
-  };
-
-  const adminUpdateConfig = (newConfig: Partial<HostelConfig>) => {
-    setConfig((prev) => ({ ...prev, ...newConfig }));
-  };
-
-  const resetAllData = () => {
-    const initialRooms = generateSeedRooms();
-    setRooms(initialRooms);
-    setBookings([]);
-    setPayments([]);
-    setCurrentStudent(DEFAULT_STUDENT);
-    setRoommateRequests([]);
-    setNotifications([
-      {
-        id: 'notif-reset',
-        title: 'System Restored',
-        message: 'Hostel inventory synchronized with official 103 rooms from MUSHIA database.',
-        timestamp: 'Just now',
-        read: false,
-        type: 'system',
-      }
-    ]);
-    setActiveBookingHold(null);
-    localStorage.removeItem(STORAGE_KEYS.ROOMS);
-    localStorage.removeItem(STORAGE_KEYS.BOOKINGS);
-    localStorage.removeItem(STORAGE_KEYS.PAYMENTS);
-    localStorage.removeItem(STORAGE_KEYS.STUDENT);
-    localStorage.removeItem(STORAGE_KEYS.REQUESTS);
-  };
-
-  const switchUserRole = (role: 'guest' | 'paid_student' | 'admin') => {
-    if (role === 'guest') {
-      setCurrentStudent({
-        ...DEFAULT_STUDENT,
-        hasPaid: false,
-        bookingId: undefined,
-        roomId: undefined,
-        roomNumber: undefined,
-        spaceNumber: undefined,
-      });
-      setActiveView('home');
-    } else if (role === 'paid_student') {
-      setActiveView(currentStudent.hasPaid ? 'dashboard' : 'rooms');
-    } else if (role === 'admin') {
-      setActiveView('admin');
-    }
   };
 
   const logout = async () => {
@@ -1015,23 +669,10 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       console.warn('Logout notice:', e);
     }
     setCurrentStudent(DEFAULT_STUDENT);
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.removeItem(STORAGE_KEYS.STUDENT);
-      } catch {}
-    }
+    setBookings([]);
+    setPayments([]);
+    setActiveBookingHold(null);
     setActiveView('home');
-    setNotifications((prev) => [
-      {
-        id: 'notif-' + Date.now(),
-        title: 'Logged Out',
-        message: 'You have been safely signed out.',
-        timestamp: 'Just now',
-        read: false,
-        type: 'system',
-      },
-      ...prev,
-    ]);
   };
 
   return (
@@ -1043,6 +684,8 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         currentStudent,
         isLoggedIn,
         logout,
+        refreshRooms,
+        refreshUserAndBookings,
         activeBookingHold,
         roommateRequests,
         notifications,
@@ -1068,12 +711,6 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         respondToRoommateRequest,
         markNotificationAsRead,
         clearAllNotifications,
-        adminUpdateRoom,
-        adminToggleMaintenance,
-        adminCancelBooking,
-        adminUpdateConfig,
-        resetAllData,
-        switchUserRole,
         isAuthModalOpen,
         setIsAuthModalOpen,
         setCurrentStudent,

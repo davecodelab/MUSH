@@ -34,10 +34,11 @@ export const BookingFlowModal: React.FC = () => {
     selectedSpaceNumber,
     isBookingModalOpen,
     closeBookingModal,
-    completePaymentAndBooking,
     currentStudent,
     setCurrentStudent,
     isLoggedIn,
+    refreshRooms,
+    refreshUserAndBookings,
     activeBookingHold,
     releaseActiveHold,
     config,
@@ -45,7 +46,7 @@ export const BookingFlowModal: React.FC = () => {
     openReceiptModal,
   } = useHostel();
 
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 5>(1);
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
 
   // Guest Auth Mode inside Step 2 ('signup' by default when guest proceeds to checkout)
@@ -54,15 +55,8 @@ export const BookingFlowModal: React.FC = () => {
   const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
   const [step2Error, setStep2Error] = useState<string | null>(null);
 
-  // Backend Booking Hold & Paystack initialization state
+  // Backend Booking Hold state
   const [backendBookingId, setBackendBookingId] = useState<number | string | null>(null);
-  const [paystackSession, setPaystackSession] = useState<{
-    reference: string;
-    authorization_url?: string;
-    access_code?: string;
-    amount: number;
-    mock?: boolean;
-  } | null>(null);
 
   // Student Form fields
   const [formData, setFormData] = useState({
@@ -91,7 +85,6 @@ export const BookingFlowModal: React.FC = () => {
       setStep2Error(null);
       setPaymentError(null);
       setBackendBookingId(null);
-      setPaystackSession(null);
     }
   }, [isBookingModalOpen, selectedRoom?.id, selectedSpaceNumber]);
 
@@ -266,6 +259,9 @@ export const BookingFlowModal: React.FC = () => {
         room_number: selectedRoom.roomNumber,
         space_number: selectedSpaceNumber,
         gender: activeGender.toUpperCase(),
+        full_name: fullName,
+        email: formData.email.trim(),
+        phone_number: formData.phone.trim(),
       });
 
       const bId = holdRes?.booking?.id;
@@ -273,6 +269,8 @@ export const BookingFlowModal: React.FC = () => {
         throw new Error('Unable to reserve this space. Please try again.');
       }
       setBackendBookingId(bId);
+      await refreshRooms();
+      await refreshUserAndBookings();
       setCurrentStep(3);
     } catch (err: any) {
       setStep2Error(formatApiError(err));
@@ -281,7 +279,7 @@ export const BookingFlowModal: React.FC = () => {
     }
   };
 
-  // Step 3 -> Step 4: Initialize official Paystack transaction on backend
+  // Step 3: Initialize official Paystack transaction on backend and redirect to Paystack Checkout
   const handleProceedToPaystack = async () => {
     setPaymentError(null);
     setIsProcessingPayment(true);
@@ -293,6 +291,9 @@ export const BookingFlowModal: React.FC = () => {
           room_number: selectedRoom.roomNumber,
           space_number: selectedSpaceNumber,
           gender: formData.gender.toUpperCase(),
+          full_name: formData.name || `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email.trim(),
+          phone_number: formData.phone.trim(),
         });
         bId = holdRes?.booking?.id;
         setBackendBookingId(bId);
@@ -305,87 +306,15 @@ export const BookingFlowModal: React.FC = () => {
       const callbackUrl = typeof window !== 'undefined' ? window.location.origin : undefined;
       const initRes = await initializePayment(bId, callbackUrl);
 
-      setPaystackSession({
-        reference: initRes.reference,
-        authorization_url: initRes.authorization_url,
-        access_code: initRes.access_code,
-        amount: initRes.amount || selectedRoom.price,
-        mock: Boolean(initRes.mock),
-      });
-
-      // If real Paystack authorization_url is returned, save state & redirect directly to Paystack Checkout!
-      if (initRes.authorization_url) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(
-            'mushia_pending_paystack',
-            JSON.stringify({
-              bookingId: bId,
-              reference: initRes.reference,
-              roomId: selectedRoom.id,
-              roomNumber: selectedRoom.roomNumber,
-              spaceNumber: selectedSpaceNumber,
-              paymentMethod: 'Paystack Checkout',
-              student: {
-                name: formData.name || `${formData.firstName} ${formData.lastName}`.trim(),
-                knustId: formData.knustId,
-                email: formData.email,
-                phone: formData.phone,
-                gender: formData.gender,
-                program: formData.program || 'Undergraduate Student',
-                level: formData.level || 'Level 100',
-              },
-            })
-          );
-          window.location.href = initRes.authorization_url;
-          return;
-        }
+      if (!initRes?.authorization_url) {
+        throw new Error('Paystack checkout URL could not be generated. Please try again.');
       }
 
-      // Otherwise open Step 4 (Paystack Checkout Authorization window)
-      setCurrentStep(4);
-    } catch (err: any) {
-      setPaymentError(formatApiError(err));
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  // Step 4: Verify payment with Django backend (/api/bookings/verify-payment/)
-  const handleVerifyPaystackCheckout = async () => {
-    if (!paystackSession?.reference) return;
-    setIsProcessingPayment(true);
-    setPaymentError(null);
-
-    try {
-      // If real authorization_url exists, redirect to Paystack
-      if (paystackSession.authorization_url && typeof window !== 'undefined') {
-        window.location.href = paystackSession.authorization_url;
-        return;
+      if (typeof window !== 'undefined') {
+        window.location.href = initRes.authorization_url;
       }
-
-      // Verify transaction reference on Django backend (locks space & confirms booking in Neon DB)
-      await verifyPayment(paystackSession.reference);
-
-      const booking = await completePaymentAndBooking({
-        student: {
-          name: formData.name || `${formData.firstName} ${formData.lastName}`.trim(),
-          knustId: formData.knustId,
-          email: formData.email,
-          phone: formData.phone,
-          gender: formData.gender,
-          program: formData.program || 'Undergraduate Student',
-          level: formData.level || 'Level 100',
-        },
-        paymentMethod: 'MTN Mobile Money',
-        paymentRef: paystackSession.reference,
-        skipBackendSync: true,
-      });
-
-      setConfirmedBooking(booking);
-      setCurrentStep(5);
     } catch (err: any) {
       setPaymentError(formatApiError(err));
-    } finally {
       setIsProcessingPayment(false);
     }
   };
@@ -400,9 +329,7 @@ export const BookingFlowModal: React.FC = () => {
   const steps = [
     { num: 1, label: 'Space Selection' },
     { num: 2, label: isLoggedIn ? 'Student Profile' : 'Sign Up / Account' },
-    { num: 3, label: 'Checkout Summary' },
-    { num: 4, label: 'Paystack Checkout' },
-    { num: 5, label: 'Confirmation' },
+    { num: 3, label: 'Paystack Checkout' },
   ];
 
   return (
@@ -993,85 +920,6 @@ export const BookingFlowModal: React.FC = () => {
                       </span>
                       <ExternalLink className="w-4 h-4" />
                     </motion.button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* STEP 4: PAYSTACK CHECKOUT WINDOW (Redirect or Sandbox Verification) */}
-              {currentStep === 4 && paystackSession && (
-                <motion.div
-                  key="step-4"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-5"
-                >
-                  <div className="bg-white rounded-2xl border-2 border-[#09A5DB]/30 overflow-hidden shadow-lg">
-                    {/* Official Paystack-style Top Bar */}
-                    <div className="bg-[#011B33] text-white px-5 py-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-3 h-3 rounded-full bg-[#09A5DB]"></div>
-                        <div>
-                          <span className="text-xs font-extrabold tracking-wide uppercase block text-[#09A5DB]">
-                            Paystack Checkout
-                          </span>
-                          <span className="text-[11px] text-slate-300">{formData.email}</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[11px] text-slate-300 block">Pay</span>
-                        <span className="text-base font-black text-white tabular-nums">
-                          GHS {paystackSession.amount.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-5 space-y-4 text-xs">
-                      <div className="flex justify-between py-2 border-b border-slate-100">
-                        <span className="text-slate-500">Paystack Reference</span>
-                        <span className="font-mono font-bold text-slate-900">{paystackSession.reference}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-slate-100">
-                        <span className="text-slate-500">Allocation</span>
-                        <span className="font-bold text-slate-900">
-                          Room {selectedRoom.roomNumber} · Space #{selectedSpaceNumber}
-                        </span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-slate-100">
-                        <span className="text-slate-500">Channel</span>
-                        <span className="font-bold text-emerald-700">
-                          Paystack (Mobile Money / Card)
-                        </span>
-                      </div>
-
-                      {paymentError && (
-                        <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
-                          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                          <span>{paymentError}</span>
-                        </div>
-                      )}
-
-                      <motion.button
-                        whileHover={!isProcessingPayment ? { scale: 1.01 } : undefined}
-                        whileTap={!isProcessingPayment ? { scale: 0.99 } : undefined}
-                        disabled={isProcessingPayment}
-                        onClick={handleVerifyPaystackCheckout}
-                        className="w-full py-3.5 px-4 bg-[#3BB75E] hover:bg-[#32a051] text-white font-black text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
-                      >
-                        {isProcessingPayment ? (
-                          <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            <span>Verifying Transaction with Paystack...</span>
-                          </>
-                        ) : (
-                          <>
-                            <ShieldCheck className="w-4 h-4" />
-                            <span>Authorize Paystack Payment (GHS {paystackSession.amount.toLocaleString()})</span>
-                          </>
-                        )}
-                      </motion.button>
-                    </div>
                   </div>
                 </motion.div>
               )}

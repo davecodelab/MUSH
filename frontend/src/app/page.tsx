@@ -16,7 +16,6 @@ import { BookingFlowModal } from '@/components/BookingFlowModal';
 import { ReceiptModal } from '@/components/ReceiptModal';
 import { RoommateMatching } from '@/components/RoommateMatching';
 import { StudentDashboard } from '@/components/StudentDashboard';
-import { AdminDashboard } from '@/components/AdminDashboard';
 import { GallerySection } from '@/components/GallerySection';
 import { LocationSection } from '@/components/LocationSection';
 import { LoginRegisterModal } from '@/components/LoginRegisterModal';
@@ -89,8 +88,6 @@ export default function HomePage() {
                 </div>
               )}
 
-              
-
               {activeView === 'gallery' && (
                 <div className="pt-4">
                   <GallerySection />
@@ -115,10 +112,6 @@ export default function HomePage() {
 
               {activeView === 'dashboard' && (
                 <StudentDashboard />
-              )}
-
-              {activeView === 'admin' && (
-                <AdminDashboard />
               )}
             </motion.div>
           </AnimatePresence>

@@ -743,6 +743,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                           <button
                             type="button"
+                            onClick={() => handleNavClick('dashboard')}
+                            className="
+                              w-full
+                              px-4
+                              py-3
+                              flex
+                              items-center
+                              gap-3
+                              text-left
+                              text-xs
+                              font-bold
+                              text-[#FEFB58]
+                              hover:bg-[#5B514B]/30
+                              transition-colors
+                              cursor-pointer
+                              border-b
+                              border-[#5B514B]/50
+                            "
+                          >
+                            <User className="w-4 h-4" />
+                            Student Portal
+                          </button>
+
+                          <button
+                            type="button"
                             onClick={() => {
                               logout();
                               setShowUserDropdown(false);
@@ -799,7 +824,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* BOOK */}
               <button
                 type="button"
-                onClick={() => handleNavClick('booking')}
+                onClick={() => handleNavClick('rooms')}
                 className="
                   hidden
                   sm:flex
@@ -1060,7 +1085,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     type="button"
                     onClick={() =>
-                      handleNavClick('booking')
+                      handleNavClick('rooms')
                     }
                     className="
                       w-full

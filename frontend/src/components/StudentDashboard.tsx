@@ -58,13 +58,14 @@ export const StudentDashboard: React.FC = () => {
 
   // Find user's confirmed booking
   const myBooking = bookings.find((b) => b.id === currentStudent.bookingId) || bookings[0];
-  const myRoom = rooms.find((r) => r.id === currentStudent.roomId || r.roomNumber === currentStudent.roomNumber) || rooms[0];
+  const myRoom = rooms.find((r) => r.id === currentStudent.roomId || r.roomNumber === currentStudent.roomNumber);
 
   const [liveRoommates, setLiveRoommates] = useState<any[]>([]);
 
   useEffect(() => {
-    if (currentStudent.hasPaid && myRoom) {
-      getRoommates(myRoom.roomNumber)
+    const rmNum = currentStudent.roomNumber || myRoom?.roomNumber;
+    if (currentStudent.hasPaid && rmNum) {
+      getRoommates(rmNum)
         .then((data) => {
           if (data && data.roommates) {
             setLiveRoommates(data.roommates);
@@ -72,7 +73,19 @@ export const StudentDashboard: React.FC = () => {
         })
         .catch(() => {});
     }
-  }, [currentStudent.hasPaid, myRoom?.roomNumber]);
+  }, [currentStudent.hasPaid, currentStudent.roomNumber, myRoom?.roomNumber]);
+
+  if (!myRoom) {
+    return (
+      <section className="py-20 bg-[#F4EFE7]">
+        <div className="max-w-xl mx-auto px-4 text-center">
+          <div className="bg-white rounded-2xl border border-[#A1927D]/50 p-8 shadow-sm text-xs text-[#5B514B]">
+            Loading your room allocation from database...
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 bg-[#F4EFE7]">
@@ -166,7 +179,7 @@ export const StudentDashboard: React.FC = () => {
               <div className="bg-white p-5 rounded-xl border border-[#A1927D]/40">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#7D6E66] block">Payment</span>
                 <span className="text-xl font-extrabold text-[#2A2827] block mt-1 tabular-nums">
-                  GHS {myRoom.price.toLocaleString()}
+                  GHS {(myBooking?.amount || myRoom.price).toLocaleString()}
                 </span>
                 <span className="text-xs text-emerald-700 font-semibold mt-0.5 block">
                   Paid via Paystack
@@ -176,7 +189,7 @@ export const StudentDashboard: React.FC = () => {
               <div className="bg-white p-5 rounded-xl border border-[#A1927D]/40">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#7D6E66] block">Booking Ref</span>
                 <span className="text-base font-black font-mono text-[#2A2827] block mt-1">
-                  {myBooking?.bookingReference || 'MSH-2026-7841'}
+                  {myBooking?.bookingReference || `MSH-${currentStudent.bookingId || ''}`}
                 </span>
                 <span className="text-xs text-[#7D6E66] mt-0.5 block">
                   Official KNUST registry ID

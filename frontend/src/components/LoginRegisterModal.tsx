@@ -8,7 +8,7 @@ import { loginUser, registerUser } from '../services/api';
 import { StudentProfile } from '../types';
 
 export const LoginRegisterModal: React.FC = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, setCurrentStudent } = useHostel();
+  const { isAuthModalOpen, setIsAuthModalOpen, setCurrentStudent, refreshUserAndBookings, refreshRooms } = useHostel();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,6 +83,8 @@ export const LoginRegisterModal: React.FC = () => {
         };
 
         setCurrentStudent(profile);
+        await refreshUserAndBookings();
+        await refreshRooms();
         setSuccessMsg('Welcome back! Signed in successfully.');
         setTimeout(() => {
           setIsAuthModalOpen(false);
@@ -120,6 +122,8 @@ export const LoginRegisterModal: React.FC = () => {
         };
 
         setCurrentStudent(profile);
+        await refreshUserAndBookings();
+        await refreshRooms();
         setSuccessMsg('Account registered successfully!');
         setTimeout(() => {
           setIsAuthModalOpen(false);
