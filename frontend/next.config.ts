@@ -1,5 +1,9 @@
 import type { NextConfig } from 'next';
 
+const backendOrigin =
+  process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/$/, '') ||
+  (process.env.NODE_ENV === 'production' ? 'https://mush-ih5l.onrender.com' : 'http://127.0.0.1:8000');
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
@@ -10,19 +14,19 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*/',
-        destination: 'http://127.0.0.1:8000/api/:path*/',
+        destination: `${backendOrigin}/api/:path*/`,
       },
       {
         source: '/api/:path*',
-        destination: 'http://127.0.0.1:8000/api/:path*/',
+        destination: `${backendOrigin}/api/:path*/`,
       },
       {
         source: '/admin/:path*',
-        destination: 'http://127.0.0.1:8000/admin/:path*',
+        destination: `${backendOrigin}/admin/:path*`,
       },
       {
         source: '/media/:path*',
-        destination: 'http://127.0.0.1:8000/media/:path*',
+        destination: `${backendOrigin}/media/:path*`,
       },
     ];
   },

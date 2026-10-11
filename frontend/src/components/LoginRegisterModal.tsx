@@ -31,7 +31,7 @@ export const LoginRegisterModal: React.FC = () => {
 
   const formatDjangoError = (err: any): string => {
     if (!err.response) {
-      return 'Network error: Cannot reach authentication service at http://localhost:8000. Please ensure the backend is running.';
+      return 'Network error: Unable to reach the authentication server. Please try again in a moment.';
     }
     const data = err.response.data;
     if (typeof data === 'string') return data;
