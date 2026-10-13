@@ -15,6 +15,7 @@ import {
   Building2,
   Sparkles
 } from 'lucide-react';
+import { MUSHIA_IMAGES } from '@/data/seedRooms';
 
 interface RoomCatalogProps {
   initialTypeFilter?: string;
@@ -299,10 +300,11 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({ initialTypeFilter }) =
                     <div>
                       <div className="relative h-44 overflow-hidden bg-[#2A2827]">
                         <img
-                          src={room.images[0]}
-                          alt={`Mushia Room ${room.roomNumber}`}
+                          src={room.images?.[0] || MUSHIA_IMAGES.interior_four}
+                          alt={`${room.roomType} room at Mushia Hostel`}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           referrerPolicy="no-referrer"
+                          loading="lazy"
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-[#2A2827]/80 via-transparent to-transparent"></div>
                         
