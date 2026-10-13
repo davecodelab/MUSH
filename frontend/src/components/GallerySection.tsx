@@ -23,7 +23,7 @@ export const GallerySection: React.FC = () => {
       title: 'Spacious 2-in-1 AC Bedroom Suite',
       category: 'rooms',
       categoryLabel: 'Bedrooms',
-      src: MUSHIA_IMAGES.interior,
+      src: MUSHIA_IMAGES.interior_two,
       description: 'Fitted wooden study desks, individual wardrobes, clean beds, and split-unit air conditioning.',
     },
     {
@@ -55,7 +55,7 @@ export const GallerySection: React.FC = () => {
       title: 'Single Executive 1-in-1 Room',
       category: 'rooms',
       categoryLabel: 'Bedrooms',
-      src: MUSHIA_IMAGES.interior,
+      src: MUSHIA_IMAGES.interior_one,
       description: 'Private single occupancy room with dedicated study workstation and private en-suite washroom.',
     },
     {
