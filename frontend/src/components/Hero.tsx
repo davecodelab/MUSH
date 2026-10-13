@@ -155,9 +155,7 @@ export const Hero: React.FC = () => {
         />
       
 
-      {/* ============================================================
-          MAIN CONTENT
-      ============================================================ */}
+      {/* ========================================================MAIN CONTENT============================================================ */}
 
       <div
         className="
@@ -434,7 +432,7 @@ export const Hero: React.FC = () => {
               className="
                 group/secondary
                 inline-flex
-                min-h-[56px]
+                min-h-14
                 w-full
                 items-center
                 justify-center
@@ -451,14 +449,14 @@ export const Hero: React.FC = () => {
                 transition-all
                 duration-300
                 hover:border-[#FEFB58]/70
-                hover:bg-[#F4EFE7]/[0.08]
+                hover:bg-[#F4EFE7]/8
                 focus-visible:outline-none
                 focus-visible:ring-2
                 focus-visible:ring-[#FEFB58]
                 focus-visible:ring-offset-4
                 focus-visible:ring-offset-[#211F1D]
                 sm:w-auto
-                sm:min-w-[190px]
+                sm:min-w-47.5
                 sm:justify-between
                 cursor-pointer
               "
@@ -518,7 +516,7 @@ export const Hero: React.FC = () => {
             >
               {/* ROOM INVENTORY */}
               <div className="flex items-start gap-3">
-                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4EFE7]/15 bg-[#F4EFE7]/[0.05]">
+                <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4EFE7]/15 bg-[#F4EFE7]/5">
                   <Building2 className="h-4 w-4 text-[#FEFB58]" />
                 </span>
 

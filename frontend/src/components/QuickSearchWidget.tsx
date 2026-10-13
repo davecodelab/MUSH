@@ -64,7 +64,7 @@ export const QuickSearchWidget: React.FC<QuickSearchProps> = ({ onSearchApply })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.25 }}
-      className="relative -mt-10 sm:-mt-12 z-20 max-w-6xl mx-auto px-4 sm:px-6"
+      className="relative -mt-8 sm:-mt-4 z-20 max-w-6xl mx-auto px-4 sm:px-6"
     >
       <div className="bg-[#5B514B] border border-[#7D6E66] rounded-2xl shadow-2xl p-5 sm:p-6 text-[#F4EFE7]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-4 mb-4 border-b border-[#7D6E66]/60">

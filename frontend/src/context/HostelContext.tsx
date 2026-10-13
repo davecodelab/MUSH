@@ -97,11 +97,11 @@ interface HostelContextType {
 const DEFAULT_CONFIG: HostelConfig = {
   name: 'Mushia Hostel',
   address: 'FNF Junction, Ayeduase Newsite, Kumasi, Ghana',
-  phone: '+233 24 589 1240 / +233 20 882 1993',
+  phone: '+233 24 920 3029',
   email: 'reservations@mushiahostel.com',
   academicYear: '2026/2027 Academic Year',
   bankAccount: 'CalBank - KNUST Branch (Acct: 140003892019)',
-  momoNumber: '0245891240 (Mushia Management Services)',
+  momoNumber: '+233 24 920 3029 (Mushia Management Services)',
   cancellationPolicy:
     'Cancellations made within 14 days of booking receive an 85% refund. No refunds are issued after check-in week.',
 };
@@ -158,7 +158,7 @@ const getRoomInteriorImage = (roomType: RoomType): string => {
 };
 
 const getDefaultPrice = (type: RoomType, hasAc: boolean) => {
-  if (type === '1-in-1') return hasAc ? 16500 : 14000;
+  if (type === '1-in-1') return hasAc ? 15000 : 14000;
   if (type === '2-in-1') return hasAc ? 7500 : 7000;
   if (type === '3-in-1') return hasAc ? 9500 : 8200;
   return hasAc ? 7800 : 6500;
