@@ -8,10 +8,7 @@ import {
   Search, 
   Filter, 
   Wind, 
-  Users, 
-  SlidersHorizontal, 
-  CheckCircle2, 
-  ArrowUpDown,
+  
   Building2,
   Sparkles
 } from 'lucide-react';
