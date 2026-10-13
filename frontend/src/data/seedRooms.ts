@@ -13,5 +13,5 @@ export const MUSHIA_IMAGES = {
 
   studyRoom: '/images/study_room.png',
   washroom: '/images/washroom.png',
-  lounge: '/images/tv_lounge.jpg',
+  lounge: '/images/lounge.jpg',
 };
