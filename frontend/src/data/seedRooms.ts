@@ -1,3 +1,4 @@
+import { b } from "motion/react-client";
 
 export const MUSHIA_IMAGES = {
   exterior: '/images/mushia_exterior.jpg',
@@ -12,6 +13,7 @@ export const MUSHIA_IMAGES = {
   interior_four: '/images/4-in-1.jpg',
 
   studyRoom: '/images/study_room.png',
-  washroom: '/images/washroom.png',
+  washroom: '/images/washroom.jpg',
   lounge: '/images/lounge.jpg',
+  balcony: '/images/balcony.jpg',
 };

@@ -87,9 +87,7 @@ export const RoomDetailModal: React.FC = () => {
       interiorImage,
       ...(selectedRoom.images || []),
       MUSHIA_IMAGES.exterior,
-      MUSHIA_IMAGES.compound,
-      MUSHIA_IMAGES.corridor,
-      MUSHIA_IMAGES.studyRoom,
+      MUSHIA_IMAGES.balcony,
       MUSHIA_IMAGES.washroom,
       MUSHIA_IMAGES.lounge,
     ];
