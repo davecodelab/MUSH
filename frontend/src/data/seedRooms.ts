@@ -1,10 +1,17 @@
-// Official Mushia Hostel photograph asset paths
+
 export const MUSHIA_IMAGES = {
   exterior: '/images/mushia_exterior.jpg',
   compound: '/images/mushia_comp.png',
   corridor: '/images/mush_corridor.png',
   background: '/images/mushia_hero.png',
-  interior: '/images/mushia_room_interior_1791228272788.jpg',
+
+  // Room images by occupancy category
+  interior_one: '/images/1-in-1.jpg',
+  interior_two: '/images/2-in-1.jpg',
+  interior_three: '/images/3-in-1.jpg',
+  interior_four: '/images/4-in-1.jpg',
+
   studyRoom: '/images/study_room.png',
-  lounge: '/images/mushia_tv_common_lounge_1791228293201.jpg',
+  washroom: '/images/washroom.png',
+  lounge: '/images/tv_lounge.jpg',
 };

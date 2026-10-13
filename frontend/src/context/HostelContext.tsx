@@ -146,6 +146,17 @@ const normalizeRoomType = (t: string, capacity: number): RoomType => {
   return '4-in-1';
 };
 
+const getRoomInteriorImage = (roomType: RoomType): string => {
+  const roomImages: Record<RoomType, string> = {
+    '1-in-1': MUSHIA_IMAGES.interior_one,
+    '2-in-1': MUSHIA_IMAGES.interior_two,
+    '3-in-1': MUSHIA_IMAGES.interior_three,
+    '4-in-1': MUSHIA_IMAGES.interior_four,
+  };
+
+  return roomImages[roomType] ?? MUSHIA_IMAGES.interior_four;
+};
+
 const getDefaultPrice = (type: RoomType, hasAc: boolean) => {
   if (type === '1-in-1') return hasAc ? 16500 : 14000;
   if (type === '2-in-1') return hasAc ? 7500 : 7000;
@@ -262,53 +273,84 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       const data = await getRooms();
       if (Array.isArray(data)) {
-        const floorIndexMap: Record<string, number> = {
-          Ground: 0,
-          '1st': 1,
-          '2nd': 2,
-          '3rd': 3,
-          '4th': 4,
-          '5th': 5,
-        };
-
         const mapped: Room[] = data.map((r: any) => {
           const floor = normalizeFloor(r.floor);
-          const roomType = normalizeRoomType(r.room_type, r.capacity);
-          const rawUpper = String(r.room_type || '').toUpperCase();
-          const airConditioned = Boolean(
-            r.amenities?.includes('AC') || rawUpper.includes('A/C') || rawUpper.includes('AC')
+
+          // Determine the correct room category from the backend.
+          const roomType = normalizeRoomType(
+            String(r.room_type ?? ''),
+            Number(r.capacity ?? 4)
           );
-          const isSmall = Boolean(r.amenities?.includes('Small') || rawUpper.includes('SMALL'));
+
+          const rawUpper = String(r.room_type ?? '').toUpperCase();
+
+          const airConditioned = Boolean(
+            r.amenities?.includes('AC') ||
+              rawUpper.includes('A/C') ||
+              rawUpper.includes('AC')
+          );
+
+          const isSmall = Boolean(
+            r.amenities?.includes('Small') ||
+              rawUpper.includes('SMALL')
+          );
+
           const size: RoomSize = isSmall ? 'Small' : 'Standard';
+
+          const backendPrice = parseFloat(r.price_per_space);
+
           const price =
-            parseFloat(r.price_per_space) > 0
-              ? parseFloat(r.price_per_space)
+            Number.isFinite(backendPrice) && backendPrice > 0
+              ? backendPrice
               : getDefaultPrice(roomType, airConditioned);
 
-          const spaces: RoomSpace[] = (r.spaces || []).map((s: any, idx: number) => {
-            const spaceStatus: SpaceStatus =
-              s.status === 'paid'
-                ? 'paid'
-                : s.status === 'reserved'
-                ? 'reserved'
-                : s.is_available === false
-                ? 'paid'
-                : 'available';
-            return {
-              id: `${r.room_number}-space-${s.space_number || idx + 1}`,
-              spaceNumber: s.space_number || idx + 1,
-              status: spaceStatus,
-            };
-          });
+          const spaces: RoomSpace[] = (r.spaces || []).map(
+            (s: any, idx: number) => {
+              const spaceStatus: SpaceStatus =
+                s.status === 'paid'
+                  ? 'paid'
+                  : s.status === 'reserved'
+                    ? 'reserved'
+                    : s.is_available === false
+                      ? 'paid'
+                      : 'available';
 
-          const isReserved = Boolean(rawUpper.includes('RESERVED') || r.amenities?.includes('Reserved'));
-          const occupiedCount = spaces.filter((s) => s.status !== 'available').length;
+              return {
+                id: `${r.room_number}-space-${s.space_number || idx + 1}`,
+                spaceNumber: s.space_number || idx + 1,
+                status: spaceStatus,
+              };
+            }
+          );
+
+          const isReserved = Boolean(
+            rawUpper.includes('RESERVED') ||
+              r.amenities?.includes('Reserved')
+          );
+
+          const occupiedCount = spaces.filter(
+            (s) => s.status !== 'available'
+          ).length;
+
           let status: RoomStatus = 'available';
-          if (occupiedCount >= r.capacity || isReserved) {
+
+          if (occupiedCount >= Number(r.capacity) || isReserved) {
             status = 'fully_occupied';
           } else if (occupiedCount > 0) {
             status = 'partially_occupied';
           }
+
+          // Select the interior photograph for this specific room category.
+          const interiorImage = getRoomInteriorImage(roomType);
+
+          const floorIndexMap: Record<string, number> = {
+            Ground: 0,
+            '1st': 1,
+            '2nd': 2,
+            '3rd': 3,
+            '4th': 4,
+            '5th': 5,
+          };
 
           return {
             id: `mushia-room-${String(r.room_number).toLowerCase()}`,
@@ -316,20 +358,25 @@ export const HostelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             floor,
             floorIndex: floorIndexMap[floor] ?? 0,
             roomType,
-            capacity: r.capacity,
+            capacity: Number(r.capacity ?? 4),
             size,
             airConditioned,
             price,
             status,
             spaces,
+
+            // The first image is always the correct category interior.
             images: [
-              MUSHIA_IMAGES.interior,
+              interiorImage,
               MUSHIA_IMAGES.exterior,
               MUSHIA_IMAGES.studyRoom,
               MUSHIA_IMAGES.lounge,
             ],
+
             features: [
-              airConditioned ? 'Split-Unit Air Conditioning' : 'High-Velocity Ceiling Fan',
+              airConditioned
+                ? 'Split-Unit Air Conditioning'
+                : 'High-Velocity Ceiling Fan',
               'Built-in Wooden Wardrobe',
               'Study Desk & Ergonomic Chair',
               'En-suite Modern Washroom',

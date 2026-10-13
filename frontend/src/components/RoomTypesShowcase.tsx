@@ -32,7 +32,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
       label: 'The Social Choice',
       tagline: 'More people. More energy. More value.',
       capacity: 4,
-      startingPrice: 'GHS 6,500',
+      startingPrice: 'GHS 4,500',
       description:
         'A practical choice for students who enjoy having people around. You get your own personal study and storage space while sharing the room with three other students.',
       highlights: [
@@ -42,7 +42,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         'AC or fan depending on room',
       ],
       note: 'Great for students who want affordability without feeling disconnected from campus life.',
-      image: MUSHIA_IMAGES.interior,
+      image: MUSHIA_IMAGES.interior_four,
       accent: '#6D8EBC',
       size: 'large',
     },
@@ -53,7 +53,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
       label: 'The Balanced Choice',
       tagline: 'The sweet spot between privacy and price.',
       capacity: 3,
-      startingPrice: 'GHS 8,200',
+      startingPrice: 'GHS 5,500',
       description:
         'A comfortable middle ground for students who want a little more breathing room without stepping into the higher price range. Room layouts vary, so some spaces feel especially cosy and others more open.',
       highlights: [
@@ -63,7 +63,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         'Selected rooms with balcony',
       ],
       note: 'A popular option for friends who want to stay together while keeping things comfortable.',
-      image: MUSHIA_IMAGES.interior,
+      image: MUSHIA_IMAGES.interior_three,
       accent: '#594C43',
       size: 'medium',
     },
@@ -74,7 +74,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
       label: 'The Comfort Choice',
       tagline: 'Room to focus. Room to breathe.',
       capacity: 2,
-      startingPrice: 'GHS 10,800',
+      startingPrice: 'GHS 7,500',
       description:
         'Ideal for two students who value a calmer environment. With fewer people sharing the room, everyday routines feel easier and your personal space goes a little further.',
       highlights: [
@@ -84,7 +84,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         'Selected rooms with AC',
       ],
       note: 'A strong fit for friends or study partners who want comfort and a quieter room.',
-      image: MUSHIA_IMAGES.interior,
+      image: MUSHIA_IMAGES.interior_two,
       accent: '#6B625B',
       size: 'medium',
     },
@@ -105,7 +105,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
         'Selected rooms with AC or balcony',
       ],
       note: 'Best suited to students who value privacy, quiet and a little more independence.',
-      image: MUSHIA_IMAGES.interior,
+      image: MUSHIA_IMAGES.interior_one,
       accent: '#2B272A',
       size: 'medium',
     },
@@ -118,9 +118,7 @@ export const RoomTypesShowcase: React.FC<RoomTypeShowcaseProps> = ({
 
   return (
     <section className="relative overflow-hidden bg-[#F3EEE7] text-[#2B272A]">
-      {/* =========================================================
-          BACKGROUND ATMOSPHERE
-      ========================================================= */}
+      {/* ====================================================BACKGROUND ATMOSPHERE========================================================= */}
 
       <div className="pointer-events-none absolute inset-0">
         {/* subtle architectural grid */}
